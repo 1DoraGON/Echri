@@ -1,58 +1,116 @@
-
+import { useRef, useState } from "react";
+import axiosClient from "../../api/axios";
+import logo from '../../assets/logo.png'
 const SignUp = () => {
-  return (
+  const fullnameRef = useRef()
+  const emailRef = useRef()
+  const passwordRef = useRef()
+  const confPasswordRef = useRef()
 
-    <div className="bg-grey-lighter min-h-screen flex flex-col">
-      <div className="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
+  const [errors, setErrors] = useState(null)
+
+
+
+
+  const onHandleSubmit = async (e) => {
+    e.preventDefault()
+    //const csrf = await axiosClient.get('/sanctum/csrf-cookie')
+    await axiosClient.get('/sanctum/csrf-cookie').then(response => {
+      console.log(response);
+      //console.log(csrf);
+      const payload = {
+        //fullname:  fullnameRef.current.value,
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+        //confPassword: confPasswordRef.current.value,
+        //_token : "{{ csrf_token() }}"
+      };
+      console.log(payload);
+      axiosClient.post('/api/login', payload)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+
+        })
+    });
+
+  }
+
+  return (
+    <>
+    <div className="container bg-gray-100 ">
+    <div className=" min-h-screen mx-auto max-w-[80vw] md:max-w-[95vw] flex md:flex-col items-center justify-around sm:gap-y-5">
+      <div className="flex flex-col items-center justify-around h-[39vh] w-[30vw] lg:h-[38vh] lg:w-[25vw] md:h-[40vh] md:w-[50vw] md:my-10 ">
+        <div className="brightness-0 max-w-lg">
+          <img src={logo} alt="" className="max-w-md" />
+        </div>
+        <div className="">
+          <h1 className="uppercase text-3xl  font-bold">just do it</h1>
+        </div>
+      </div>
+      <form onSubmit={(e) => { onHandleSubmit(e) }} className="container  max-w-md flex-1 flex flex-col items-center justify-center px-2">
         <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
           <h1 className="mb-8 text-3xl text-center">Sign up</h1>
           <input
+            required
             type="text"
-            className="block border border-grey-light w-full p-3 rounded mb-4"
+            ref={fullnameRef}
+            className="block border border-slate-400 w-full p-3 rounded mb-4"
             name="fullname"
             placeholder="Full Name" />
 
           <input
+            required
             type="text"
-            className="block border border-grey-light w-full p-3 rounded mb-4"
+            ref={emailRef}
+            className="block border border-slate-400 w-full p-3 rounded mb-4"
             name="email"
             placeholder="Email" />
 
           <input
+            required
             type="password"
-            className="block border border-grey-light w-full p-3 rounded mb-4"
+            ref={passwordRef}
+            className="block border border-slate-400 w-full p-3 rounded mb-4"
             name="password"
             placeholder="Password" />
           <input
+            required
             type="password"
-            className="block border border-grey-light w-full p-3 rounded mb-4"
+            ref={confPasswordRef}
+            className="block border border-slate-400 w-full p-3 rounded mb-4"
             name="confirm_password"
             placeholder="Confirm Password" />
 
           <button
             type="submit"
-            className="w-full text-center py-3 rounded bg-[#38c172] text-white hover:bg-green-dark focus:outline-none my-1"
+            className="w-full text-center py-3 rounded bg-blue-500 text-white hover:bg-blue-600 button-theme focus:outline-none my-1"
           >Create Account</button>
 
-          <div className="text-center text-sm text-grey-dark mt-4">
-            By signing up, you agree to the
-            <a className="no-underline border-b border-grey-dark text-grey-dark" href="#">
+          <div className="text-center text-sm text-gray-800 mt-4">
+            By signing up, you agree to the&nbsp;
+            <a className="no-underline border-b border-blue-600 text-blue-600" href="#">
               Terms of Service
-            </a> and
-            <a className="no-underline border-b border-grey-dark text-grey-dark" href="#">
+            </a> and&nbsp;
+            <a className="no-underline border-b border-blue-600 text-blue-600" href="#">
               Privacy Policy
             </a>
           </div>
         </div>
 
-        <div className="text-grey-dark mt-6">
-          Already have an account?
-          <a className="no-underline border-b border-blue text-blue" href="../login/">
+        <div className="text-gray-800 mt-6">
+          Already have an account?&nbsp;
+          <a className="no-underline border-b border-blue-600 text-blue-600" href="../login/">
             Log in
           </a>.
         </div>
-      </div>
+      </form>
+
     </div>
+    </div>
+    </>
   );
 };
 

@@ -41,13 +41,13 @@ const SignUp = () => {
   return (
     <>
     <div className="container bg-gray-100 ">
-    <div className=" min-h-screen mx-auto max-w-[80vw] md:max-w-[95vw] flex md:flex-col items-center justify-around sm:gap-y-5">
-      <div className="flex flex-col items-center justify-around h-[39vh] w-[30vw] lg:h-[38vh] lg:w-[25vw] md:h-[40vh] md:w-[50vw] md:my-10 ">
-        <div className="brightness-0 max-w-lg">
-          <img src={logo} alt="" className="max-w-md" />
+    <div className=" min-h-screen mx-auto max-w-[80vw] lg:max-w-[95vw] flex md:flex-col items-center justify-around sm:gap-y-5">
+      <div className="flex flex-col items-center justify-around h-[39vh] w-[30vw] lg:h-[38vh] lg:w-[25vw] md:h-[30vh] md:w-[50vw] lg:max-w-[25vw]">
+        <div className= "brightness-0 ">
+          <img src={logo} alt="" className="w-auto h-auto max-w-full max-h-full" />
         </div>
-        <div className="">
-          <h1 className="uppercase text-3xl  font-bold">just do it</h1>
+        <div className="w-auto h-auto max-w-full max-h-full">
+          <h1 className="uppercase text-3xl lg:text-2xl md:text-xl   font-bold">just do it</h1>
         </div>
       </div>
       <form onSubmit={(e) => { onHandleSubmit(e) }} className="container  max-w-md flex-1 flex flex-col items-center justify-center px-2">

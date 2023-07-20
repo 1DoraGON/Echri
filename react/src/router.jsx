@@ -1,13 +1,22 @@
-import { createBrowserRouter } from "react-router-dom";
+
 import App from "./App";
 import SignUp from "./components/Registration/SignUp";
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import DefaultLayout from "./components/DefaultLayout";
+import GuestLayout from "./components/GuestLayout";
+import Dahsboard from "./views/Dahsboard";
+import Login from "./views/login";
+import Notfound from "./views/Notfound";
+import UserForm from "./views/UserForm";
+import Users from "./views/users";
+import Signup from "./views/signup";
 
 const router = createBrowserRouter( [
     
     {
         path:'/',
-        element:<App />,
-/*         children: [
+        element:<DefaultLayout />,
+        children: [
 
             {
                 path:'/',
@@ -31,13 +40,13 @@ const router = createBrowserRouter( [
                 element:<Dahsboard />
             },
 
-        ] */
+        ]
     },
     
     {
-        path:'/login',
-        element:<SignUp />,
-/*         children: [
+        path:'/',
+        element:<GuestLayout />,
+        children: [
             {
                 path:'/login',
                 element:<Login />
@@ -46,14 +55,14 @@ const router = createBrowserRouter( [
                 path:'/signup',
                 element:<Signup />
             },
-        ] */
+        ]
     },
     
 
-/*     {
+    {
         path:'/*',
         element:<Notfound />
-    }, */
+    },
 
 ])
 

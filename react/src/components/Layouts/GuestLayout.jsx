@@ -1,10 +1,14 @@
-import React from 'react'
 import Login from '../Registration/Login'
-import SignUp from '../Registration/SignUp'
+import useAuth from '../../hooks/useAuth'
+import { Navigate, Outlet } from 'react-router-dom'
 
 const GuestLayout = () => {
+
+  const auth = useAuth()
+
   return (
-    <SignUp />
+    auth? <Navigate to="/" /> :
+    <Outlet />
   )
 }
 

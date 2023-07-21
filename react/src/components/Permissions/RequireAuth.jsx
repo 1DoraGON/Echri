@@ -16,7 +16,7 @@ const RequireAuth = ({ allowedRoles }) => {
 
 export default RequireAuth; */
 
-import React from 'react'
+import React, { useDebugValue } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { selectToken } from '../../app/UserSlice'
@@ -25,6 +25,8 @@ import useAuth from '../../hooks/useAuth'
 const RequireAuth = () => {
   const auth = useAuth()
   const location = useLocation();
+  //useDebugValue(auth)
+  useDebugValue(location)
 
   return (
     auth? <Outlet /> : <Navigate to="/login" state={{from: location}} replace />

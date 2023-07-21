@@ -1,8 +1,11 @@
 import React from 'react'
+import RequireAuth from '../Permissions/RequireAuth'
 
 const DefaultLayout = () => {
+
+
   return (
-    <div>DefaultLayout</div>
+    <RequireAuth />
   )
 }
 

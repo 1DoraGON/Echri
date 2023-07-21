@@ -35,7 +35,7 @@ const SignUp = () => {
         password_confirmation: confPasswordRef.current.value,
       };
       console.log(payload);
-      axiosClient.post('/signup', payload)
+      axiosClient.post('/api/signup', payload)
         .then(({data}) => {
           dispatch(setUser(data.user)) 
           dispatch(setToken(data.token))

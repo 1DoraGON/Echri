@@ -1,47 +1,33 @@
 
-import App from "./App";
-import SignUp from "./components/Registration/SignUp";
+import { GuestLayout, Login, NotFound, Profile, SignUp} from './components/index'
+import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import DefaultLayout from "./components/DefaultLayout";
-import GuestLayout from "./components/GuestLayout";
-import Dahsboard from "./views/Dahsboard";
-import Login from "./views/login";
-import Notfound from "./views/Notfound";
-import UserForm from "./views/UserForm";
-import Users from "./views/users";
-import Signup from "./views/signup";
-
+import App from "./App";
 const router = createBrowserRouter( [
     
     {
+        /* require login */
         path:'/',
         element:<DefaultLayout />,
         children: [
 
             {
                 path:'/',
-                element:<Navigate to="/users" />
+                element:<Navigate to="/products" />
             },
             
             {
-                path:'/users',
-                element:<Users />
+                path:'/products',
+                element:<App />
             },
             {
-                path:'/users/new',
-                element:<UserForm key="userCreate" />
-            },
-            {
-                path:'/users/:id',
-                element:<UserForm key="userUpdate"/>
-            },
-            {
-                path:'/dashboard',
-                element:<Dahsboard />
-            },
+                path:'/profile',
+                element:<Profile/>
+            }
 
         ]
     },
+        /* guest */
     
     {
         path:'/',
@@ -53,7 +39,7 @@ const router = createBrowserRouter( [
             },
             {
                 path:'/signup',
-                element:<Signup />
+                element:<SignUp />
             },
         ]
     },
@@ -61,7 +47,7 @@ const router = createBrowserRouter( [
 
     {
         path:'/*',
-        element:<Notfound />
+        element:<NotFound />
     },
 
 ])

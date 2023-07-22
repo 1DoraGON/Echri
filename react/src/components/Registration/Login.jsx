@@ -3,6 +3,7 @@ import axiosClient from "../../api/axios";
 import logo from '../../assets/logo.png';
 import { useDispatch, useSelector } from 'react-redux'
 import { removeToken, setToken, setUser } from "../../app/UserSlice";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
 
@@ -11,46 +12,53 @@ const Login = () => {
 
   const [errors, setErrors] = useState(null)
 
+  const location = useLocation()
+  const navigate = useNavigate()
+  const from = location.state?.from?.pathname || "/";
 
   const dispatch = useDispatch()
 
-  useEffect(()=> {
+  useEffect(() => {
     console.log(localStorage);
     //dispatch(removeToken())
 
-  },[])
+  }, [])
   const onHandleSubmit = async (e) => {
     e.preventDefault()
     //const csrf = await axiosClient.get('/sanctum/csrf-cookie')
-    await axiosClient.get('/sanctum/csrf-cookie').then(response => {
-      console.log(response);
-      //console.log(csrf);
-      const payload = {
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
-      };
-      console.log(payload);
-      axiosClient.post('/api/login', payload)
-        .then(({data}) => {
-          dispatch(setUser(data.user)) 
-          dispatch(setToken(data.token))
-          console.log(data);
-          //console.log(data.token);
-          //console.log(response);
-        })
-        .catch(err => {
-          const response = err.response
+    try {
+      await axiosClient.get('/sanctum/csrf-cookie').then(response => {
+        //console.log(response);
+        const payload = {
+          email: emailRef.current.value,
+          password: passwordRef.current.value,
+        };
+        //console.log(payload);
+        axiosClient.post('/api/login', payload)
+          .then(({ data }) => {
+            dispatch(setUser(data.user))
+            dispatch(setToken(data.token))
+            console.log('this is from :',from);
+            navigate(from, { replace: true })
+            
+          })
+          .catch(err => {
+            const response = err.response
 
-          //console.log(err);
-          if (response && response.status === 422) {
-            setErrors(response.data.errors)
-            console.log(errors);
-          }
-        })
-    });
+            if (response && response.status === 422) {
+              setErrors(response.data.errors)
+              console.log(errors);
+            }
+          })
+      });
 
+    }
+
+
+    catch (err) {
+      console.log(err);
+    }
   }
-
   return (
     <>
       <div className="container bg-gray-100 ">

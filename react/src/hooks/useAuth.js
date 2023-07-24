@@ -7,6 +7,7 @@ const useAuth = () => {
   const token = useSelector(selectToken)
   const user = useSelector(selectUser)
   const auth = token !== ""? {token,user} : false
+  //console.log(auth);
   useDebugValue(auth)
   return auth
 }

@@ -4,6 +4,7 @@ import logo from '../../assets/logo.png';
 import { useDispatch, useSelector } from 'react-redux'
 import { removeToken, setToken, setUser } from "../../app/UserSlice";
 import { useLocation, useNavigate } from "react-router-dom";
+import SocialAuth from "./SocialAuth";
 
 const Login = () => {
 
@@ -97,27 +98,21 @@ const Login = () => {
                 className="block border border-slate-400 w-full p-3 rounded mb-4"
                 name="password"
                 placeholder="Password" />
-
+                <div className="flex flex-col max-w-sm gap-2">
               <button
                 type="submit"
-                className="w-full text-center py-3 rounded bg-blue-500 text-white hover:bg-blue-600 button-theme focus:outline-none my-1"
+                className="button-theme py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700  text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md rounded-lg"
               >Login</button>
-
-              <div className="text-center text-sm text-gray-800 mt-4">
-                By signing up, you agree to the&nbsp;
-                <a className="no-underline border-b border-blue-600 text-blue-600" href="#">
-                  Terms of Service
-                </a> and&nbsp;
-                <a className="no-underline border-b border-blue-600 text-blue-600" href="#">
-                  Privacy Policy
-                </a>
+              <span className="mx-auto text-center w-[80%] no-underline border-b border-slate-400 text-black my-2">Or</span>
+              <SocialAuth />
               </div>
+
             </div>
 
             <div className="text-gray-800 mt-6">
-              Already have an account?&nbsp;
+              You don't have an account?&nbsp;
               <a className="no-underline border-b border-blue-600 text-blue-600" href="../login/">
-                Log in
+                Sign up
               </a>.
             </div>
           </form>

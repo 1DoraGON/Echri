@@ -3,7 +3,6 @@ import { GuestLayout, Login, NotFound, Profile, SignUp} from './components/index
 import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "./App";
-import GoogleSignIn from './components/Registration/GoogleSignIn';
 const router = createBrowserRouter( [
     
     {
@@ -36,7 +35,7 @@ const router = createBrowserRouter( [
         children: [
             {
                 path:'/login',
-                element:<GoogleSignIn />
+                element:<Login />
             },
             {
                 path:'/signup',

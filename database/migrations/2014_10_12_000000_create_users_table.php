@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('firstname');
             $table->string('lastname');
+            $table->boolean('is_social_auth')->default(false); // Adding the 'isSocialAuth' column with default value 'false'
+            $table->string('picture')->nullable(); // Adding the 'picture' column to store the picture URL (nullable allows for an optional value)
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

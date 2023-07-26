@@ -38,7 +38,7 @@ const SocialAuth = () => {
 
         <div className="hidden">
 
-          <GoogleLogin
+{/*           <GoogleLogin
             onSuccess={credentialResponse => {
               console.log('this is the log ',credentialResponse.credential);
               var decoded = jwt_decode(credentialResponse.credential);
@@ -46,7 +46,7 @@ const SocialAuth = () => {
             }}
             onError={() => {
               console.log('Login Failed');
-            }} />
+            }} /> */}
         </div>
       </button>
       <LoginSocialFacebook

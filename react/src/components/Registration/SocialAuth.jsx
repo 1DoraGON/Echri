@@ -6,7 +6,7 @@ import axios from 'axios';
 import { LoginSocialFacebook } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
 const SocialAuth = () => {
-  const clientId = "96452844927-6hq7j74fa1utblqptncbaghtm1erbfee.apps.googleusercontent.com"
+  //const clientId = "96452844927-6hq7j74fa1utblqptncbaghtm1erbfee.apps.googleusercontent.com"
 
   const login = useGoogleLogin({
     onSuccess: async respose => {
@@ -40,9 +40,9 @@ const SocialAuth = () => {
 
           <GoogleLogin
             onSuccess={credentialResponse => {
-              console.log(credentialResponse.credential);
+              console.log('this is the log ',credentialResponse.credential);
               var decoded = jwt_decode(credentialResponse.credential);
-              console.log(decoded)
+              console.log('this is the log decoded ',decoded)
             }}
             onError={() => {
               console.log('Login Failed');

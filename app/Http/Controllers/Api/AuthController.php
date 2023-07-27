@@ -8,6 +8,7 @@ use App\Http\Requests\SignupRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\SocialAuthRequest;
 
 class AuthController extends Controller
 {
@@ -24,6 +25,7 @@ class AuthController extends Controller
         $token = $user->createToken('main')->plainTextToken;
         return response(compact('user','token'));
     }
+
     public function signup(SignupRequest $request)
     {
         $data = $request->validated();
@@ -38,6 +40,32 @@ class AuthController extends Controller
         $token = $user->createToken('main')->plainTextToken;
         return response(compact('user', 'token'));
     }
+    public function socialAuth(SocialAuthRequest $request)
+    {
+        $data = $request->validated();
+    
+        // Check if the email already exists in the database
+        if (User::where('email', $data['email'])->exists()) {
+            // If the user already exists, log them in and return the token
+            $user = User::where('email', $data['email'])->first();
+            $token = $user->createToken('main')->plainTextToken;
+            return response(compact('user', 'token'));
+        } else {
+            // If the user does not exist, create a new user without a password
+            $user = User::create([
+                'firstname' => $data['firstname'] ?? '',
+                'lastname' => $data['lastname'] ?? '',
+                'email' => $data['email'],
+                'password' => '', // Set password to an empty string or null
+            ]);
+            $user->picture = $data['picture'];
+            $user->save();
+    
+            $token = $user->createToken('main')->plainTextToken;
+            return response(compact('user', 'token'));
+        }
+    }
+    
     public function logout(Request $request){
         $user = $request->user();
         $user->currentAccessToken()->delete();

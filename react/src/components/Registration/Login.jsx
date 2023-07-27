@@ -104,7 +104,7 @@ const Login = () => {
                 className="button-theme py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700  text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md rounded-lg"
               >Login</button>
               <span className="mx-auto text-center w-[80%] no-underline border-b border-slate-400 text-black my-2">Or</span>
-              <SocialAuth />
+              <SocialAuth setErrors = {setErrors}/>
               </div>
 
             </div>

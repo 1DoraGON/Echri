@@ -41,3 +41,4 @@ Route::post('/test', function (Request $request) {
 
 Route::post('/signup',[AuthController::class, 'signup']);
 Route::post('/login',[AuthController::class, 'login']);
+Route::post('/socialauth',[AuthController::class, 'socialAuth']);

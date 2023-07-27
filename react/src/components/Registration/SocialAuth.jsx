@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { LoginSocialFacebook } from "reactjs-social-login";
 const SocialAuth = () => {
 
-  const FacebookId="1316180369297101"
+  const FacebookId="242567552035675"
   const [img,setImg] = useState('')
   const login = useGoogleLogin({
     onSuccess: async respose => {

@@ -3,7 +3,7 @@ import axiosClient from "../../api/axios";
 import logo from '../../assets/logo.png';
 import { useDispatch, useSelector } from 'react-redux'
 import { removeToken, setToken, setUser } from "../../app/UserSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SocialAuth from "./SocialAuth";
 
 const Login = () => {
@@ -74,7 +74,7 @@ const Login = () => {
           </div>
           <form onSubmit={(e) => { onHandleSubmit(e) }} className="container  max-w-md flex-1 flex flex-col items-center justify-center px-2">
             <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
-              <h1 className="mb-8 text-3xl text-center">Sign up</h1>
+              <h1 className="mb-8 text-3xl text-center">Log in</h1>
               {errors &&
                 <ul className='alert'>
                   {Object.keys(errors).map(key => (
@@ -111,9 +111,9 @@ const Login = () => {
 
             <div className="text-gray-800 mt-6">
               You don't have an account?&nbsp;
-              <a className="no-underline border-b border-blue-600 text-blue-600" href="../login/">
+              <Link className="no-underline border-b border-blue-600 text-blue-600" to='/signup'>
                 Sign up
-              </a>.
+              </Link>.
             </div>
           </form>
 

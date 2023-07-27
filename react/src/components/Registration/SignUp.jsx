@@ -3,6 +3,7 @@ import axiosClient from "../../api/axios";
 import logo from '../../assets/logo.png';
 import { useDispatch, useSelector } from 'react-redux'
 import { removeToken, setToken, setUser } from "../../app/UserSlice";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const firstnameRef = useRef()
@@ -134,9 +135,9 @@ const SignUp = () => {
 
             <div className="text-gray-800 mt-6">
               Already have an account?&nbsp;
-              <a className="no-underline border-b border-blue-600 text-blue-600" href="../login/">
+              <Link className="no-underline border-b border-blue-600 text-blue-600" to='/login'>
                 Log in
-              </a>.
+              </Link>.
             </div>
           </form>
 

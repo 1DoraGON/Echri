@@ -59,6 +59,7 @@ class AuthController extends Controller
                 'password' => '', // Set password to an empty string or null
             ]);
             $user->picture = $data['picture'];
+            $user->is_social_auth = 1;
             $user->save();
     
             $token = $user->createToken('main')->plainTextToken;

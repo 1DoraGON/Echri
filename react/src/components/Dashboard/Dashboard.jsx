@@ -1,9 +1,12 @@
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { FiSettings } from 'react-icons/fi'
-import { Outlet, Routes } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+
+import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
+import { Ecommerce } from './pages';
 
 const Dashboard = () => {
-  const activeMenu = false;
+  const activeMenu = true;
   return (
     <>
       <div className="flex relative dark:bg-main-dark-bg">
@@ -21,11 +24,11 @@ const Dashboard = () => {
         </div>
         {activeMenu ? (
           <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white dark:text-white">
-            Sidebar
+            <Sidebar />
           </div>
         ) : (
           <div className="w-0 dark:text-white dark:bg-secondary-dark-bg">
-            Sidebar w-0
+            <Sidebar />
           </div>
         )}
         <div className={`dark:bg-main-bg bg-main-bg min-h-screen w-full
@@ -33,12 +36,12 @@ const Dashboard = () => {
             'flex-2'}`
         }>
           <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full dark:text-white">
-            Navbar
+            <Navbar />
 
           </div>
         </div>
         <div className="">
-          <Outlet />
+          <Ecommerce />
         </div>
       </div>
     </>

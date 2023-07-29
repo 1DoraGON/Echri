@@ -4,6 +4,9 @@ import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "./App";
 import Dashboard from './components/Dashboard/Dashboard';
+import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor } from './components/Dashboard/pages';
+
+import './App.css';
 const router = createBrowserRouter( [
     
     {
@@ -30,66 +33,70 @@ const router = createBrowserRouter( [
                 element:<Dashboard />,
                 children: [
                     {
+                        path: '/dashboard',
+                        element: <Ecommerce />
+                    },
+                    {
                         path: '/dashboard/orders',
-                        element: <h1>orders</h1>
+                        element: <Orders />
                     },
                     {
                         path: '/dashboard/employees',
-                        element: <h1>employees</h1>
+                        element: <Employees />
                     },
                     {
                         path: '/dashboard/customers',
-                        element: <h1>customers</h1>
+                        element: <Customers />
                     },
                     {
                         path: '/dashboard/kanban',
-                        element: <h1>kanban</h1>
+                        element: <Kanban />
                     },
                     {
                         path: '/dashboard/editor',
-                        element: <h1>editor</h1>
+                        element: <Editor />
                     },
                     {
                         path: '/dashboard/calendar',
-                        element: <h1>calendar</h1>
+                        element: <Calendar />
                     },
                     {
                         path: '/dashboard/color-picker',
-                        element: <h1>color-picker</h1>
+                        element: <ColorPicker />
                     },
 
 
                     {
                         path: '/dashboard/line',
-                        element: <h1>line</h1>
+                        element: <Line />
                     },
                     {
                         path: '/dashboard/area',
-                        element: <h1>area</h1>
+                        element: <Area />
                     },
                     {
                         path: '/dashboard/bar',
-                        element: <h1>bar</h1>
+                        element: <Bar />
                     },
                     {
                         path: '/dashboard/pie',
-                        element: <h1>pie</h1>
+                        element: <Pie />
                     },
                     {
                         path: '/dashboard/financial',
-                        element: <h1>financial</h1>
+                        element: <Financial />
                     },
                     {
                         path: '/dashboard/color-mapping',
-                        element: <h1>color-mapping</h1>
+                        element: <ColorMapping />
                     },
                     {
                         path: '/dashboard/pyramid',
-                        element: <h1>pyramid</h1>
+                        element: <Pyramid />
                     },
                     {
                         path: '/dashboard/stacked',
-                        element: <h1>stacked</h1>
+                        element: <Stacked />
                     },
                 ]
             }

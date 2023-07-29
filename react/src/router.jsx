@@ -27,7 +27,71 @@ const router = createBrowserRouter( [
             },
             {
                 path:'/dashboard',
-                element:<Dashboard />
+                element:<Dashboard />,
+                children: [
+                    {
+                        path: '/dashboard/orders',
+                        element: <h1>orders</h1>
+                    },
+                    {
+                        path: '/dashboard/employees',
+                        element: <h1>employees</h1>
+                    },
+                    {
+                        path: '/dashboard/customers',
+                        element: <h1>customers</h1>
+                    },
+                    {
+                        path: '/dashboard/kanban',
+                        element: <h1>kanban</h1>
+                    },
+                    {
+                        path: '/dashboard/editor',
+                        element: <h1>editor</h1>
+                    },
+                    {
+                        path: '/dashboard/calendar',
+                        element: <h1>calendar</h1>
+                    },
+                    {
+                        path: '/dashboard/color-picker',
+                        element: <h1>color-picker</h1>
+                    },
+
+
+                    {
+                        path: '/dashboard/line',
+                        element: <h1>line</h1>
+                    },
+                    {
+                        path: '/dashboard/area',
+                        element: <h1>area</h1>
+                    },
+                    {
+                        path: '/dashboard/bar',
+                        element: <h1>bar</h1>
+                    },
+                    {
+                        path: '/dashboard/pie',
+                        element: <h1>pie</h1>
+                    },
+                    {
+                        path: '/dashboard/financial',
+                        element: <h1>financial</h1>
+                    },
+                    {
+                        path: '/dashboard/color-mapping',
+                        element: <h1>color-mapping</h1>
+                    },
+                    {
+                        path: '/dashboard/pyramid',
+                        element: <h1>pyramid</h1>
+                    },
+                    {
+                        path: '/dashboard/stacked',
+                        element: <h1>stacked</h1>
+                    },
+                ]
             }
 
         ]

@@ -1,6 +1,6 @@
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { FiSettings } from 'react-icons/fi'
-import { Routes } from 'react-router-dom';
+import { Outlet, Routes } from 'react-router-dom';
 
 const Dashboard = () => {
   const activeMenu = false;
@@ -38,9 +38,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="">
-          <Routes>
-            
-          </Routes>
+          <Outlet />
         </div>
       </div>
     </>

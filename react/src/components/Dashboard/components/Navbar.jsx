@@ -6,14 +6,41 @@ import { RiNotification3Line } from 'react-icons/ri';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-import avatar from '../../data/avatar.jpg';
+import avatar from '../../../data/avatar.jpg';
 import { Cart, Chat, Notification, UserProfile } from '.';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectActiveMenu, selectCart, selectChat, selectNotification, selectUserProfile, setActiveMenu, setCart, setChat, setNotification, setUserProfile } from '../../../app/ThemeSlice';
+import NavButton from './utils/NavButton';
 const Navbar = () => {
-  useEffect(()=>{
+  const activeMenu = useSelector(selectActiveMenu)
+  const dispatch = useDispatch()
+  const cart = useSelector(selectCart)
+  const chat = useSelector(selectChat)
+  const notification = useSelector(selectNotification)
+  const userProfile = useSelector(selectUserProfile)
 
-  },[])
+
+  useEffect(() => {
+ 
+  }, [])
   return (
-    <div>Navbar</div>
+    <>
+      <div className="flex justify-between p-2 md:mx-6 relative">
+        <NavButton title="Menu" customFunc={() => { dispatch(setActiveMenu(!activeMenu)) }} color="blue" icon={<AiOutlineMenu />} />
+        <div className="flex">
+          <NavButton title="Cart" customFunc={() => { dispatch(setCart(!cart)) }} color="blue" icon={<FiShoppingCart />} />
+          <NavButton title="Chat" dotColor="#03c9d7" customFunc={() => { dispatch(setChat(!chat)) }} color="blue" icon={<BsChatLeft />} />
+          <NavButton title="Chat" dotColor="#03c9d7" customFunc={() => { dispatch(setNotification(!notification)) }} color="blue" icon={<RiNotification3Line />} />
+          <TooltipComponent content="Profile" position='BottomCenter'>
+            <div className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg " onClick={()=>{dispatch(setUserProfile(!userProfile))}}>
+              <img src={avatar} alt="avatar" className='rounded-full w-8 h-8' />
+              <p className=''> <span className='text-gray-400 text-14'>Hi, </span> {' '} <span className='text-gray-400 font-bold ml-1 text-14'>Amir</span> </p>
+              <MdKeyboardArrowDown className='text-gray-400 text-14 ' />
+            </div>
+          </TooltipComponent>
+        </div>
+      </div>
+    </>
   )
 }
 

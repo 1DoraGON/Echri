@@ -43,10 +43,11 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="">
-          <Ecommerce />
+          <Outlet />
         </div>
       </div>
     </>
+    
   )
 }
 

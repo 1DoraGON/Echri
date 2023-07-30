@@ -4,9 +4,11 @@ import { Outlet } from 'react-router-dom';
 
 import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
 import { Ecommerce } from './pages';
+import { useSelector } from 'react-redux';
+import { selectActiveMenu } from '../../app/ThemeSlice';
 
 const Dashboard = () => {
-  const activeMenu = true;
+  const activeMenu = useSelector(selectActiveMenu);
   return (
     <>
       <div className="flex relative dark:bg-main-dark-bg">

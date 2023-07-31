@@ -9,7 +9,7 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import avatar from '../../../data/avatar.jpg';
 import { Cart, Chat, Notification, UserProfile } from '.';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActiveMenu, selectCart, selectChat, selectNotification, selectUserProfile, setActiveMenu, setCart, setChat, setNotification, setUserProfile } from '../../../app/ThemeSlice';
+import { selectActiveMenu, selectCart, selectChat, selectNotification, selectScreenSize, selectUserProfile, setActiveMenu, setCart, setChat, setNotification, setScreenSize, setUserProfile } from '../../../app/ThemeSlice';
 import NavButton from './utils/NavButton';
 const Navbar = () => {
   const activeMenu = useSelector(selectActiveMenu)
@@ -18,14 +18,29 @@ const Navbar = () => {
   const chat = useSelector(selectChat)
   const notification = useSelector(selectNotification)
   const userProfile = useSelector(selectUserProfile)
-
+  const screenSize = useSelector(selectScreenSize)
 
   useEffect(() => {
- 
+    const handleResize = () => {
+      dispatch(setScreenSize(window.innerWidth))
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+    return () => {
+      window.removeEventListener('resize',handleResize)
+    }
   }, [])
+  useEffect(()=>{
+
+    if (screenSize <= 900) {
+      dispatch(setActiveMenu(false))
+    } else {
+      dispatch(setActiveMenu(true))
+    }
+  },[screenSize])
   return (
     <>
-      <div className="flex justify-between p-2 md:mx-6 relative">
+      <div className="flex justify-between p-2 md:mr-6 md:mx-6 relative">
         <NavButton title="Menu" customFunc={() => { dispatch(setActiveMenu(!activeMenu)) }} color="blue" icon={<AiOutlineMenu />} />
         <div className="flex">
           <NavButton title="Cart" customFunc={() => { dispatch(setCart(!cart)) }} color="blue" icon={<FiShoppingCart />} />
@@ -38,6 +53,11 @@ const Navbar = () => {
               <MdKeyboardArrowDown className='text-gray-400 text-14 ' />
             </div>
           </TooltipComponent>
+          {cart && <Cart />}
+          {notification && <Notification />}
+          {chat && <Chat />}
+          {userProfile && <UserProfile />}
+
         </div>
       </div>
     </>

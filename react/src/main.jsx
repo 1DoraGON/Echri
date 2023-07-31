@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import './App.css'
 import { Provider } from 'react-redux'
 import Store from './app/Store.js'
 import { Toaster } from 'react-hot-toast'
@@ -9,6 +8,8 @@ import { RouterProvider } from 'react-router-dom'
 import router from './router'
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import { registerLicense } from '@syncfusion/ej2-base';
+import '@syncfusion/ej2-base/styles/material.css'; // Choose the appropriate theme (e.g., material.css, bootstrap.css, etc.)
+import '@syncfusion/ej2-react-popups/styles/material.css'; // Choose the appropriate theme (e.g., material.css, bootstrap.css, etc.)
 
 // Registering Syncfusion license key
 registerLicense('487137');

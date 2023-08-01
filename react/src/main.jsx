@@ -8,11 +8,11 @@ import { RouterProvider } from 'react-router-dom'
 import router from './router'
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import { registerLicense } from '@syncfusion/ej2-base';
-import '@syncfusion/ej2-base/styles/material.css'; // Choose the appropriate theme (e.g., material.css, bootstrap.css, etc.)
-import '@syncfusion/ej2-react-popups/styles/material.css'; // Choose the appropriate theme (e.g., material.css, bootstrap.css, etc.)
+//import '@syncfusion/ej2-base/styles/material.css'; // Choose the appropriate theme (e.g., material.css, bootstrap.css, etc.)
+//import '@syncfusion/ej2-react-popups/styles/material.css'; // Choose the appropriate theme (e.g., material.css, bootstrap.css, etc.)
 
 // Registering Syncfusion license key
-registerLicense('487137');
+registerLicense('ORg4AjUWIQA/Gnt2V1hhQlJAfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hSn5bdkRiXnxZcn1VQWlb');
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={Store}>

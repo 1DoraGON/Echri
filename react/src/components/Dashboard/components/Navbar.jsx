@@ -43,6 +43,8 @@ const Navbar = () => {
       <div className="flex justify-between p-2 md:mr-6 md:mx-6 relative">
         <NavButton title="Menu" customFunc={() => { dispatch(setActiveMenu(!activeMenu)) }} color="blue" icon={<AiOutlineMenu />} />
         <div className="flex">
+        <div className="test">Hello world</div>
+
           <NavButton title="Cart" customFunc={() => { dispatch(setCart(!cart)) }} color="blue" icon={<FiShoppingCart />} />
           <NavButton title="Chat" dotColor="#03c9d7" customFunc={() => { dispatch(setChat(!chat)) }} color="blue" icon={<BsChatLeft />} />
           <NavButton title="Chat" dotColor="#03c9d7" customFunc={() => { dispatch(setNotification(!notification)) }} color="blue" icon={<RiNotification3Line />} />

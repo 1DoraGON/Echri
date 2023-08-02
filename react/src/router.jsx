@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor } from './components/Dashboard/pages';
 
 import './App.css';
+import HomePage from './components/HomePage';
 const router = createBrowserRouter( [
     
     {
@@ -22,7 +23,7 @@ const router = createBrowserRouter( [
             
             {
                 path:'/products',
-                element:<App />
+                element:<HomePage />
             },
             {
                 path:'/profile',

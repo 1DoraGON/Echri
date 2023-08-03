@@ -25,7 +25,7 @@ const Sidebar = () => {
               <SiShopware /> <span>Shoppy </span>
             </Link>
             <TooltipComponent content="Menu" position='BottomCenter' >
-              <button type="button" className='text-xl rounded-full p-3 hover:bg-light-gray mt-4 block md:hidden' onClick={() => {
+              <button type="button" className='text-xl rounded-full p-3 hover:bg-light-gray mt-4 block' onClick={() => {
                 dispatch(setActiveMenu(!activeMenu))
               }}>
                 <MdOutlineCancel />
@@ -40,7 +40,7 @@ const Sidebar = () => {
                   {link.title}
                 </p>
                 {link.links.map((link,i)=>(
-                  <NavLink to={`/${link.name}`} key={i} onClick={()=>{}} className={({isActive})=>isActive ? activeLink : normalLink}>
+                  <NavLink to={`/${link.url}`} key={i} onClick={()=>{}} className={({isActive})=>isActive ? activeLink : normalLink}>
                     {link.icon}
                     <span className='capitalize'>
                       {link.name}

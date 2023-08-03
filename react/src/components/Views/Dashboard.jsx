@@ -26,29 +26,29 @@ const Dashboard = () => {
 
         </div>
         {activeMenu ? (
-          <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white dark:text-white">
+          <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white dark:text-white transition-all duration-300">
             <Sidebar />
           </div>
         ) : (
-          <div className="w-0 dark:text-white dark:bg-secondary-dark-bg">
+          <div className="w-0 dark:text-white dark:bg-secondary-dark-bg transition-all duration-300">
             <Sidebar />
           </div>
         )}
         <div className={
           activeMenu
-            ? 'dark:bg-main-dark-bg  bg-main-bg min-h-screen ml-72 w-full  '
-            : 'bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 '
+            ? 'dark:bg-main-dark-bg  bg-main-bg min-h-screen ml-72 w-full transition-all duration-300'
+            : 'bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 transition-all duration-300'
         } >
           {activeMenu ? (
             <div style={{
               width: 'calc(100% - 18rem)',
-            }} className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full dark:text-white">
+            }} className="fixed static bg-main-bg dark:bg-main-dark-bg navbar w-full  dark:text-white ">
               <Navbar />
 
             </div>
 
           ) : (
-            <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full dark:text-white">
+            <div className="fixed static bg-main-bg dark:bg-main-dark-bg navbar w-full dark:text-white">
               <Navbar />
 
             </div>

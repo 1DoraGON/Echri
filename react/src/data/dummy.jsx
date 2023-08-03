@@ -475,6 +475,7 @@ export const links = [
     links: [
       {
         name: 'ecommerce',
+        url: 'dashboard/ecommerce',
         icon: <FiShoppingBag />,
       },
     ],
@@ -485,14 +486,17 @@ export const links = [
     links: [
       {
         name: 'orders',
+        url: 'dashboard/orders',
         icon: <AiOutlineShoppingCart />,
       },
       {
         name: 'employees',
+        url: 'dashboard/employees',
         icon: <IoMdContacts />,
       },
       {
         name: 'customers',
+        url: 'dashboard/customers',
         icon: <RiContactsLine />,
       },
     ],
@@ -502,18 +506,22 @@ export const links = [
     links: [
       {
         name: 'calendar',
+        url: 'dashboard/calendar',
         icon: <AiOutlineCalendar />,
       },
       {
         name: 'kanban',
+        url: 'dashboard/kanban',
         icon: <BsKanban />,
       },
       {
         name: 'editor',
+        url: 'dashboard/editor',
         icon: <FiEdit />,
       },
       {
         name: 'color-picker',
+        url: 'dashboard/color-picker',
         icon: <BiColorFill />,
       },
     ],
@@ -523,35 +531,43 @@ export const links = [
     links: [
       {
         name: 'line',
+        url: 'dashboard/line',
         icon: <AiOutlineStock />,
       },
       {
         name: 'area',
+        url: 'dashboard/area',
         icon: <AiOutlineAreaChart />,
       },
 
       {
         name: 'bar',
+        url: 'dashboard/bar',
         icon: <AiOutlineBarChart />,
       },
       {
         name: 'pie',
+        url: 'dashboard/pie',
         icon: <FiPieChart />,
       },
       {
         name: 'financial',
+        url: 'dashboard/financial',
         icon: <RiStockLine />,
       },
       {
         name: 'color-mapping',
+        url: 'dashboard/color-mapping',
         icon: <BsBarChart />,
       },
       {
         name: 'pyramid',
+        url: 'dashboard/pyramid',
         icon: <GiLouvrePyramid />,
       },
       {
         name: 'stacked',
+        url: 'dashboard/stacked',
         icon: <AiOutlineBarChart />,
       },
     ],

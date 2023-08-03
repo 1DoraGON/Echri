@@ -1,13 +1,13 @@
 
-import { GuestLayout, Login, NotFound, Profile, SignUp} from './components/index'
+import { GuestLayout, Login, NotFound, Profile, SignUp} from './components/HomePage/index'
 import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "./App";
-import Dashboard from './components/Dashboard/Dashboard';
+import Dashboard from './components/Views/Dashboard';
 import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor } from './components/Dashboard/pages';
 
 import './App.css';
-import HomePage from './components/HomePage';
+import HomePage from './components/Views/HomePage';
 const router = createBrowserRouter( [
     
     {

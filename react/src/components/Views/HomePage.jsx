@@ -1,6 +1,6 @@
 
-import {Cart, FlexContent, Footer, Hero, Navbar, Sales, Stories} from './index'
-import { footerAPI, heroapi, highlight, popularsales, sneaker, story, toprateslaes } from '../data/data.js'
+import {Cart, FlexContent, Footer, Hero, Navbar, Sales, Stories} from '../HomePage/index'
+import { footerAPI, heroapi, highlight, popularsales, sneaker, story, toprateslaes } from '../../data/data.js'
 function HomePage() {
   return (
     <>

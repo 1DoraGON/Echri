@@ -1,10 +1,9 @@
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { FiSettings } from 'react-icons/fi'
 import { Outlet } from 'react-router-dom';
-import '../../App.css'
 
-import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
-import { Ecommerce } from './pages';
+import { Navbar, Footer, Sidebar, ThemeSettings } from '../Dashboard/components';
+import { Ecommerce } from '../Dashboard/pages';
 import { useSelector } from 'react-redux';
 import { selectActiveMenu } from '../../app/ThemeSlice';
 

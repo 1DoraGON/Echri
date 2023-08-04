@@ -1,5 +1,4 @@
 import React from 'react'
-//import { GoPrimitiveDot } from 'react-icons/go';
 //import { IoIosMore } from 'react-icons/io'; 
 import { CurrencyDollarIcon, MagnifyingGlassIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
 
@@ -10,7 +9,7 @@ const Ecommerce = () => {
   return (
     <div className='mt-12'>
       <div className="flex flex-wrap lg:flex-nowrap justify-center">
-        <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl lg:w-80 py-8 px-10 pt-9 m-3 bg-hero-pattern bg-no-repeat bg-cover bg-center">
+        <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-80 py-8 px-10 pt-9 m-3">
           <div className="flex justify-between items-center">
             <div className="">
               <p className='font-bold text-gray-400'>Earnings</p>
@@ -43,9 +42,25 @@ const Ecommerce = () => {
           ))}
         </div>
       </div>
+      <div className="flex gap-10 flex-wrap justify-center">
+        <div className="dark:text-gray-200 bg-white dark:bg-secondary-dark-bg m-3 p-4 rounded-2xl w-780">
+          <div className="flex justify-between">
+            <p className='font-semibold text-xl'>Revenue Updates</p>
+            <div className="flex items-center gap-4">
+              <p className="">
+                <div className="rounded-full bg-green-500 w-3 h-3"></div>
+
+
+
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
-    
+
   )
 }
 

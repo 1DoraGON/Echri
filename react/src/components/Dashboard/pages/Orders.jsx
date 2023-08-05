@@ -4,6 +4,8 @@ import { ordersData, contextMenuItems, ordersGrid } from '../../../data/dummy'
 import { Header } from '../components'
 
 const Orders = () => {
+  const editing = { allowDeleting: true, allowEditing: true };
+
   return (
     <div className='m-10 mt-20 md:m-2 p-10  md:p-2 bg-white rounded-3xl'>
       <Header category="Page" title="Orders" />
@@ -17,6 +19,7 @@ const Orders = () => {
         <Inject services={[Resize,Sort,ContextMenu,Filter,Page,ExcelExport,Edit,PdfExport]} />
       </GridComponent>
     </div>
+
   )
 }
 

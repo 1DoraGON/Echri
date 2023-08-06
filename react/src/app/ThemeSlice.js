@@ -8,7 +8,7 @@ const initialState = {
   notification: false,
   screenSize: localStorage.getItem('screenSize') ? JSON.parse(localStorage.getItem('screenSize')) : undefined,
   currentColor: localStorage.getItem('currentColor') ? JSON.parse(localStorage.getItem('currentColor')) : '#03C9D7',
-  currentMode: localStorage.getItem('currentMode') ? JSON.parse(localStorage.getItem('currentMode')) : 'Light',
+  currentMode: localStorage.getItem('currentMode') ? JSON.parse(localStorage.getItem('currentMode')) : 'Dark',
   themeSettings: localStorage.getItem('themeSettings') ? JSON.parse(localStorage.getItem('themeSettings')) : false,
   activeMenu: true,
 };
@@ -38,6 +38,7 @@ const ThemeSlice = createSlice({
     },
     setThemeSettings: (state,action) => {
       state.themeSettings = action.payload
+      console.log(action.payload);
       localStorage.setItem("themeSettings", JSON.stringify(state.themeSettings))
 
     },

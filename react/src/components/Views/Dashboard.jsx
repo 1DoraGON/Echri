@@ -4,11 +4,13 @@ import { Outlet } from 'react-router-dom';
 
 import { Navbar, Footer, Sidebar, ThemeSettings } from '../Dashboard/components';
 import { Ecommerce } from '../Dashboard/pages';
-import { useSelector } from 'react-redux';
-import { selectActiveMenu } from '../../app/ThemeSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectActiveMenu, selectThemeSettings, setThemeSettings } from '../../app/ThemeSlice';
 
 const Dashboard = () => {
   const activeMenu = useSelector(selectActiveMenu);
+  const themeSettings = useSelector(selectThemeSettings)
+  const dispatch = useDispatch()
   return (
     <>
 
@@ -18,7 +20,7 @@ const Dashboard = () => {
             content="Settings"
             position="Top"
           >
-            <button type='button' className='text-3xl p-3 hover:drop-shadow-xl text-white hover:bg-light-gray' style={{ background: 'blue', borderRadius: '50%' }}>
+            <button type='button' className='text-3xl p-3 hover:drop-shadow-xl text-white hover:bg-light-gray' style={{ background: 'blue', borderRadius: '50%' }} onClick={()=>{dispatch(setThemeSettings(true))}}>
               <FiSettings />
             </button>
 
@@ -55,6 +57,10 @@ const Dashboard = () => {
 
           )}
           <div className="">
+            <div className={`transition-all duration-300 ${!themeSettings ? 'hidden' : ''}`}>
+              <ThemeSettings />
+            </div>
+
             <Outlet />
           </div>
         </div>

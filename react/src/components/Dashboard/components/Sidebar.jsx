@@ -5,12 +5,12 @@ import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { links } from '../../../data/dummy'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectActiveMenu, setActiveMenu } from '../../../app/ThemeSlice';
+import { selectActiveMenu, selectCurrentColor, setActiveMenu } from '../../../app/ThemeSlice';
 
 const Sidebar = () => {
   const dispatch = useDispatch()
   const activeMenu = useSelector(selectActiveMenu)
-  
+  const currentColor = useSelector(selectCurrentColor)
   const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg  text-white  text-md m-2';
   const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2';
   return (
@@ -40,7 +40,7 @@ const Sidebar = () => {
                   {link.title}
                 </p>
                 {link.links.map((link,i)=>(
-                  <NavLink to={`/${link.url}`} key={i} onClick={()=>{}} className={({isActive})=>isActive ? activeLink : normalLink}>
+                  <NavLink to={`/${link.url}`} key={i} onClick={()=>{}} className={({isActive})=>isActive ? activeLink : normalLink} style={({isActive})=>({backgroundColor: isActive ? currentColor : ''})}>
                     {link.icon}
                     <span className='capitalize'>
                       {link.name}

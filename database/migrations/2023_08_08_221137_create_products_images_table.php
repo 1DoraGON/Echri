@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('products_images', function (Blueprint $table) {
             $table->id();
-            $table->string('wilaya');
-            $table->string('full_address');
+            $table->unsignedBigInteger('product_id'); // Foreign key column
+            $table->string('image_url'); // New column for image URL
             $table->timestamps();
+
+            // Define the foreign key constraint
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('products_images');
     }
 };

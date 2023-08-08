@@ -15,8 +15,12 @@ return new class extends Migration
             $table->id();
             $table->decimal('total_price', 8, 2);
             $table->unsignedBigInteger('user_id'); // Foreign key column
+            $table->unsignedBigInteger('address_id')->nullable(); // Foreign key column
+            $table->boolean('home_delivery');
             $table->timestamps();
 
+            // Define the foreign key constraint
+            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
             // Define the foreign key constraint
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

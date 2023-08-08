@@ -19,8 +19,8 @@ class Order extends Model
         return $this->belongsToMany(Product::class)->withPivot('quantity'); // Define the pivot table and pivot column
     }
 
-    public function orders()
+    public function address()
     {
-        return $this->belongsToMany(Order::class)->withPivot('quantity'); // Define the pivot table and pivot column
+        return $this->hasOne(Address::class); // Assuming your foreign key column in users table is 'address_id'
     }
 }

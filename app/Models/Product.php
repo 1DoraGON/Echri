@@ -13,4 +13,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Order::class)->withPivot('quantity'); // Define the pivot table and pivot column
     }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
 }

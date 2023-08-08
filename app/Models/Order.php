@@ -9,14 +9,18 @@ class Order extends Model
 {
     use HasFactory;
 
-    /**
-     * Get the user that owns the Order
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->withPivot('quantity'); // Define the pivot table and pivot column
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)->withPivot('quantity'); // Define the pivot table and pivot column
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -24,9 +25,18 @@ class ProductController extends Controller
             'color_start' => 'nullable|string',
             'color_end' => 'nullable|string',
             'stock' => 'nullable|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);
+        //return response(compact('data'));
 
+        $imagePath = $data['image'];
+        unset($data['image']);
         $product = Product::create($data);
+        $imagePath = $imagePath->store('product_images', 'public');
+        $image = ProductImage::create([
+            'image_url' => $imagePath,
+            'product_id' => $product->id
+        ]);
         return new ProductResource($product);
     }
 

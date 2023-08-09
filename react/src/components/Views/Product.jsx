@@ -12,7 +12,7 @@ const Product = () => {
     color_end: '#fff'
     // ... other fields
   });
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -34,27 +34,28 @@ const Product = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    //console.log(formData)
-/*     'name' => 'required|string',
-    'description' => 'nullable|string',
-    'price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-    'color_start' => 'nullable|string',
-    'color_end' => 'nullable|string',
-    'stock' => 'nullable|integer', */
-    axiosClient.post('/api/products', formData)
-    .then(({ data }) => {
-      console.log(data)
-      axiosClient.delete(`/api/products/${data.data.id}`).then((res) => {
-        console.log(res);
-        
+    
+    const formDataToSend = new FormData();
+    formDataToSend.append('name', formData.name);
+    formDataToSend.append('description', formData.description);
+    formDataToSend.append('price', formData.price);
+    formDataToSend.append('stock', formData.stock);
+    formDataToSend.append('color_start', formData.color_start);
+    formDataToSend.append('color_end', formData.color_end);
+    formDataToSend.append('image', formData.image); // Append the image file
+  
+    axiosClient.post('/api/products', formDataToSend)
+      .then(({ data }) => {
+        console.log(data);
+        axiosClient.delete(`/api/products/${data.data.id}`).then((res) => {
+          console.log(res);
+        });
+      })
+      .catch(err => {
+        console.log(err);
       });
-    })
-    .catch(err => {
-      console.log(err)
-      
-    })
-    // ... send formDataToSend to the backend using fetch or axios
   };
+  
 
   return (
 

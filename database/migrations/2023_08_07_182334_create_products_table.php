@@ -15,6 +15,7 @@ class CreateProductsTable extends Migration
             $table->text('color_start')->nullable();
             $table->text('color_end')->nullable();
             $table->decimal('price', 8, 2);
+            $table->integer('stock')->nullable(); // Add the quantity column
             // Add any other columns you need for the product
             $table->timestamps();
         });

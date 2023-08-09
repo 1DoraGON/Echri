@@ -20,7 +20,10 @@ class ProductController extends Controller
         $data = $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'color_start' => 'nullable|string',
+            'color_end' => 'nullable|string',
+            'stock' => 'nullable|integer',
         ]);
 
         $product = Product::create($data);
@@ -37,7 +40,10 @@ class ProductController extends Controller
         $data = $request->validate([
             'name' => 'required|string',
             'description' => 'nullable|string',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'color_start' => 'nullable|string',
+            'color_end' => 'nullable|string',
+            'stock' => 'nullable|integer',
         ]);
 
         $product->update($data);

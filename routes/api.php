@@ -2,6 +2,8 @@
 
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function(){
         return $request->user();
     });
     Route::apiResource('/users',UserController::class);
+    Route::apiResource('/products',ProductController::class);
+    Route::apiResource('/orders',OrderController::class);
 
 });
 Route::post('/test', function (Request $request) {

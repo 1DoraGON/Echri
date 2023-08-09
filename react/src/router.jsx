@@ -4,6 +4,7 @@ import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "./App";
 import Dashboard from './components/Views/Dashboard';
+import Product from './components/Views/Product';
 import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor } from './components/Dashboard/pages';
 
 import './App.css';
@@ -28,6 +29,10 @@ const router = createBrowserRouter( [
             {
                 path:'/profile',
                 element:<Profile/>
+            },
+            {
+                path:'/products/add',
+                element:<Product/>
             },
             {
                 path:'/dashboard',

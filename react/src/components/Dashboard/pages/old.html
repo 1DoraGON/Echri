@@ -1,0 +1,61 @@
+
+<>
+{<div className="container  dark:text-gray-200 dark:bg-main-dark-bg">
+  <div className="py-10 min-h-screen mx-auto max-w-[80vw] lg:max-w-[95vw] flex md:flex-col items-center justify-around sm:gap-y-5">
+    <div className="flex flex-col items-center justify-around h-[39vh] w-[30vw] lg:h-[38vh] lg:w-[25vw] md:h-[30vh] md:w-[50vw] lg:max-w-[25vw]">
+      <div className=" ">
+
+        <img id="image-preview" src="" alt="" className="w-auto h-auto max-w-full max-h-full" />
+      </div>
+      <div className="w-auto h-auto max-w-full max-h-full">
+        <h1 className="uppercase text-3xl lg:text-2xl md:text-xl font-bold">just do it</h1>
+      </div>
+    </div>
+
+    <form onSubmit={handleSubmit} encType="multipart/form-data" className="container  max-w-md flex-1 flex flex-col items-center justify-center px-2">
+      <div className="bg-white  dark:text-gray-200 dark:bg-secondary-dark-bg px-6 py-8 rounded shadow-md text-black w-full">
+        <h1 className="mb-8 text-3xl text-center">Sign up</h1>
+        {/*                 {errors &&
+            <ul className='alert'>
+              {Object.keys(errors).map(key => (
+                <li key={key}>{errors[key][0]}</li>
+              ))}
+              <p key={errors}></p>
+            </ul>} */}
+        <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="block border border-slate-400 w-full p-3 rounded mb-4"
+        />
+        <input type="text" name="description" value={formData.description} onChange={handleInputChange} className="block border border-slate-400 w-full p-3 rounded mb-4" />
+        <input type="number" name="price" value={formData.price} onChange={handleInputChange} className="block border border-slate-400 w-full p-3 rounded mb-4" />
+        <input type="text" name="stock" value={formData.stock} onChange={handleInputChange} className="block border border-slate-400 w-full p-3 rounded mb-4" />
+        <input type="text" name="color_start" value={formData.color_start} onChange={handleInputChange} className="block border border-slate-400 w-full p-3 rounded mb-4" />
+        <input type="text" name="color_end" value={formData.color_end} onChange={handleInputChange} className="block border border-slate-400 w-full p-3 rounded mb-4" />
+        <input type="file" name="image" onChange={handleImageChange}
+          className="block border border-slate-400 w-full p-3 rounded mb-4" />
+
+        <button
+          type="submit"
+          className="w-full text-center py-3 rounded bg-blue-500 text-white hover:bg-blue-600 button-theme focus:outline-none my-1"
+        >Create Account</button>
+
+        <div className="text-center text-sm text-gray-800  dark:text-gray-200 mt-4">
+          By signing up, you agree to the&nbsp;
+          <a className="no-underline border-b border-blue-600 text-blue-600" href="#">
+            Terms of Service
+          </a> and&nbsp;
+          <a className="no-underline border-b border-blue-600 text-blue-600" href="#">
+            Privacy Policy
+          </a>
+        </div>
+      </div>
+
+      <div className="text-gray-800 mt-6">
+        Already have an account?&nbsp;
+        {/* <Link className="no-underline border-b border-blue-600 text-blue-600" to='/login'>
+            Log in
+          </Link>. */}
+      </div>
+    </form>
+
+  </div>
+</div>}
+</>

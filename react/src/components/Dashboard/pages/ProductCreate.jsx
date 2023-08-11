@@ -3,6 +3,8 @@ import axiosClient from "../../../api/axios";
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { MdOutlineCancel } from 'react-icons/md';
 import Modal from 'react-modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectModalIsOpen, setModalIsOpen } from '../../../app/ThemeSlice';
 
 const Product = () => {
   const ImageSVG = () => (
@@ -28,9 +30,7 @@ const Product = () => {
       }
     }
   };
-  useEffect(() => {
-    //console.log(tags);
-  }, [tags])
+
   const removeTag = (index) => {
     if (event.key !== 'Enter') {
 
@@ -78,10 +78,13 @@ const Product = () => {
     mainImage: null,
     images: [],
     color_start: '#fff',
-    color_end: '#fff'
+    color_end: '#fff',
+    category: null
     // ... other fields
   });
-
+  useEffect(() => {
+    console.log(formData);
+  }, [formData])
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
     setFormData((prevData) => ({ ...prevData, images: [...prevData.images, imageFile] }));
@@ -147,6 +150,19 @@ const Product = () => {
 
 
 
+  const [options, setOptions] = useState(['Surabaya', 'Jakarta', 'Tangerang', 'Bandung']);
+  const modalIsOpen = useSelector(selectModalIsOpen)
+  const dispatch = useDispatch()
+  const [newOption, setNewOption] = useState('');
+
+  const handleOptionAddition = () => {
+    if (newOption.trim() !== '' && !options.includes(newOption)) {
+      setOptions([...options, newOption]);
+      setFormData((prevData) => ({...prevData,category : newOption}))
+      setNewOption('');
+      dispatch(setModalIsOpen(false));
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -158,8 +174,13 @@ const Product = () => {
     formDataToSend.append('stock', formData.stock);
     formDataToSend.append('color_start', formData.color_start);
     formDataToSend.append('color_end', formData.color_end);
-    formDataToSend.append('image', formData.images); // Append the image file
-
+    formDataToSend.append('mainImage', formData.mainImage); // Append the image file
+    formDataToSend.append('images', formData.images); // Append the image file
+    formDataToSend.append('tags', tags.join(',')); // Append the image file
+    formDataToSend.append('category', formData.category); // Append the image file
+    console.log(formDataToSend);
+    console.log(formData);
+    console.log(tags);
     axiosClient.post('/api/products', formDataToSend)
       .then(({ data }) => {
         axiosClient.delete(`/api/products/${data.data.id}`).then((res) => {
@@ -169,20 +190,9 @@ const Product = () => {
       });
   };
 
-  const [options, setOptions] = useState(['Surabaya', 'Jakarta', 'Tangerang', 'Bandung']);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [newOption, setNewOption] = useState('');
-
-  const handleOptionAddition = () => {
-    if (newOption.trim() !== '' && !options.includes(newOption)) {
-      setOptions([...options, newOption]);
-      setNewOption('');
-      setModalIsOpen(false);
-    }
-  };
   return (
     <>
-      <section className="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-secondary-dark-bg mt-20">
+      <section className="mb-10 max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-secondary-dark-bg mt-20">
         <h1 className="text-xl font-bold text-black capitalize dark:text-gray-200">Add A Product</h1>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
@@ -233,47 +243,64 @@ const Product = () => {
 
             <div>
               <label className="text-black dark:text-gray-200" htmlFor="select">Select</label>
-              <select className="border p-2 rounded" id="select">
-                {options.map((option, index) => (
-                  <option key={index}>{option}</option>
-                ))}
-              </select>
-              <button
-                className="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={() => setModalIsOpen(true)}
-              >
-                Add
-              </button>
+              <div className="flex items-center justify-between">
 
-              <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
-                style={{
-                  content: {
-                    width: '400px',
-                    height: '160px',
-                    margin: 'auto',
-                    background: 'white',
-                    borderRadius: '8px',
-                    zIndex: 100
-                  },
-                }}
-              >
-                <h2 className="text-center">Add New Option</h2>
-                <input
-                  type="text"
-                  value={newOption}
-                  onChange={(e) => setNewOption(e.target.value)}
-                  className="block w-full p-2 my-2 border rounded"
-                />
+
+                <select name='category' value={formData.category} onChange={handleInputChange} className={`w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-main-dark-bg dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring`} id="select">
+                  {options.map((option, index) => (
+                    <option key={index}>{option}</option>
+                  ))}
+                </select>
+                {/*               <div>
+                <label className="text-black dark:text-gray-200" name="passwordConfirmation">Select</label>
+                <select className={`${inputStyle}`}>
+                  <option>Surabaya</option>
+                  <option>Jakarta</option>
+                  <option>Tangerang</option>
+                  <option>Bandung</option>
+                </select>
+              </div> */}
                 <button
-                  onClick={handleOptionAddition}
-                  className="block mx-auto bg-blue-500 text-white px-4 py-2 rounded absolute right-2 bottom-2"
+                  className="w-[40%] px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-main-dark-bg dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
+                  onClick={() => dispatch(setModalIsOpen(true))}
                 >
-                  Add
+                  Add New Category
                 </button>
-              </Modal>
-              
+
+                <Modal
+                  isOpen={modalIsOpen}
+                  onRequestClose={() => dispatch(setModalIsOpen(false))}
+                  style={{
+                    overlay: {
+                      backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent dark overlay
+                      zIndex: 1000, // Set a higher z-index to overlay above other content
+                    },
+                    content: {
+                      width: '400px',
+                      height: '160px',
+                      margin: 'auto',
+                      background: '#f3f4f6',
+                      borderRadius: '8px',
+                      zIndex: 1001, // Set a z-index higher than the overlay
+                    },
+                  }}
+                >
+                  <h2 className="text-center">Add New Option</h2>
+                  <input
+                    type="text"
+                    value={newOption}
+                    onChange={(e) => setNewOption(e.target.value)}
+                    className="block w-full p-2 my-2 border-1 border-gray-400 rounded"
+                  />
+                  <button
+                    onClick={handleOptionAddition}
+                    className="block mx-auto bg-blue-500 text-white px-4 py-2 rounded absolute right-2 bottom-2"
+                  >
+                    Add
+                  </button>
+                </Modal>
+              </div>
+
             </div>
             {/*             <div>
               <label className="text-black dark:text-gray-200" name="passwordConfirmation">Range</label>
@@ -394,38 +421,6 @@ const Product = () => {
 
           <div className="flex justify-end mt-6">
             <button className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-gray-600">Save</button>
-          </div>
-        </form>
-      </section>
-
-      <section className="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20">
-        <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-gray-200">Account settings</h2>
-
-        <form>
-          <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-            <div>
-              <label className="text-gray-700 dark:text-gray-200" name="username">Username</label>
-              <input type="text" className={`${inputStyle}`} />
-            </div>
-
-            <div>
-              <label className="text-gray-700 dark:text-gray-200" name="emailAddress">Email Address</label>
-              <input type="email" className={`${inputStyle}`} />
-            </div>
-
-            <div>
-              <label className="text-gray-700 dark:text-gray-200" name="password">Password</label>
-              <input type="password" className={`${inputStyle}`} />
-            </div>
-
-            <div>
-              <label className="text-gray-700 dark:text-gray-200" name="passwordConfirmation">Password Confirmation</label>
-              <input type="password" className={`${inputStyle}`} />
-            </div>
-          </div>
-
-          <div className="flex justify-end mt-6">
-            <button className="px-6 py-2 leading-5 text-black transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Save</button>
           </div>
         </form>
       </section>

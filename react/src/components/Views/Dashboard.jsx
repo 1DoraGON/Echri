@@ -5,13 +5,13 @@ import { Outlet } from 'react-router-dom';
 import { Navbar, Footer, Sidebar, ThemeSettings } from '../Dashboard/components';
 import { Ecommerce } from '../Dashboard/pages';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActiveMenu, selectThemeSettings, setThemeSettings } from '../../app/ThemeSlice';
+import { selectActiveMenu, selectModalIsOpen, selectThemeSettings, setThemeSettings } from '../../app/ThemeSlice';
 
 const Dashboard = () => {
   const activeMenu = useSelector(selectActiveMenu);
   const themeSettings = useSelector(selectThemeSettings)
   const dispatch = useDispatch()
-  
+  const modalIsOpen = useSelector(selectModalIsOpen)
   
   return (
     <>
@@ -43,7 +43,7 @@ const Dashboard = () => {
             ? 'dark:bg-main-dark-bg  bg-main-bg min-h-screen ml-72 w-full transition-all duration-300'
             : 'bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 transition-all duration-300'
         } >
-          {activeMenu ? (
+          {activeMenu && !modalIsOpen ? (
             <div style={{
               width: 'calc(100% - 18rem)',
             }} className="fixed static bg-main-bg dark:bg-main-dark-bg navbar w-full z-10 dark:text-white ">
@@ -51,13 +51,13 @@ const Dashboard = () => {
 
             </div>
 
-          ) : (
+          ) : !modalIsOpen ? (
             <div className="fixed static bg-main-bg z-10 dark:bg-main-dark-bg navbar w-full dark:text-white">
               <Navbar />
 
             </div>
 
-          )}
+          ) : ('')}
           <div className="">
             <div className={`transition-all duration-300 ${!themeSettings ? 'hidden' : ''}`}>
               <ThemeSettings />

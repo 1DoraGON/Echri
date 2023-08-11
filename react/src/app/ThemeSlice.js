@@ -11,12 +11,16 @@ const initialState = {
   currentMode: localStorage.getItem('currentMode') ? JSON.parse(localStorage.getItem('currentMode')) : 'Dark',
   themeSettings: localStorage.getItem('themeSettings') ? JSON.parse(localStorage.getItem('themeSettings')) : false,
   activeMenu: true,
+  modalIsOpen:false,
 };
 
 const ThemeSlice = createSlice({
   initialState,
   name:'theme',
   reducers: {
+    setModalIsOpen: (state, action) => {
+      state.modalIsOpen = action.payload
+    },
     setChat: (state, action) => {
       state.chat = action.payload
     },
@@ -62,7 +66,7 @@ const ThemeSlice = createSlice({
   }
 })
 
-export const {setChat, setUserProfile, setCart, setNotification, setScreenSize, setThemeSettings, setCurrentMode, setCurrentColor, setActiveMenu} = ThemeSlice.actions
+export const {setModalIsOpen,setChat, setUserProfile, setCart, setNotification, setScreenSize, setThemeSettings, setCurrentMode, setCurrentColor, setActiveMenu} = ThemeSlice.actions
 
 
 export const selectChat = (state) => state.theme.chat
@@ -74,4 +78,5 @@ export const selectCurrentColor = (state) => state.theme.currentColor
 export const selectCurrentMode = (state) => state.theme.currentMode
 export const selectThemeSettings = (state) => state.theme.themeSettings
 export const selectActiveMenu = (state) => state.theme.activeMenu
+export const selectModalIsOpen = (state) => state.theme.modalIsOpen
 export default ThemeSlice.reducer

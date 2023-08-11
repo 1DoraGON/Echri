@@ -28,11 +28,11 @@ const Product = () => {
       }
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     //console.log(tags);
-  },[tags])
+  }, [tags])
   const removeTag = (index) => {
-    if (event.key !== 'Enter'){
+    if (event.key !== 'Enter') {
 
       const newTags = [...tags];
       newTags.splice(index, 1);
@@ -210,7 +210,7 @@ const Product = () => {
                     <span className="mr-1">{tag}</span>
                     <button
                       className="text-red-600 hover:text-red-800"
-                      onClick={(e) => {e.preventDefault();removeTag(index)}}
+                      onClick={(e) => { e.preventDefault(); removeTag(index) }}
                       onKeyDown={handleTagInputKeyDown}
                     >
                       <MdOutlineCancel />
@@ -232,34 +232,54 @@ const Product = () => {
             </div>
 
             <div>
-      <label className="text-black dark:text-gray-200" htmlFor="select">Select</label>
-      <select className="border p-2 rounded" id="select">
-        {options.map((option, index) => (
-          <option key={index}>{option}</option>
-        ))}
-      </select>
-      <button
-        className="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
-        onClick={() => setModalIsOpen(true)}
-      >
-        Add
-      </button>
+              <label className="text-black dark:text-gray-200" htmlFor="select">Select</label>
+              <select className="border p-2 rounded" id="select">
+                {options.map((option, index) => (
+                  <option key={index}>{option}</option>
+                ))}
+              </select>
+              <button
+                className="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={() => setModalIsOpen(true)}
+              >
+                Add
+              </button>
 
-      <Modal className='w-60 h-60 bg-black z-[1000000000]' isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
-        <h2>Add New Option</h2>
-        <input
-          type="text"
-          value={newOption}
-          onChange={(e) => setNewOption(e.target.value)}
-        />
-        <button onClick={handleOptionAddition}>Add</button>
-      </Modal>
-    </div>
-{/*             <div>
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                style={{
+                  content: {
+                    width: '400px',
+                    height: '160px',
+                    margin: 'auto',
+                    background: 'white',
+                    borderRadius: '8px',
+                    zIndex: 100
+                  },
+                }}
+              >
+                <h2 className="text-center">Add New Option</h2>
+                <input
+                  type="text"
+                  value={newOption}
+                  onChange={(e) => setNewOption(e.target.value)}
+                  className="block w-full p-2 my-2 border rounded"
+                />
+                <button
+                  onClick={handleOptionAddition}
+                  className="block mx-auto bg-blue-500 text-white px-4 py-2 rounded absolute right-2 bottom-2"
+                >
+                  Add
+                </button>
+              </Modal>
+              
+            </div>
+            {/*             <div>
               <label className="text-black dark:text-gray-200" name="passwordConfirmation">Range</label>
               <input id="range" type="range" className="block w-full py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
             </div> */}
-{/*             <div>
+            {/*             <div>
               <label className="text-black dark:text-gray-200" name="passwordConfirmation">Date</label>
               <input id="date" type="date" className={`${inputStyle}`} />
             </div> */}
@@ -343,7 +363,7 @@ const Product = () => {
                       >
                         <ImageSVG />
                         <label
-                          hname="file-upload"
+                          name="file-upload"
                           className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 dark:text-gray-200"
                         >
                           <span className="dark:text-black p-2">Upload a file</span>

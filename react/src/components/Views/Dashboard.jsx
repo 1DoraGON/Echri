@@ -46,13 +46,13 @@ const Dashboard = () => {
           {activeMenu ? (
             <div style={{
               width: 'calc(100% - 18rem)',
-            }} className="fixed static bg-main-bg dark:bg-main-dark-bg navbar w-full  dark:text-white ">
+            }} className="fixed static bg-main-bg dark:bg-main-dark-bg navbar w-full z-10 dark:text-white ">
               <Navbar />
 
             </div>
 
           ) : (
-            <div className="fixed static bg-main-bg dark:bg-main-dark-bg navbar w-full dark:text-white">
+            <div className="fixed static bg-main-bg z-10 dark:bg-main-dark-bg navbar w-full dark:text-white">
               <Navbar />
 
             </div>

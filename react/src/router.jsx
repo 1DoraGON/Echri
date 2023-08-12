@@ -104,6 +104,10 @@ const router = createBrowserRouter( [
                         path: '/dashboard/products/create',
                         element: <ProductCreate />
                     },
+                    {
+                        path: '/dashboard/products/:productId/update', // Dynamic route with :productId parameter
+                        element: <ProductCreate />
+                    },
                 ]
             }
 

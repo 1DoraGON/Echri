@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -18,7 +19,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string',
+            'name' => ['required', 'string', Rule::unique('categories')],
         ]);
         //return response(compact('data'));
 

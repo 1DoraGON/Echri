@@ -17,7 +17,15 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->images->pluck('image_url'), // Assuming 'image_url' is the field for image URLs
+            'category_id' => $this->category_id,
+            'description' => $this->description,
+            'price' => $this->price,
+            'color_start' => $this->color_start,
+            'color_end' => $this->color_end,
+            'stock' => $this->stock,
+            'tags' => $this->tags,
+            'main_image' => $this->main_image,
+            'images' => $this->images->pluck('image_url'), // Assuming 'image_url' is the field for image URLs
         ];
     }
 }

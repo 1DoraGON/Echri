@@ -10,6 +10,9 @@ import { registerLicense } from '@syncfusion/ej2-base';
 import App from './App'
 //import '@syncfusion/ej2-base/styles/material.css'; // Choose the appropriate theme (e.g., material.css, bootstrap.css, etc.)
 //import '@syncfusion/ej2-react-popups/styles/material.css'; // Choose the appropriate theme (e.g., material.css, bootstrap.css, etc.)
+import Modal from 'react-modal'; // Import Modal
+
+Modal.setAppElement('#root'); // Set the app element to the root element
 
 // Registering Syncfusion license key
 registerLicense('ORg4AjUWIQA/Gnt2V1hhQlJAfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hSn5bdkRiXnxZcn1VQWlb');

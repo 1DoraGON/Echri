@@ -6,8 +6,11 @@ import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectModalIsOpen, setModalIsOpen } from '../../../app/ThemeSlice';
 import { toast } from 'react-hot-toast';
-import { PencilSquareIcon } from '@heroicons/react/24/solid';
+import { useParams } from 'react-router-dom';
 const ProductCreate = () => {
+
+  const { productId } = useParams(); // Get the productId parameter from the URL
+
   //
   //
   //
@@ -30,6 +33,45 @@ const ProductCreate = () => {
   const modalIsOpen = useSelector(selectModalIsOpen)
   const dispatch = useDispatch()
   const [newOption, setNewOption] = useState('');
+  const emptyForm = {
+    name: '',
+    description: '',
+    price: '',
+    stock: '',
+    mainImage: null,
+    images: [],
+    color_start: '#fff',
+    color_end: '#fff',
+    category: null
+  }
+    const [formData, setFormData] = useState(emptyForm);
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  // Categories and Select Logic
+
+  useEffect(() => {
+    if(productId){
+      axiosClient.get('/api/products/'+productId).then(({data}) => {
+        
+        console.log(data);
+      })
+      
+    }
+    axiosClient.get('/api/categories').then(({ data }) => {
+      setOptions(data.data)
+      //console.log(options);
+    }).catch((response) => {
+      console.log(response);
+    })
+  }, [])
+
 
   const splideOptions = {
     perPage: 2.7,
@@ -49,17 +91,6 @@ const ProductCreate = () => {
     },
   };
 
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
-    stock: '',
-    mainImage: null,
-    images: [],
-    color_start: '#fff',
-    color_end: '#fff',
-    category: null
-  });
 
   //
   //
@@ -143,23 +174,7 @@ const ProductCreate = () => {
   };
 
 
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  // Categories and Select Logic
-  useEffect(() => {
-    axiosClient.get('/api/categories').then(({ data }) => {
-      setOptions(data.data)
-      //console.log(options);
-    }).catch((response) => {
-      console.log(response);
-    })
-  }, [])
+
 
   //
   //
@@ -175,11 +190,19 @@ const ProductCreate = () => {
         axiosClient.post('/api/categories', payload).then((response) => {
           toast.success(`${newOption} ${response.data.message}`)
           setOptions((prevData) => [...prevData , response.data.resource])
-          console.log(response);
+          //console.log(response);
           setFormData((prevData) => ({ ...prevData, category: response.data.resource.id }))
+        }).catch (({response}) => {
+          if (response.status===422) {
+            toast.error(response.data.errors.name[0])
+          }
+          console.log(response);
         })
-      } catch (error) {
-        console.log(error);
+      } catch ({response}) {
+        if (response.status===422) {
+          toast.error(response.response.data.errors.name[0])
+        }
+        console.log(response);
       }
       setNewOption('');
       dispatch(setModalIsOpen(false));
@@ -267,9 +290,10 @@ const ProductCreate = () => {
     //console.log(tags);
     axiosClient.post('/api/products', formDataToSend)
       .then(({ data }) => {
+        toast.success(`Product Added Successfully`)
+        setFormData(emptyForm);
+        setTags([])
         console.log(data);
-        axiosClient.delete(`/api/products/${data.data.id}`).then((res) => {
-        });
       })
       .catch(err => {
         console.log(err);
@@ -339,14 +363,13 @@ const ProductCreate = () => {
                   )}
                   {options.map((option, index) => (
                     <option className='flex items-center justify-between' value={option.id} key={index}>
-                      {option.name}
-                   <PencilSquareIcon className='w-4 h-4 text-white' /> </option>
+                      {option.name}</option>
                   ))}
                 </select>
 
                 <button
                   className="w-[40%] px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-main-dark-bg dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
-                  onClick={() => dispatch(setModalIsOpen(true))}
+                  onClick={(e) =>{e.preventDefault(); dispatch(setModalIsOpen(true))}}
                 >
                   Add New Category
                 </button>
@@ -434,8 +457,7 @@ const ProductCreate = () => {
                             id="file-upload"
                             name="mainImage"
                             type="file"
-                            className="sr-only"
-
+                            className="sr-only hidden"
                             onChange={handleMainImageChange}
                             ref={mainImageRef} // Attach the ref to the input element
                           />
@@ -482,7 +504,7 @@ const ProductCreate = () => {
                             id="file-upload"
                             name="file-upload"
                             type="file"
-                            className="sr-only"
+                            className="sr-only hidden"
                             onChange={handleImageChange}
                             ref={fileInputRef} // Attach the ref to the input element
                           />

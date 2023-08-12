@@ -15,11 +15,11 @@ class CreateProductsTable extends Migration
             $table->text('color_start')->nullable();
             $table->text('color_end')->nullable();
             $table->text('tags')->nullable();
-            $table->string('main_image');
+            $table->string('main_image')->nullable();
             $table->decimal('price', 8, 2);
             $table->integer('stock')->nullable();
              // Add the quantity column
-             $table->unsignedBigInteger('category_id'); // Foreign key column
+             $table->unsignedBigInteger('category_id')->nullable(); // Foreign key column
              $table->timestamps();
  
              // Define the foreign key constraint

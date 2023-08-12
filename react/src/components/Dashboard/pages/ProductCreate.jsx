@@ -5,8 +5,14 @@ import { MdOutlineCancel } from 'react-icons/md';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectModalIsOpen, setModalIsOpen } from '../../../app/ThemeSlice';
-
-const Product = () => {
+import { toast } from 'react-hot-toast';
+import { PencilSquareIcon } from '@heroicons/react/24/solid';
+const ProductCreate = () => {
+  //
+  //
+  //
+  //
+  // Const
   const ImageSVG = () => (
     <svg className="mx-auto h-12 w-12 text-black dark:text-gray-200" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
       <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -16,33 +22,15 @@ const Product = () => {
   const [tags, setTags] = useState([]);
   const [currentTag, setCurrentTag] = useState('');
 
-  const handleTagInputChange = (event) => {
-    setCurrentTag(event.target.value);
-
-  };
-
-  const handleTagInputKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // Prevent the default Enter behavior
-      if (currentTag.trim() !== '') {
-        setTags([...tags, currentTag]);
-        setCurrentTag('');
-      }
-    }
-  };
-
-  const removeTag = (index) => {
-    if (event.key !== 'Enter') {
-
-      const newTags = [...tags];
-      newTags.splice(index, 1);
-      setTags(newTags);
-      console.log("remove");
-    }
-  };
 
   const fileInputRef = useRef(null);
   const mainImageRef = useRef(null);
+
+  const [options, setOptions] = useState([]);
+  const modalIsOpen = useSelector(selectModalIsOpen)
+  const dispatch = useDispatch()
+  const [newOption, setNewOption] = useState('');
+
   const splideOptions = {
     perPage: 2.7,
     perMove: 1,
@@ -60,16 +48,7 @@ const Product = () => {
       425: { perPage: 1 },
     },
   };
-  const handleDivClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-  const handleMainImageDivClick = () => {
-    if (mainImageRef.current) {
-      mainImageRef.current.click();
-    }
-  };
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -80,21 +59,77 @@ const Product = () => {
     color_start: '#fff',
     color_end: '#fff',
     category: null
-    // ... other fields
   });
-  useEffect(() => {
-    console.log(formData);
-  }, [formData])
+
+  //
+  //
+  //
+  //
+  //
+  // Inputs Logic
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+
+  //
+  //
+  //
+  //
+  //
+  // Tags
+  const handleTagInputChange = (event) => {
+    setCurrentTag(event.target.value);
+
+  };
+
+  const handleTagInputKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (currentTag.trim() !== '') {
+        setTags([...tags, currentTag]);
+        setCurrentTag('');
+      }
+    }
+  };
+
+  const removeTag = (index) => {
+    if (event.key !== 'Enter') {
+
+      const newTags = [...tags];
+      newTags.splice(index, 1);
+      setTags(newTags);
+    }
+  };
+
+
+  //
+  //
+  //
+  //
+  //
+  //
+  // Handle Images
+
+  const handleDivClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+  const handleMainImageDivClick = () => {
+    if (mainImageRef.current) {
+      mainImageRef.current.click();
+    }
+  };
+
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
     setFormData((prevData) => ({ ...prevData, images: [...prevData.images, imageFile] }));
 
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
   const handleMainImageChange = (e) => {
     const imageFile = e.target.files[0];
     setFormData((prevData) => ({ ...prevData, mainImage: imageFile }));
@@ -106,6 +141,56 @@ const Product = () => {
     const images = formData.images.filter(item => item !== image);
     setFormData((prevData) => ({ ...prevData, images: images }));
   };
+
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  // Categories and Select Logic
+  useEffect(() => {
+    axiosClient.get('/api/categories').then(({ data }) => {
+      setOptions(data.data)
+      //console.log(options);
+    }).catch((response) => {
+      console.log(response);
+    })
+  }, [])
+
+  //
+  //
+  //
+  //
+  //
+  /* Add Category */
+  const handleOptionAddition = (e) => {
+    e.preventDefault();
+    if (newOption.trim() !== '' && !options.includes(newOption)) {
+      const payload = { name: newOption }
+      try {
+        axiosClient.post('/api/categories', payload).then((response) => {
+          toast.success(`${newOption} ${response.data.message}`)
+          setOptions((prevData) => [...prevData , response.data.resource])
+          console.log(response);
+          setFormData((prevData) => ({ ...prevData, category: response.data.resource.id }))
+        })
+      } catch (error) {
+        console.log(error);
+      }
+      setNewOption('');
+      dispatch(setModalIsOpen(false));
+    }
+  };
+
+  //
+  //
+  //
+  //
+  //
   // This useEffect hook will log the updated formData whenever images change.
   useEffect(() => {
     try {
@@ -150,20 +235,15 @@ const Product = () => {
 
 
 
-  const [options, setOptions] = useState(['Surabaya', 'Jakarta', 'Tangerang', 'Bandung']);
-  const modalIsOpen = useSelector(selectModalIsOpen)
-  const dispatch = useDispatch()
-  const [newOption, setNewOption] = useState('');
 
-  const handleOptionAddition = () => {
-    if (newOption.trim() !== '' && !options.includes(newOption)) {
-      setOptions([...options, newOption]);
-      setFormData((prevData) => ({...prevData,category : newOption}))
-      setNewOption('');
-      dispatch(setModalIsOpen(false));
-    }
-  };
 
+
+  //
+  //
+  //
+  //
+  //
+  /* Submit */
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -174,19 +254,25 @@ const Product = () => {
     formDataToSend.append('stock', formData.stock);
     formDataToSend.append('color_start', formData.color_start);
     formDataToSend.append('color_end', formData.color_end);
-    formDataToSend.append('mainImage', formData.mainImage); // Append the image file
-    formDataToSend.append('images', formData.images); // Append the image file
-    formDataToSend.append('tags', tags.join(',')); // Append the image file
-    formDataToSend.append('category', formData.category); // Append the image file
+    formDataToSend.append('main_image', formData.mainImage);
+    formData.images.forEach((image) => {
+      formDataToSend.append('images[]', image);
+    });
+    formDataToSend.append('images', formData.images);
+    console.log(formData.images);
+    formDataToSend.append('tags', tags.join(','));
+    formDataToSend.append('category_id', formData.category);
     console.log(formDataToSend);
     console.log(formData);
-    console.log(tags);
+    //console.log(tags);
     axiosClient.post('/api/products', formDataToSend)
       .then(({ data }) => {
+        console.log(data);
         axiosClient.delete(`/api/products/${data.data.id}`).then((res) => {
         });
       })
       .catch(err => {
+        console.log(err);
       });
   };
 
@@ -194,7 +280,7 @@ const Product = () => {
     <>
       <section className="mb-10 max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-secondary-dark-bg mt-20">
         <h1 className="text-xl font-bold text-black capitalize dark:text-gray-200">Add A Product</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
             <div>
               <label className="text-black dark:text-gray-200" name='name'>Name</label>
@@ -247,19 +333,17 @@ const Product = () => {
 
 
                 <select name='category' value={formData.category} onChange={handleInputChange} className={`w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-main-dark-bg dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring`} id="select">
+                  {options.length == 0 && (
+
+                  <option value={null}>Please Add A Category</option>
+                  )}
                   {options.map((option, index) => (
-                    <option key={index}>{option}</option>
+                    <option className='flex items-center justify-between' value={option.id} key={index}>
+                      {option.name}
+                   <PencilSquareIcon className='w-4 h-4 text-white' /> </option>
                   ))}
                 </select>
-                {/*               <div>
-                <label className="text-black dark:text-gray-200" name="passwordConfirmation">Select</label>
-                <select className={`${inputStyle}`}>
-                  <option>Surabaya</option>
-                  <option>Jakarta</option>
-                  <option>Tangerang</option>
-                  <option>Bandung</option>
-                </select>
-              </div> */}
+
                 <button
                   className="w-[40%] px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-main-dark-bg dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
                   onClick={() => dispatch(setModalIsOpen(true))}
@@ -428,6 +512,6 @@ const Product = () => {
   )
 }
 
-export default Product
+export default ProductCreate
 
 

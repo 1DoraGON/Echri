@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
@@ -28,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('/users',UserController::class);
     Route::apiResource('/products',ProductController::class);
     Route::apiResource('/orders',OrderController::class);
+    Route::apiResource('/categories',CategoryController::class);
 
 });
 Route::post('/test', function (Request $request) {

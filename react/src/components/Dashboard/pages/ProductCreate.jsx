@@ -6,10 +6,13 @@ import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectModalIsOpen, setModalIsOpen } from '../../../app/ThemeSlice';
 import { toast } from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { NotFound } from '../../HomePage';
 const ProductCreate = () => {
-
+  const STORAGE_URL = 'http://127.0.0.1:8000/storage/'
+  const navigate = useNavigate()
   const { productId } = useParams(); // Get the productId parameter from the URL
+  const [loading, setLoading] = useState(true);
 
   //
   //
@@ -38,11 +41,11 @@ const ProductCreate = () => {
     description: '',
     price: '',
     stock: '',
-    mainImage: null,
+    main_image: null,
     images: [],
     color_start: '#fff',
     color_end: '#fff',
-    category: null
+    category_id: null
   }
     const [formData, setFormData] = useState(emptyForm);
 
@@ -59,12 +62,30 @@ const ProductCreate = () => {
   useEffect(() => {
     if(productId){
       axiosClient.get('/api/products/'+productId).then(({data}) => {
+        setTags(data.data.tags.split('||'))
+        delete data.data.tags
+        setFormData(data.data)
+        setLoading(false);
+        //console.log(data);
+        //console.log(formData);
         
-        console.log(data);
+      }).catch(err=>{
+        if(err.response?.status===404){
+          console.log(err.response?.status===404);
+          navigate('/404')
+        }
       })
+
       
+    } else {
+      setLoading(false);
+      setFormData(emptyForm)
     }
     axiosClient.get('/api/categories').then(({ data }) => {
+      console.log(data.data);
+      if(data.data.length >0){
+        setFormData((prev) => ({...prev,category_id: data.data[0].id}))
+      }
       setOptions(data.data)
       //console.log(options);
     }).catch((response) => {
@@ -163,10 +184,10 @@ const ProductCreate = () => {
 
   const handleMainImageChange = (e) => {
     const imageFile = e.target.files[0];
-    setFormData((prevData) => ({ ...prevData, mainImage: imageFile }));
+    setFormData((prevData) => ({ ...prevData, main_image: imageFile }));
   };
   const handleRemoveMainImage = () => {
-    setFormData((prevData) => ({ ...prevData, mainImage: null }));
+    setFormData((prevData) => ({ ...prevData, main_image: null }));
   };
   const handleRemoveImage = (image) => {
     const images = formData.images.filter(item => item !== image);
@@ -191,7 +212,7 @@ const ProductCreate = () => {
           toast.success(`${newOption} ${response.data.message}`)
           setOptions((prevData) => [...prevData , response.data.resource])
           //console.log(response);
-          setFormData((prevData) => ({ ...prevData, category: response.data.resource.id }))
+          setFormData((prevData) => ({ ...prevData, category_id: response.data.resource.id }))
         }).catch (({response}) => {
           if (response.status===422) {
             toast.error(response.data.errors.name[0])
@@ -217,16 +238,17 @@ const ProductCreate = () => {
   // This useEffect hook will log the updated formData whenever images change.
   useEffect(() => {
     try {
-
       formData.images.forEach((image, i) => {
-        const reader = new FileReader(); // Create a new FileReader object for each image
-
-        reader.onload = (event) => {
-          const imagePreview = event.target.result;
-          document.getElementById('image-preview-' + i).src = imagePreview;
-        };
-
-        reader.readAsDataURL(image);
+        if(typeof image !== 'string'){          
+          const reader = new FileReader(); // Create a new FileReader object for each image
+  
+          reader.onload = (event) => {
+            const imagePreview = event.target.result;
+            document.getElementById('image-preview-' + i).src = imagePreview;
+          };
+  
+          reader.readAsDataURL(image);
+        }
       });
     } catch (error) {
       // Create a new array without the last image
@@ -240,27 +262,28 @@ const ProductCreate = () => {
 
   useEffect(() => {
     try {
-
-      const reader = new FileReader(); // Create a new FileReader object for each image
-
-      reader.onload = (event) => {
-        const imagePreview = event.target.result;
-        document.getElementById('image-preview-main').src = imagePreview;
-      };
-
-      reader.readAsDataURL(formData.mainImage);
+      if(typeof formData.main_image !== 'string'){
+        const reader = new FileReader(); // Create a new FileReader object for each image
+  
+        reader.onload = (event) => {
+          const imagePreview = event.target.result;
+          document.getElementById('image-preview-main').src = imagePreview;
+        };
+  
+        reader.readAsDataURL(formData.main_image);
+      }          
     } catch (error) {
 
       // Update the state with the new array
-      setFormData({ ...formData, mainImage: null });
+      setFormData({ ...formData, main_image: null });
     }
-  }, [formData.mainImage]);
+  }, [formData.main_image]);
 
 
 
-
-
-
+  //
+  //
+  //
   //
   //
   //
@@ -269,7 +292,11 @@ const ProductCreate = () => {
   /* Submit */
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
     const formDataToSend = new FormData();
     formDataToSend.append('name', formData.name);
     formDataToSend.append('description', formData.description);
@@ -277,28 +304,50 @@ const ProductCreate = () => {
     formDataToSend.append('stock', formData.stock);
     formDataToSend.append('color_start', formData.color_start);
     formDataToSend.append('color_end', formData.color_end);
-    formDataToSend.append('main_image', formData.mainImage);
+    formDataToSend.append('main_image', formData.main_image);
     formData.images.forEach((image) => {
       formDataToSend.append('images[]', image);
     });
-    formDataToSend.append('images', formData.images);
+    //formDataToSend.append('images', formData.images);
     console.log(formData.images);
-    formDataToSend.append('tags', tags.join(','));
-    formDataToSend.append('category_id', formData.category);
-    console.log(formDataToSend);
+    formDataToSend.append('tags', tags.join('||'));
+    formDataToSend.append('category_id', formData.category_id);
+    console.log('form data '+formDataToSend.get('description'));
     console.log(formData);
     //console.log(tags);
-    axiosClient.post('/api/products', formDataToSend)
+    if (productId) {
+      formDataToSend.append('_method', 'put');
+      console.log('put');
+      axiosClient.post('/api/products/15', formDataToSend, config)
       .then(({ data }) => {
-        toast.success(`Product Added Successfully`)
-        setFormData(emptyForm);
-        setTags([])
+        toast.success(`Product Updated Successfully`)
         console.log(data);
       })
       .catch(err => {
         console.log(err);
-      });
+      });  
+    } else {
+
+      axiosClient.post('/api/products', formDataToSend, config)
+        .then(({ data }) => {
+          toast.success(`Product Added Successfully`)
+          setFormData(emptyForm);
+          setTags([])
+          console.log(data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
+
+
+  
+  if (loading) {
+    return null; // Render nothing while loading
+  }
+
+
 
   return (
     <>
@@ -356,7 +405,7 @@ const ProductCreate = () => {
               <div className="flex items-center justify-between">
 
 
-                <select name='category' value={formData.category} onChange={handleInputChange} className={`w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-main-dark-bg dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring`} id="select">
+                <select name='category_id' value={formData.category_id} onChange={handleInputChange} className={`w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-main-dark-bg dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring`} id="select">
                   {options.length == 0 && (
 
                   <option value={null}>Please Add A Category</option>
@@ -424,7 +473,7 @@ const ProductCreate = () => {
               </label>
 
               <Splide className='mt-10' options={splideOptions}>
-                {formData.mainImage !== null ? (
+                {formData.main_image !== null ? (
 
                   <SplideSlide className='mb-0.5 flex items-center justify-center h-64 relative'>
                     <div className="absolute top-2 right-2" onClick={handleRemoveMainImage}>
@@ -434,7 +483,7 @@ const ProductCreate = () => {
                       <img
                         id={`image-preview-main`}
                         className="object-center w-full h-auto"
-                        src=""
+                        src={`${productId? STORAGE_URL+formData.main_image: ''}`}
                         alt=""
                       />
                     </div>
@@ -479,7 +528,7 @@ const ProductCreate = () => {
                       <img
                         id={`image-preview-${i}`}
                         className="object-center w-full h-auto"
-                        src=""
+                        src={`${productId? STORAGE_URL+image: ''}`}
                         alt=""
                       />
                     </div>
@@ -487,7 +536,7 @@ const ProductCreate = () => {
 
 
                 ))}
-                {formData.mainImage !== null && (
+                {formData.main_image !== null && (
                   <SplideSlide className='mb-0.5' >
                     <div className="flex items-center justify-center border-2 h-full border-gray-300 border-dashed rounded-md cursor-pointer" onClick={handleDivClick} >
                       <div

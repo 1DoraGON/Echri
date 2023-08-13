@@ -44,22 +44,30 @@ export const gridOrderStatus = (props) => (
 );
 
 export const kanbanGrid = [
-  { headerText: 'To Do',
+  {
+    headerText: 'To Do',
     keyField: 'Open',
-    allowToggle: true },
+    allowToggle: true
+  },
 
-  { headerText: 'In Progress',
+  {
+    headerText: 'In Progress',
     keyField: 'InProgress',
-    allowToggle: true },
+    allowToggle: true
+  },
 
-  { headerText: 'Testing',
+  {
+    headerText: 'Testing',
     keyField: 'Testing',
     allowToggle: true,
-    isExpanded: false },
+    isExpanded: false
+  },
 
-  { headerText: 'Done',
+  {
+    headerText: 'Done',
     keyField: 'Close',
-    allowToggle: true },
+    allowToggle: true
+  },
 ];
 const gridEmployeeProfile = (props) => (
   <div className="flex items-center gap-2">
@@ -323,20 +331,26 @@ export const colorMappingData = [
 ];
 
 export const rangeColorMapping = [
-  { label: '1°C to 10°C',
+  {
+    label: '1°C to 10°C',
     start: '1',
     end: '10',
-    colors: colorMappingData[1] },
+    colors: colorMappingData[1]
+  },
 
-  { label: '11°C to 20°C',
+  {
+    label: '11°C to 20°C',
     start: '11',
     end: '20',
-    colors: colorMappingData[2] },
+    colors: colorMappingData[2]
+  },
 
-  { label: '21°C to 30°C',
+  {
+    label: '21°C to 30°C',
     start: '21',
     end: '30',
-    colors: colorMappingData[3] },
+    colors: colorMappingData[3]
+  },
 
 ];
 
@@ -393,38 +407,50 @@ export const LinePrimaryYAxis = {
 
 export const customersGrid = [
   { type: 'checkbox', width: '50' },
-  { headerText: 'Name',
+  {
+    headerText: 'Name',
     width: '150',
     template: customerGridImage,
-    textAlign: 'Center' },
-  { field: 'ProjectName',
+    textAlign: 'Center'
+  },
+  {
+    field: 'ProjectName',
     headerText: 'Project Name',
     width: '150',
-    textAlign: 'Center' },
-  { field: 'Status',
+    textAlign: 'Center'
+  },
+  {
+    field: 'Status',
     headerText: 'Status',
     width: '130',
     format: 'yMd',
     textAlign: 'Center',
-    template: customerGridStatus },
+    template: customerGridStatus
+  },
   {
     field: 'Weeks',
     headerText: 'Weeks',
     width: '100',
     format: 'C2',
-    textAlign: 'Center' },
-  { field: 'Budget',
+    textAlign: 'Center'
+  },
+  {
+    field: 'Budget',
     headerText: 'Budget',
     width: '100',
     format: 'yMd',
-    textAlign: 'Center' },
+    textAlign: 'Center'
+  },
 
-  { field: 'Location',
+  {
+    field: 'Location',
     headerText: 'Location',
     width: '150',
-    textAlign: 'Center' },
+    textAlign: 'Center'
+  },
 
-  { field: 'CustomerID',
+  {
+    field: 'CustomerID',
     headerText: 'Customer ID',
     width: '120',
     textAlign: 'Center',
@@ -434,39 +460,51 @@ export const customersGrid = [
 ];
 
 export const employeesGrid = [
-  { headerText: 'Employee',
+  {
+    headerText: 'Employee',
     width: '150',
     template: gridEmployeeProfile,
-    textAlign: 'Center' },
-  { field: 'Name',
+    textAlign: 'Center'
+  },
+  {
+    field: 'Name',
     headerText: '',
     width: '0',
     textAlign: 'Center',
   },
-  { field: 'Title',
+  {
+    field: 'Title',
     headerText: 'Designation',
     width: '170',
     textAlign: 'Center',
   },
-  { headerText: 'Country',
+  {
+    headerText: 'Country',
     width: '120',
     textAlign: 'Center',
-    template: gridEmployeeCountry },
+    template: gridEmployeeCountry
+  },
 
-  { field: 'HireDate',
+  {
+    field: 'HireDate',
     headerText: 'Hire Date',
     width: '135',
     format: 'yMd',
-    textAlign: 'Center' },
+    textAlign: 'Center'
+  },
 
-  { field: 'ReportsTo',
+  {
+    field: 'ReportsTo',
     headerText: 'Reports To',
     width: '120',
-    textAlign: 'Center' },
-  { field: 'EmployeeID',
+    textAlign: 'Center'
+  },
+  {
+    field: 'EmployeeID',
     headerText: 'Employee ID',
     width: '125',
-    textAlign: 'Center' },
+    textAlign: 'Center'
+  },
 ];
 
 export const links = [
@@ -488,6 +526,16 @@ export const links = [
         name: 'orders',
         url: 'dashboard/orders',
         icon: <AiOutlineShoppingCart />,
+      },
+      {
+        name: 'products',
+        url: 'dashboard/products',
+        icon: (
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />
+          </svg>
+
+        ),
       },
       {
         name: 'employees',
@@ -886,6 +934,56 @@ export const userProfileData = [
   },
 ];
 
+export const productsGrid = [
+  {
+    headerText: 'Image',
+    template: gridOrderImage,
+    textAlign: 'Center',
+    width: '120',
+  },
+  {
+    field: 'name',
+    headerText: 'Name',
+    width: '150',
+    editType: 'dropdownedit',
+    textAlign: 'Center',
+  },
+  {
+    field: 'category_id',
+    headerText: 'Category',
+    width: '150',
+    textAlign: 'Center',
+  },
+  {
+    field: 'price',
+    headerText: 'Price',
+    format: 'C2',
+    textAlign: 'Center',
+    editType: 'numericedit',
+    width: '150',
+  },
+  {
+    field: 'stock',
+    headerText: 'Stock',
+    format: 'C2',
+    textAlign: 'Center',
+    editType: 'numericedit',
+    width: '150',
+  },
+  {
+    field: 'id',
+    headerText: 'Product ID',
+    width: '120',
+    textAlign: 'Center',
+  },
+
+  {
+    field: 'created_at',
+    headerText: 'Added At',
+    width: '150',
+    textAlign: 'Center',
+  },
+];
 export const ordersGrid = [
   {
     headerText: 'Image',
@@ -900,7 +998,8 @@ export const ordersGrid = [
     editType: 'dropdownedit',
     textAlign: 'Center',
   },
-  { field: 'CustomerName',
+  {
+    field: 'CustomerName',
     headerText: 'Customer Name',
     width: '150',
     textAlign: 'Center',
@@ -1506,7 +1605,7 @@ export const employeesData = [
     Country: 'USA',
     ReportsTo: 'Carson',
     EmployeeImage:
-    avatar3,
+      avatar3,
   },
   {
     EmployeeID: 2,
@@ -1576,7 +1675,7 @@ export const employeesData = [
     Country: 'USA',
     ReportsTo: 'Carson',
     EmployeeImage:
-    avatar2,
+      avatar2,
 
   },
   {
@@ -1647,7 +1746,7 @@ export const employeesData = [
     Country: 'USA',
     ReportsTo: 'Carson',
     EmployeeImage:
-    avatar,
+      avatar,
   },
   {
     EmployeeID: 2,
@@ -1717,7 +1816,7 @@ export const employeesData = [
     Country: 'USA',
     ReportsTo: 'Carson',
     EmployeeImage:
-    avatar2,
+      avatar2,
 
   },
   {
@@ -1788,7 +1887,7 @@ export const employeesData = [
     Country: 'USA',
     ReportsTo: 'Carson',
     EmployeeImage:
-    avatar2,
+      avatar2,
 
   },
   {
@@ -1859,7 +1958,7 @@ export const employeesData = [
     Country: 'USA',
     ReportsTo: 'Carson',
     EmployeeImage:
-    avatar2,
+      avatar2,
 
   },
   {
@@ -1930,7 +2029,7 @@ export const employeesData = [
     Country: 'USA',
     ReportsTo: 'Carson',
     EmployeeImage:
-    avatar2,
+      avatar2,
 
   },
   {
@@ -2001,7 +2100,7 @@ export const employeesData = [
     Country: 'USA',
     ReportsTo: 'Carson',
     EmployeeImage:
-    avatar2,
+      avatar2,
 
   },
   {
@@ -2072,7 +2171,7 @@ export const employeesData = [
     Country: 'USA',
     ReportsTo: 'Carson',
     EmployeeImage:
-    avatar2,
+      avatar2,
 
   },
   {
@@ -2137,6 +2236,21 @@ export const employeesData = [
   },
 ];
 
+
+export const productsData = [
+  {
+    id: 10248,
+    name: 'Vinet',
+
+    price: 32.38,
+    stock: 500,
+    category_id: 'Shoes',
+    created_at: '8/13/2023',
+
+    ProductImage:
+    product6,
+  },
+]
 export const ordersData = [
   {
     OrderID: 10248,
@@ -2192,7 +2306,7 @@ export const ordersData = [
     Status: 'rejected',
     StatusBg: 'red',
     ProductImage:
-    product1,
+      product1,
   },
   {
     OrderID: 94757,
@@ -3108,29 +3222,35 @@ export const SparklineAreaData = [
 ];
 
 export const lineCustomSeries = [
-  { dataSource: lineChartData[0],
+  {
+    dataSource: lineChartData[0],
     xName: 'x',
     yName: 'y',
     name: 'Germany',
     width: '2',
     marker: { visible: true, width: 10, height: 10 },
-    type: 'Line' },
+    type: 'Line'
+  },
 
-  { dataSource: lineChartData[1],
+  {
+    dataSource: lineChartData[1],
     xName: 'x',
     yName: 'y',
     name: 'England',
     width: '2',
     marker: { visible: true, width: 10, height: 10 },
-    type: 'Line' },
+    type: 'Line'
+  },
 
-  { dataSource: lineChartData[2],
+  {
+    dataSource: lineChartData[2],
     xName: 'x',
     yName: 'y',
     name: 'India',
     width: '2',
     marker: { visible: true, width: 10, height: 10 },
-    type: 'Line' },
+    type: 'Line'
+  },
 
 ];
 
@@ -3193,7 +3313,8 @@ export const stackedChartData = [
 
 export const stackedCustomSeries = [
 
-  { dataSource: stackedChartData[0],
+  {
+    dataSource: stackedChartData[0],
     xName: 'x',
     yName: 'y',
     name: 'Budget',
@@ -3202,7 +3323,8 @@ export const stackedCustomSeries = [
 
   },
 
-  { dataSource: stackedChartData[1],
+  {
+    dataSource: stackedChartData[1],
     xName: 'x',
     yName: 'y',
     name: 'Expense',

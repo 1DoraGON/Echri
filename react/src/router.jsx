@@ -3,7 +3,7 @@ import { GuestLayout, Login, NotFound, Profile, SignUp} from './components/HomeP
 import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dashboard from './components/Views/Dashboard';
-import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor,ProductCreate } from './components/Dashboard/pages';
+import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor,ProductCreate, Products } from './components/Dashboard/pages';
 
 import './App.css';
 import HomePage from './components/Views/HomePage';
@@ -100,6 +100,10 @@ const router = createBrowserRouter( [
                     },
 
                     /* Product management */
+                    {
+                        path: '/dashboard/products',
+                        element: <Products />
+                    },
                     {
                         path: '/dashboard/products/create',
                         element: <ProductCreate />

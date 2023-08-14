@@ -342,7 +342,6 @@ const ProductCreate = () => {
         .then(({ data }) => {
           toast.success(`Product Added Successfully`)
           delete emptyForm.category_id
-          setFormData((prev) => ({ ...prev, name:parseInt(prev.id)+1 }));
           //setFormData((prev) => ({ ...emptyForm, category_id: prev.category_id }));
           setTags([])
           console.log(data);

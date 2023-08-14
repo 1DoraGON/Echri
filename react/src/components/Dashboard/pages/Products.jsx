@@ -84,12 +84,14 @@ const Products = () => {
         setProductsData(filterdedData)
       }
       console.log(response);
+
       return true;
     }).catch((err) => {
       console.log(err);
 
       toast.error('Oops! Somthing went wrong!')
     })
+
   }
   const productsGridWithFormattedDate = productsGrid.map((item) => {
     if (item.field === 'created_at') {
@@ -133,7 +135,6 @@ const Products = () => {
           //console.log(filterdedData);
           //setProductsData(filterdedData) // Pass the ID to your delete function
         })
-        dispatch(setModalIsOpen(false))
         
       }
       if(success){
@@ -206,7 +207,7 @@ const Products = () => {
           },
         }}
       >
-        <h2 className="text-center">Are you sure you want to delete product <span className='font-semibold'>{productId ? productId.name : ''}</span> </h2>
+        <h2 className="text-center">{productId? 'Are you sure you want to delete product' : 'Are you sure you want to delete products?'} <span className='font-semibold'>{productId ? productId.name : ''}</span> </h2>
         <div className="absolute right-2 bottom-2">
 
           <button

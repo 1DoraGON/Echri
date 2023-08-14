@@ -59,9 +59,9 @@ const Dashboard = () => {
 
           ) : ('')}
           <div className="">
-            <div className={`transition-all duration-300 ${!themeSettings ? 'hidden' : ''}`}>
+{/*             <div className={`transition-all duration-300 ${!themeSettings ? 'hidden' : ''}`}>
               <ThemeSettings />
-            </div>
+            </div> */}
 
             <Outlet />
           </div>

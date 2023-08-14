@@ -35,6 +35,7 @@ export const modifyButtonTemplate = (props) => {
   );
 } 
 export const productsGrid = [
+  { type: 'checkbox', width: '50' },
   {
     headerText: 'Image',
     template: gridOrderImage,
@@ -51,6 +52,7 @@ export const productsGrid = [
   {
     field: 'category_id',
     headerText: 'Category',
+    editType: 'dropdownedit',
     width: '150',
     textAlign: 'Center',
   },

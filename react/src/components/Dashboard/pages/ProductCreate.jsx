@@ -86,6 +86,7 @@ const ProductCreate = () => {
       console.log(data.data);
       if (data.data.length > 0 && !productId) {
         setFormData((prev) => ({ ...prev, category_id: data.data[0].id }))
+        console.log('it must work ' + data.data[0].id);
       }
       setOptions(data.data)
       //console.log(options);
@@ -330,18 +331,27 @@ const ProductCreate = () => {
         })
         .catch(err => {
           console.log(err.response);
-          setErrors(err.response?.data.errors)
+          if (err.response?.status == 422) {
+            setErrors(err.response?.data.errors)
+
+          }
         });
     } else {
 
       axiosClient.post('/api/products', formDataToSend, config)
         .then(({ data }) => {
           toast.success(`Product Added Successfully`)
-          setFormData(emptyForm);
+          delete emptyForm.category_id
+          setFormData((prev) => ({ ...prev, name:parseInt(prev.id)+1 }));
+          //setFormData((prev) => ({ ...emptyForm, category_id: prev.category_id }));
           setTags([])
           console.log(data);
         })
         .catch(err => {
+          if (err.response?.status == 422) {
+            setErrors(err.response?.data.errors)
+
+          }
           console.log(err);
         });
     }

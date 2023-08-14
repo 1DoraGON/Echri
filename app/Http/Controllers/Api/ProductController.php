@@ -38,20 +38,18 @@ class ProductController extends Controller
         $imagePath = $imagePath->store('main_product_images', 'public');
         $data['main_image'] = $imagePath;
 
-        $images = $data['images']; // Retrieve the images array after it's stored in the $data array
+        $images = $data['images'] ?? []; // Retrieve the images array after it's stored in the $data array
         unset($data['images']);
 
         //return response(compact('data'));
 
         $product = Product::create($data);
-        if ($images) {
-            foreach ($images as $key => $value) {
-                $imagePath = $value->store('product_images', 'public');
-                $image = ProductImage::create([
-                    'image_url' => $imagePath,
-                    'product_id' => $product->id
-                ]);
-            }
+        foreach ($images as $key => $value) {
+            $imagePath = $value->store('product_images', 'public');
+            $image = ProductImage::create([
+                'image_url' => $imagePath,
+                'product_id' => $product->id
+            ]);
         }
         //$images = $product->images;
         //return response(compact('images'));
@@ -84,7 +82,7 @@ class ProductController extends Controller
 
         return response(compact('data'));
         if ($product->main_image !== $data['main_image']) {
-            if (Storage::disk('public')->exists($product->main_image)) {
+            if (!empty($product->main_image) && Storage::disk('public')->exists($product->main_image)) {
                 Storage::disk('public')->delete($product->main_image);
             }
             $imagePath = $data['main_image']->store('main_product_images', 'public');
@@ -100,7 +98,7 @@ class ProductController extends Controller
         foreach ($old_images as $value) {
             if (!in_array($value->image_url, $existed_images)) {
                 $value->delete();
-                if (Storage::disk('public')->exists($value->image_url)) {
+                if (!empty($value->image_url) && Storage::disk('public')->exists($value->image_url)) {
                     Storage::disk('public')->delete($value->image_url);
                 }
             }
@@ -125,6 +123,19 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        //return response()->json(['message' => 'reaching this point', 'product'=>$product]);
+
+        if (!empty($product->main_image) && Storage::disk('public')->exists($product->main_image)) {
+            Storage::disk('public')->delete($product->main_image);
+        }
+        if ($product->images) {
+            
+            foreach($product->images as $value ){
+                if (!empty($value->image_url) && Storage::disk('public')->exists($value->image_url)) {
+                    Storage::disk('public')->delete($value->image_url);
+                }
+            }
+        }
         $product->delete();
         return response()->json(['message' => 'Product deleted successfully']);
     }

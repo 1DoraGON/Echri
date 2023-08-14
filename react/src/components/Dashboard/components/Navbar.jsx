@@ -35,7 +35,7 @@ const Navbar = () => {
     if (screenSize <= 900) {
       dispatch(setActiveMenu(false))
     } else {
-      dispatch(setActiveMenu(true))
+      //dispatch(setActiveMenu(true))
     }
   },[screenSize])
   return (

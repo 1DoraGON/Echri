@@ -10,8 +10,9 @@ const initialState = {
   currentColor: localStorage.getItem('currentColor') ? JSON.parse(localStorage.getItem('currentColor')) : '#03C9D7',
   currentMode: localStorage.getItem('currentMode') ? JSON.parse(localStorage.getItem('currentMode')) : 'Dark',
   themeSettings: localStorage.getItem('themeSettings') ? JSON.parse(localStorage.getItem('themeSettings')) : false,
-  activeMenu: true,
+  activeMenu: false,
   modalIsOpen:false,
+  selectedProductId:null,
 };
 
 const ThemeSlice = createSlice({
@@ -58,15 +59,19 @@ const ThemeSlice = createSlice({
     },
     setActiveMenu: (state, action) => {
       state.activeMenu = action.payload
-      console.log(state.activeMenu);
     },
+    
+    setSelectedProductId: (state, action) => {
+      state.selectedProductId = action.payload
+    },
+    
 /*     setIsClicked: (state, action) => {
       state. = action.payload
     }, */
   }
 })
 
-export const {setModalIsOpen,setChat, setUserProfile, setCart, setNotification, setScreenSize, setThemeSettings, setCurrentMode, setCurrentColor, setActiveMenu} = ThemeSlice.actions
+export const {setModalIsOpen,setSelectedProductId,setChat, setUserProfile, setCart, setNotification, setScreenSize, setThemeSettings, setCurrentMode, setCurrentColor, setActiveMenu} = ThemeSlice.actions
 
 
 export const selectChat = (state) => state.theme.chat
@@ -79,4 +84,5 @@ export const selectCurrentMode = (state) => state.theme.currentMode
 export const selectThemeSettings = (state) => state.theme.themeSettings
 export const selectActiveMenu = (state) => state.theme.activeMenu
 export const selectModalIsOpen = (state) => state.theme.modalIsOpen
+export const selectProductId = (state) => state.theme.selectedProductId
 export default ThemeSlice.reducer

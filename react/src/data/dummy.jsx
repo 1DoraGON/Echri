@@ -25,8 +25,8 @@ import product8 from './product8.jpg';
 
 export const gridOrderImage = (props) => (
   <div>
-    <img
-      className="rounded-xl h-20 md:ml-3"
+    <img onClick={()=>{console.log('hello world');}}
+      className="rounded-xl h-20 md:ml-3 cursor-pointer"
       src={props.ProductImage}
       alt="order-item"
     />
@@ -934,56 +934,7 @@ export const userProfileData = [
   },
 ];
 
-export const productsGrid = [
-  {
-    headerText: 'Image',
-    template: gridOrderImage,
-    textAlign: 'Center',
-    width: '120',
-  },
-  {
-    field: 'name',
-    headerText: 'Name',
-    width: '150',
-    editType: 'dropdownedit',
-    textAlign: 'Center',
-  },
-  {
-    field: 'category_id',
-    headerText: 'Category',
-    width: '150',
-    textAlign: 'Center',
-  },
-  {
-    field: 'price',
-    headerText: 'Price',
-    format: 'C2',
-    textAlign: 'Center',
-    editType: 'numericedit',
-    width: '150',
-  },
-  {
-    field: 'stock',
-    headerText: 'Stock',
-    format: 'C2',
-    textAlign: 'Center',
-    editType: 'numericedit',
-    width: '150',
-  },
-  {
-    field: 'id',
-    headerText: 'Product ID',
-    width: '120',
-    textAlign: 'Center',
-  },
 
-  {
-    field: 'created_at',
-    headerText: 'Added At',
-    width: '150',
-    textAlign: 'Center',
-  },
-];
 export const ordersGrid = [
   {
     headerText: 'Image',

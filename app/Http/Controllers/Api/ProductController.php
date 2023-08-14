@@ -65,32 +65,36 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'name' => 'required|string',
-            'category_id' => 'required|integer|exists:categories,id',
+            'name' => 'string',
+            'category_id' => 'integer|exists:categories,id',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'price' => 'numeric|regex:/^\d+(\.\d{1,2})?$/',
             'color_start' => 'nullable|string',
             'color_end' => 'nullable|string',
             'stock' => 'nullable|integer',
             'tags' => 'nullable|string',
-            'main_image' => ['required', new ImageOrUrl],
+            'main_image' => [ new ImageOrUrl],
             'images' => 'nullable',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'old_images' => 'nullable',
             'old_images.*' => 'nullable|string'
         ]);
 
-        return response(compact('data'));
-        if ($product->main_image !== $data['main_image']) {
-            if (!empty($product->main_image) && Storage::disk('public')->exists($product->main_image)) {
-                Storage::disk('public')->delete($product->main_image);
-            }
-            $imagePath = $data['main_image']->store('main_product_images', 'public');
-            $data['main_image'] = $imagePath;
-            //return response(compact('data'));
-            $product->save();
-        }
+        //return response(compact('data'));
 
+        if (!empty($data['main_image'])) {
+        if ($product->main_image !== $data['main_image']) {
+                # code...
+                if (!empty($product->main_image) && Storage::disk('public')->exists($product->main_image)) {
+                    Storage::disk('public')->delete($product->main_image);
+                }
+                $imagePath = $data['main_image']->store('main_product_images', 'public');
+                $data['main_image'] = $imagePath;
+                //return response(compact('data'));
+                $product->save();
+            }
+        }
+            
         $images = $data['images'] ?? [];
         $old_images = $product->images;
         $existed_images = $data['old_images'] ?? [];

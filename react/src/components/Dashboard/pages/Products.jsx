@@ -61,6 +61,8 @@ const Products = () => {
     fetchData();
   }, []);
 
+
+  
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -99,9 +101,23 @@ const Products = () => {
     }
     return item;
   });
+
+  function findDifferentKeyValuePairs(obj1, obj2) {
+    const differentPairs = {};
+  
+    for (const key in obj1) {
+      if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
+        if (obj1[key] !== obj2[key]) {
+          differentPairs[key] = obj2[key]
+        }
+      }
+    }
+  
+    return differentPairs;
+  }
   const handleActionBegin = (args) => {
     if (args.requestType === 'delete' || args.requestType === 'save') {
-      console.log(args);
+      //console.log(args);
       // Prevent the action from executing immediately
       args.cancel = true;
   
@@ -126,10 +142,30 @@ const Products = () => {
         args.cancel = false;
         
       }
-      args.cancel = false;
+      if (args.requestType === 'save') {
+        const payload = findDifferentKeyValuePairs(args.previousData,args.data)
+        //console.log('payload ',payload);
+        success = handleUpdate(payload,args.data.id)
+      }
+      if(success){
+        args.cancel = false
+        
+      }
       // Similar for 'save'
     }
   };
+  const handleUpdate = async (payload,id) => {
+    await axiosClient.put('/api/products/'+id,payload).then((response)=>{
+      if(response.status==200){
+        toast.success('Product Updated Successfully!')
+        return true
+      }
+    }).catch((error)=>{
+      toast.success('Oops! Somthing went wrong!')
+      console.log(error)
+    })
+    return false
+  }
   return (
     <div className='m-10 mt-20 md:m-2 p-10  md:p-2 bg-white rounded-3xl'>
       <div className="flex items-center justify-between">
@@ -147,7 +183,7 @@ const Products = () => {
         <ColumnsDirective>
           {productsGridWithFormattedDate.map((item, i) => (
 
-            <ColumnDirective key={i} {...item}  edit={item.field !== 'id'} />
+            <ColumnDirective key={i} {...item}  allowEditing={item.field !== 'id' && item.field!== 'ProductImage'} />
           ))}
         </ColumnsDirective>
         <Inject services={[Page, Selection,Search, Edit, Sort, Filter, ExcelExport, Toolbar, ContextMenu, PdfExport]} />

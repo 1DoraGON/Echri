@@ -7,6 +7,7 @@ import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Ka
 
 import './App.css';
 import HomePage from './components/Views/HomePage';
+import NewCart from './components/HomePage/NewCart';
 const router = createBrowserRouter( [
     
     {
@@ -23,6 +24,10 @@ const router = createBrowserRouter( [
             {
                 path:'/products',
                 element:<HomePage />
+            },
+            {
+                path:'/cart',
+                element:<NewCart />
             },
             {
                 path:'/profile',

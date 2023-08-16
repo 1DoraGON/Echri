@@ -27,6 +27,7 @@ import { selectModalIsOpen, selectProductId, setModalIsOpen } from '../../../app
 import { Link } from 'react-router-dom';
 
 const Products = () => {
+  const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
   const productId = useSelector(selectProductId)
   const [loading, setLoading] = useState(true);
   const [productsData, setProductsData] = useState([]);
@@ -51,7 +52,7 @@ const Products = () => {
                       month: 'long',
                       day: 'numeric',
                     }), */
-          ProductImage: 'http://127.0.0.1:8000/storage/' + product.main_image,
+          ProductImage: STORAGE_URL + product.main_image,
         }));
 
         setProductsData(transformedData);

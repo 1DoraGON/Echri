@@ -8,8 +8,9 @@ import { selectModalIsOpen, setModalIsOpen } from '../../../app/ThemeSlice';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { NotFound } from '../../HomePage';
+import { ImagePreview, ImagePreviewSecondary } from '../components';
 const ProductCreate = () => {
-  const STORAGE_URL = 'http://127.0.0.1:8000/storage/'
+  const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
   const navigate = useNavigate()
   const { productId } = useParams(); // Get the productId parameter from the URL
   const [loading, setLoading] = useState(true);
@@ -26,12 +27,13 @@ const ProductCreate = () => {
   )
   const inputStyle = "block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-main-dark-bg dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
   const [tags, setTags] = useState([]);
+  const [categoryImage, setCategoryImage] = useState('');
   const [currentTag, setCurrentTag] = useState('');
 
 
   const fileInputRef = useRef(null);
   const mainImageRef = useRef(null);
-
+  const categoryImageRef = useRef(null)
   const [options, setOptions] = useState([]);
   const modalIsOpen = useSelector(selectModalIsOpen)
   const dispatch = useDispatch()
@@ -86,7 +88,7 @@ const ProductCreate = () => {
       console.log(data.data);
       if (data.data.length > 0 && !productId) {
         setFormData((prev) => ({ ...prev, category_id: data.data[0].id }))
-        console.log('it must work ' + data.data[0].id);
+        //console.log('it must work ' + data.data[0].id);
       }
       setOptions(data.data)
       //console.log(options);
@@ -177,6 +179,11 @@ const ProductCreate = () => {
       mainImageRef.current.click();
     }
   };
+  const handleCategoryImageDivClick = () => {
+    if (categoryImageRef.current) {
+      categoryImageRef.current.click();
+    }
+  };
 
   const handleImageChange = (e) => {
     const imageFile = e.target.files[0];
@@ -188,8 +195,16 @@ const ProductCreate = () => {
     const imageFile = e.target.files[0];
     setFormData((prevData) => ({ ...prevData, main_image: imageFile }));
   };
+
+  const handleCategoryImageChange = (e) => {
+    const imageFile = e.target.files[0];
+    setCategoryImage(imageFile);
+  };
   const handleRemoveMainImage = () => {
     setFormData((prevData) => ({ ...prevData, main_image: '' }));
+  };
+  const handleRemoveCategoryImage = () => {
+    setCategoryImage('');
   };
   const handleRemoveImage = (image) => {
     const images = formData.images.filter(item => item !== image);
@@ -208,27 +223,35 @@ const ProductCreate = () => {
   const handleOptionAddition = (e) => {
     e.preventDefault();
     if (newOption.trim() !== '' && !options.includes(newOption)) {
-      const payload = { name: newOption }
+      const payload = { name: newOption, image_url: categoryImage }
+      console.log(payload);
+      const formToSend = new FormData()
+      formToSend.append('name', payload.name)
+      formToSend.append('image_url', payload.image_url)
       try {
-        axiosClient.post('/api/categories', payload).then((response) => {
+        axiosClient.post('/api/categories', formToSend).then((response) => {
           toast.success(`${newOption} ${response.data.message}`)
           setOptions((prevData) => [...prevData, response.data.resource])
           //console.log(response);
           setFormData((prevData) => ({ ...prevData, category_id: response.data.resource.id }))
-        }).catch(({ response }) => {
-          if (response.status === 422) {
-            toast.error(response.data.errors.name[0])
+        }).catch(( error ) => {
+          console.log(error.response);
+          if (error.response?.status === 422) {
+            const errors = error.response.data.errors
+            console.log(errors);
+            Object.entries(errors).forEach(([key, value]) => {
+              toast.error('Category '+ value[0])
+            });
           }
-          console.log(response);
         })
       } catch ({ response }) {
-        if (response.status === 422) {
-          toast.error(response.response.data.errors.name[0])
-        }
         console.log(response);
       }
+      setCategoryImage('')
       setNewOption('');
       dispatch(setModalIsOpen(false));
+    } else if (newOption.trim() === ''){
+      toast.error('Category name field is required!')
     }
   };
 
@@ -280,6 +303,22 @@ const ProductCreate = () => {
       setFormData({ ...formData, main_image: '' });
     }
   }, [formData.main_image]);
+  useEffect(() => {
+    try {
+      const reader = new FileReader(); // Create a new FileReader object for each image
+
+      reader.onload = (event) => {
+        const imagePreview = event.target.result;
+        document.getElementById('image-preview-category').src = imagePreview;
+      };
+
+      reader.readAsDataURL(categoryImage);
+    } catch (error) {
+
+      // Update the state with the new array
+      setCategoryImage('');
+    }
+  }, [categoryImage]);
 
 
 
@@ -458,7 +497,7 @@ const ProductCreate = () => {
                     },
                     content: {
                       width: '400px',
-                      height: '160px',
+                      height: '450px',
                       margin: 'auto',
                       background: '#f3f4f6',
                       borderRadius: '8px',
@@ -475,22 +514,23 @@ const ProductCreate = () => {
                   />
                   <button
                     onClick={handleOptionAddition}
-                    className="block mx-auto bg-blue-500 text-white px-4 py-2 rounded absolute right-2 bottom-2"
+                    className="block mx-auto bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded absolute right-2 bottom-2"
                   >
                     Add
                   </button>
+                  <div className=" mt-8">
+                    {categoryImage === '' ? (
+                      <ImagePreview ImageSVG={ImageSVG} handleImageChange={handleCategoryImageChange} fileInputRef={categoryImageRef} handleDivClick={handleCategoryImageDivClick} style={'flex items-center justify-center border-2 h-60 border-blue-400 rounded-md cursor-pointer'} text={'Upload Category Image'} isCategory={true} />
+
+                    ) : (
+                      <ImagePreviewSecondary handleRemoveImage={handleRemoveCategoryImage} image={categoryImage} STORAGE_URL={STORAGE_URL} productId={false} i={'category'} />
+                    )}
+                  </div>
                 </Modal>
               </div>
 
             </div>
-            {/*             <div>
-              <label className="text-black dark:text-gray-200" name="passwordConfirmation">Range</label>
-              <input id="range" type="range" className="block w-full py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
-            </div> */}
-            {/*             <div>
-              <label className="text-black dark:text-gray-200" name="passwordConfirmation">Date</label>
-              <input id="date" type="date" className={`${inputStyle}`} />
-            </div> */}
+
 
             <div>
               <label className="block text-sm font-medium text-black dark:text-gray-200">
@@ -501,94 +541,25 @@ const ProductCreate = () => {
                 {formData.main_image !== '' ? (
 
                   <SplideSlide className='mb-0.5 flex items-center justify-center h-64 relative'>
-                    <div className="absolute top-2 right-2" onClick={handleRemoveMainImage}>
-                      <MdOutlineCancel className='w-5 h-5 text-black dark:text-gray-200 hover:text-slate-400 cursor-pointer' />
-                    </div>
-                    <div className="w-full h-full overflow-hidden border-2 border-blue-400 rounded-md flex items-center ">
-                      <img
-                        id={`image-preview-main`}
-                        className="object-center w-full h-auto"
-                        src={`${productId ? STORAGE_URL + formData.main_image : ''}`}
-                        alt=""
-                      />
-                    </div>
+                    <ImagePreviewSecondary handleRemoveImage={handleRemoveMainImage} image={formData.main_image} STORAGE_URL={STORAGE_URL} productId={productId} i={'main'} />
                   </SplideSlide>
                 ) : (
 
                   <SplideSlide className='mb-0.5' >
-                    <div className="flex items-center justify-center border-2 h-60 border-blue-400 rounded-md cursor-pointer" onClick={handleMainImageDivClick} >
-                      <div
-                        className="space-y-1 text-center"
-                      // Handle div click event
-                      >
-                        <ImageSVG />
-                        <label
-                          name="file-upload"
-                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 dark:text-gray-200"
-                        >
-                          <span className="dark:text-black p-2">Upload Main Image</span>
-                          <input
-                            id="file-upload"
-                            name="mainImage"
-                            type="file"
-                            className="sr-only hidden"
-                            onChange={handleMainImageChange}
-                            ref={mainImageRef} // Attach the ref to the input element
-                          />
-                        </label>
-                        <p className="pl-1 dark:text-gray-200 text-black">or drag and drop</p>
-                        <p className="text-xs text-black dark:text-gray-200">
-                          PNG, JPG, GIF up to 10MB
-                        </p>
-                      </div>
-                    </div>
+
+                    <ImagePreview ImageSVG={ImageSVG} handleImageChange={handleMainImageChange} fileInputRef={mainImageRef} handleDivClick={handleMainImageDivClick} style={'flex items-center justify-center border-2 h-60 border-blue-400 rounded-md cursor-pointer'} text={'Upload Main Image'} isCategory={false} />
                   </SplideSlide>
                 )}
                 {formData.images.map((image, i) => (
                   <SplideSlide key={i} className='mb-0.5 flex items-center justify-center h-64 relative'>
-                    <div className="absolute top-2 right-2" onClick={() => { handleRemoveImage(image) }}>
-                      <MdOutlineCancel className='w-5 h-5 text-black dark:text-gray-200 hover:text-slate-400 cursor-pointer' />
-                    </div>
-                    <div className="w-full h-full overflow-hidden border-2 border-gray-300 border-dashed rounded-md flex items-center ">
-                      <img
-                        id={`image-preview-${i}`}
-                        className="object-center w-full h-auto"
-                        src={`${productId ? STORAGE_URL + image : ''}`}
-                        alt=""
-                      />
-                    </div>
+                    <ImagePreviewSecondary handleRemoveImage={handleRemoveImage} image={image} STORAGE_URL={STORAGE_URL} productId={productId} i={i} />
                   </SplideSlide>
 
 
                 ))}
                 {formData.main_image !== '' && (
                   <SplideSlide className='mb-0.5' >
-                    <div className="flex items-center justify-center border-2 h-full border-gray-300 border-dashed rounded-md cursor-pointer" onClick={handleDivClick} >
-                      <div
-                        className="space-y-1 text-center"
-                      // Handle div click event
-                      >
-                        <ImageSVG />
-                        <label
-                          name="file-upload"
-                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 dark:text-gray-200"
-                        >
-                          <span className="dark:text-black p-2">Upload a file</span>
-                          <input
-                            id="file-upload"
-                            name="file-upload"
-                            type="file"
-                            className="sr-only hidden"
-                            onChange={handleImageChange}
-                            ref={fileInputRef} // Attach the ref to the input element
-                          />
-                        </label>
-                        <p className="pl-1 dark:text-gray-200 text-black">or drag and drop</p>
-                        <p className="text-xs text-black dark:text-gray-200">
-                          PNG, JPG, GIF up to 10MB
-                        </p>
-                      </div>
-                    </div>
+                    <ImagePreview ImageSVG={ImageSVG} handleImageChange={handleImageChange} fileInputRef={fileInputRef} handleDivClick={handleDivClick} style={'flex items-center justify-center border-2 h-full border-gray-300 border-dashed rounded-md cursor-pointer'} text={'Upload Secondary Images'} isCategory={false} />
                   </SplideSlide>
                 )}
 

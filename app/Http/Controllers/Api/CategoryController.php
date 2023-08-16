@@ -20,9 +20,11 @@ class CategoryController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', Rule::unique('categories')],
+            'image_url' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
         //return response(compact('data'));
-
+        $imagePath = $data['image_url']->store('categories_images', 'public');
+        $data['image_url'] = $imagePath;
         $category = Category::create($data);
         $resource = new CategoryResource($category);
         $message = 'Category have been added successfully';

@@ -5,7 +5,6 @@ import { setAddItemToCart } from '../../app/CartSlice'
 import { truncate } from 'lodash';
 
 const Item = ({
-    ifExists,
     id,
     color_start,
     color_end,
@@ -33,7 +32,9 @@ const Item = ({
         shadow: "shadow-lg shadow-blue-500", */
         dispatch(setAddItemToCart(item))
     }
-    const STORAGE_URL = 'http://127.0.0.1:8000/storage/'
+    const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
+
+    //const STORAGE_URL = 'http://127.0.0.1:8000/storage/'
     return (
 
         <div className="max-w-sm bg-blue-100 shadow-lg rounded-lg overflow-hidden my-10 transition-all duration-700 ease-in-out w-full hover:scale-105">
@@ -41,7 +42,7 @@ const Item = ({
                 <h1 className="text-gray-900 font-bold text-xl leading-snug h-10 uppercase">{truncate(name, { length: 50 })}</h1>
                 <p className="text-gray-600 leading-snug h-12 text-sm mt-1">{truncate(description, { length: 70 })}</p>
             </div>
-            <img className="h-56 w-full object-cover mt-2" src={STORAGE_URL+main_image} alt="NIKE AIR"/>
+            <img className="h-56 w-full object-cover mt-2" src={STORAGE_URL+main_image} alt={name} />
                 <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
                     <h1 className="text-gray-200 font-bold text-xl">DZD {price}</h1>
                     <button  onClick={onAddToCart} className="px-3 py-1 bg-blue-100 hover:bg-white text-sm text-gray-900 font-semibold rounded">Add to card</button>

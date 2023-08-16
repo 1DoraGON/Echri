@@ -20,15 +20,15 @@ const ImagePreview = ({ ImageSVG, handleImageChange, fileInputRef, handleDivClic
           className={`relative cursor-pointer ${isCategory ? '' : 'bg-white dark:text-gray-200'} rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 `}
         >
           <span className={`${isCategory ? 'text-black' : 'dark:text-black'} dark:text-black p-2`}>{text}</span>
+          </label>
           <input
             id="file-upload"
             name="file-upload"
             type="file"
-            className="sr-only hidden"
+            className="hidden"
             onChange={handleImageChange}
             ref={fileInputRef} // Attach the ref to the input element
           />
-        </label>
         <p className={`pl-1 ${isCategory ? 'text-black' : 'dark:text-gray-200'}`}>or drag and drop</p>
         <p className={`text-xs ${isCategory ? 'text-black' : 'dark:text-gray-200'}`}>
           PNG, JPG, GIF up to 10MB

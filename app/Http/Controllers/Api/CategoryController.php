@@ -15,7 +15,12 @@ class CategoryController extends Controller
         $categories = Category::all();
         return CategoryResource::collection($categories);
     }
-
+    public function indexWithProducts()
+    {
+        $categories = Category::withLastFiveProducts()->get();
+    
+        return response()->json(compact('categories'));
+    }
     public function store(Request $request)
     {
         $data = $request->validate([

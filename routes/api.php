@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('/products',ProductController::class);
     Route::apiResource('/orders',OrderController::class);
     Route::apiResource('/categories',CategoryController::class);
+    Route::get('categories/indexWithProducts', [CategoryController::class, 'indexWithProducts']);
+
 
 });
 Route::post('/test', function (Request $request) {

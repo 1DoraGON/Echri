@@ -20,6 +20,8 @@ const Stories = () => {
         toast.error('Oops! Something went wrong please try later!')
       })
     }
+
+    
     fetchCategories()
   },[])
 

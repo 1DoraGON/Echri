@@ -13,6 +13,7 @@ const initialState = {
   activeMenu: false,
   modalIsOpen:false,
   selectedProductId:null,
+  filterPage:true,
 };
 
 const ThemeSlice = createSlice({
@@ -64,6 +65,9 @@ const ThemeSlice = createSlice({
     setSelectedProductId: (state, action) => {
       state.selectedProductId = action.payload
     },
+    setFilterPage: (state, action) => {
+      state.filterPage = action.payload
+    },
     
 /*     setIsClicked: (state, action) => {
       state. = action.payload
@@ -85,4 +89,5 @@ export const selectThemeSettings = (state) => state.theme.themeSettings
 export const selectActiveMenu = (state) => state.theme.activeMenu
 export const selectModalIsOpen = (state) => state.theme.modalIsOpen
 export const selectProductId = (state) => state.theme.selectedProductId
+export const selectFilterPage = (state) => state.theme.filterPage
 export default ThemeSlice.reducer

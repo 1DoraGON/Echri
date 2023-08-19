@@ -30,8 +30,7 @@ const Stories = () => {
   const splideOptions = {
     perPage: 4,
     perMove: 1,
-    type: 'loop',
-    rewind: true,
+    rewind: false,
     keyboard: 'global',
     gap: '1rem',
     pagination: false,

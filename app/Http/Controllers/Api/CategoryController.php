@@ -16,11 +16,20 @@ class CategoryController extends Controller
         return CategoryResource::collection($categories);
     }
     // CategoryController.php
-    
     public function indexWithProducts()
     {
-        $categories = Category::withLastFiveProducts()->get();
-
+        $categories = Category::withLastFiveProducts()->whereHas('products')
+            ->get();
+        $categories = $categories->toArray();
+        $categories = array_map(function($category) {
+            $cat = $category;
+            $cat['products'] = array_slice($category['products'], 0, 5);
+            return $cat;
+        },$categories);
+/*         $categories = $categories->map(function ($category) {
+            $category['products'] = '$category->products->take(5)';
+            return $category;
+        }); */
         return response()->json(compact('categories'));
     }
 

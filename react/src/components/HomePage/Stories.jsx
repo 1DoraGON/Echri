@@ -10,22 +10,22 @@ import { toast } from 'react-hot-toast';
 
 const Stories = () => {
   const [categories, setCategories] = useState([])
-  useEffect(()=>{
-    const fetchCategories = async () =>{
-      await axiosClient.get('/api/categories/indexWithProducts').then((response)=>{
-        setCategories(response.data.data)
+  useEffect(() => {
+    const fetchCategories = async () => {
+      await axiosClient.get('/api/categories/indexWithProducts').then((response) => {
+        setCategories(response.data.categories)
         console.log(response);
-      }).catch((error)=>{
+      }).catch((error) => {
         console.log(error);
         toast.error('Oops! Something went wrong please try later!')
       })
     }
 
-    
 
-    
+
+
     fetchCategories()
-  },[])
+  }, [])
 
   const splideOptions = {
     perPage: 4,
@@ -52,14 +52,14 @@ const Stories = () => {
         <Title title="In our store we have:" />
         <div className="">
           <Splide className='mt-10' options={splideOptions}>
-            {categories.map((val, i) => (
+            {categories?.map((val, i) => (
               <SplideSlide key={i} className='mb-0.5' >
                 <div className="relative grid items-center gap-4 pb-2 rounded-lg shadow shadow-slate-200 ring-1 ring-slate-200">
                   <div className="flex items-center justify-center">
                     <img src={STORAGE_URL + val.image_url} alt={`img/story${i}`} className='w-full h-48 object-cover shadow-md shadow-slate-200 rounded-tl-lg rounded-tr-lg' />
                   </div>
                   <div className="flex items-center justify-between w-full px-4">
-{/*                     <div className="flex-items-center gap-0.5">
+                    {/*                     <div className="flex-items-center gap-0.5">
                       <HeartIcon className='icon-style text-red-500 w-5 h-5' /> <span className='text-xs font-bold'>{val.like}</span>
                     </div>
                     <div className="flex-items-center gap-0.5">
@@ -72,7 +72,8 @@ const Stories = () => {
                   </div>
                   <div className="grid items-center justify-items-start px-4">
                     <h1 className='text-base font-semibold lg:text-sm'>{val.name}</h1>
-                    <p className='text-sm text-justify lg:text-xs'>{truncate(val.name, { length: 175 })} </p>
+                    <p className='text-sm text-justify lg:text-xs h-24'>{truncate(val.products.map(obj => obj.name).join(', ')
+                      , { length: 175 })} and many more ... </p>
                   </div>
                   <div className="flex items-center justify-center px-4 w-full">
                     <a target='_blank' role={'button'} href='' className='w-full bg-slate-900 bg-gradient-to-b from-slate-800 to-black shadow-md shadow-black text-center text-slate-100 py-1.5 button-theme'>Explore </a>

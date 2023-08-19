@@ -15,12 +15,15 @@ class CategoryController extends Controller
         $categories = Category::all();
         return CategoryResource::collection($categories);
     }
+    // CategoryController.php
+    
     public function indexWithProducts()
     {
         $categories = Category::withLastFiveProducts()->get();
-    
+
         return response()->json(compact('categories'));
     }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -33,7 +36,7 @@ class CategoryController extends Controller
         $category = Category::create($data);
         $resource = new CategoryResource($category);
         $message = 'Category have been added successfully';
-        return response(compact('resource','message'));
+        return response(compact('resource', 'message'));
     }
 
     public function show(Category $category)
@@ -50,7 +53,7 @@ class CategoryController extends Controller
         $category->update($data);
         $resource = new CategoryResource($category);
         $message = 'Category have been updated successfully';
-        return response(compact('resource','message'));
+        return response(compact('resource', 'message'));
     }
 
     public function destroy(Category $Category)

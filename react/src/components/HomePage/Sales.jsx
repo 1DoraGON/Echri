@@ -3,22 +3,18 @@ import Title from '../utils/Title'
 import Item from '../utils/Item'
 import { toast } from 'react-hot-toast'
 import axiosClient from '../../api/axios'
-import { useSelector } from 'react-redux'
-import { selectFilterPage } from '../../app/ThemeSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchProducts, selectFilterPage, selectProducts } from '../../app/ProductsSlice'
 
 const Sales = () => {
   const filterPage = useSelector(selectFilterPage)
-  const [latestProducts, setLatestProducts] = useState([])
+  const dispatch = useDispatch()
+  const latestProducts = useSelector(selectProducts)
   useEffect(() => {
-    const fetchProducts = async () => {
-      await axiosClient.get('/api/products').then((response) => {
-        setLatestProducts(response.data.data)
-        console.log(response);
-      }).catch((error) => {
-        toast.error('Oops! Something went wrong please try later!')
-      })
+    const fetch = async () => {
+      dispatch(fetchProducts({search:'e'}));
     }
-    fetchProducts()
+    fetch()
   }, [])
 
   return (

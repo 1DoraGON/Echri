@@ -45,6 +45,10 @@ const Stories = () => {
   };
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
 
+  const handleCategoryClick = (category) =>{
+    
+  }
+
   return (
     <>
       <div className="nike-container mb-11">
@@ -71,11 +75,11 @@ const Stories = () => {
                   </div>
                   <div className="grid items-center justify-items-start px-4">
                     <h1 className='text-base font-semibold lg:text-sm'>{val.name}</h1>
-                    <p className='text-sm text-justify lg:text-xs h-24'>{truncate(val.products.map(obj => obj.name).join(', ')
+                    <p className='text-sm text-justify lg:text-xs h-28 lg:h-24'>{truncate(val.products.map(obj => obj.name).join(', ')
                       , { length: 175 })} and many more ... </p>
                   </div>
                   <div className="flex items-center justify-center px-4 w-full">
-                    <a target='_blank' role={'button'} href='' className='w-full bg-slate-900 bg-gradient-to-b from-slate-800 to-black shadow-md shadow-black text-center text-slate-100 py-1.5 button-theme'>Explore </a>
+                    <button type='button' onClick={()=>{ handleCategoryClick(val.id) }} className='w-full bg-slate-900 bg-gradient-to-b from-slate-800 to-black shadow-md shadow-black text-center text-slate-100 py-1.5 button-theme'>Explore </button>
                   </div>
                 </div>
               </SplideSlide>

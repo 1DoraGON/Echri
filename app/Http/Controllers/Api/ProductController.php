@@ -12,10 +12,15 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return ProductResource::collection($products);
+        $perPage = 18;
+        
+        $products = Product::latest()
+            ->filter($request->only(['search', 'category']))
+            ->paginate($perPage);
+    
+        return response()->json($products);
     }
 
     public function store(Request $request)

@@ -3,7 +3,7 @@ import { HeartIcon, MagnifyingGlassIcon, ShoppingBagIcon } from '@heroicons/reac
 import logo from '../../assets/logo.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectCartTotalQantity, setOpenCart } from '../../app/CartSlice'
-import { selectFilterPage } from '../../app/ThemeSlice'
+import { selectFilterPage } from '../../app/ProductsSlice'
 const Navbar = () => {
   const filterPage = useSelector(selectFilterPage)
   const [navState, setNavState] = useState(false)

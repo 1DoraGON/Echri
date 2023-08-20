@@ -13,7 +13,7 @@ const initialState = {
   activeMenu: false,
   modalIsOpen:false,
   selectedProductId:null,
-  filterPage:true,
+  isLoading:true,
 };
 
 const ThemeSlice = createSlice({
@@ -65,8 +65,8 @@ const ThemeSlice = createSlice({
     setSelectedProductId: (state, action) => {
       state.selectedProductId = action.payload
     },
-    setFilterPage: (state, action) => {
-      state.filterPage = action.payload
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload
     },
     
 /*     setIsClicked: (state, action) => {
@@ -75,7 +75,7 @@ const ThemeSlice = createSlice({
   }
 })
 
-export const {setModalIsOpen,setSelectedProductId,setChat, setUserProfile, setCart, setNotification, setScreenSize, setThemeSettings, setCurrentMode, setCurrentColor, setActiveMenu} = ThemeSlice.actions
+export const {setModalIsOpen,setSelectedProductId,setChat, setUserProfile, setCart, setNotification, setScreenSize, setThemeSettings, setCurrentMode, setCurrentColor, setActiveMenu,setIsLoading} = ThemeSlice.actions
 
 
 export const selectChat = (state) => state.theme.chat
@@ -89,5 +89,5 @@ export const selectThemeSettings = (state) => state.theme.themeSettings
 export const selectActiveMenu = (state) => state.theme.activeMenu
 export const selectModalIsOpen = (state) => state.theme.modalIsOpen
 export const selectProductId = (state) => state.theme.selectedProductId
-export const selectFilterPage = (state) => state.theme.filterPage
+export const selectIsLoading = (state) => state.theme.isLoading
 export default ThemeSlice.reducer

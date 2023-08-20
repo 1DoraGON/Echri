@@ -26,7 +26,10 @@ class Product extends Model
             $query->where(function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%')
-                    ->orWhere('tags', 'like', '%' . $search . '%');
+                    ->orWhere('tags', 'like', '%' . $search . '%')
+                    ->orWhereHas('category', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    });
             });
         });
     

@@ -7,9 +7,12 @@ import { ClockIcon } from "@heroicons/react/24/outline";
 import { truncate } from 'lodash';
 import axiosClient from '../../api/axios';
 import { toast } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { fetchProducts } from '../../app/ProductsSlice';
 
 const Stories = () => {
   const [categories, setCategories] = useState([])
+  const dispatch = useDispatch()
   useEffect(() => {
     const fetchCategories = async () => {
       await axiosClient.get('/api/categories/indexWithProducts').then((response) => {
@@ -46,7 +49,12 @@ const Stories = () => {
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
 
   const handleCategoryClick = (category) =>{
-    
+    dispatch(fetchProducts({category:category}));
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Smooth scrolling animation
+    });
+
   }
 
   return (

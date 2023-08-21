@@ -4,8 +4,9 @@ import Item from '../utils/Item'
 import { toast } from 'react-hot-toast'
 import axiosClient from '../../api/axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchProducts, selectFilterPage, selectLoading, selectProducts } from '../../app/ProductsSlice'
+import { fetchProducts, selectFilterPage, selectLoading, selectProducts, setFilterPage, setLoading } from '../../app/ProductsSlice'
 import EmptyItem from '../utils/EmptyItem'
+import Pagination from '../utils/Pagination'
 
 const Sales = () => {
   const searchRef = useRef()
@@ -19,9 +20,16 @@ const Sales = () => {
       dispatch(fetchProducts({ params }));
     }
     fetch({})
+    dispatch(setFilterPage(false))
   }, [])
 
   const handleSearch = (e) => {
+    dispatch(setLoading(true))
+    dispatch(setFilterPage(true))
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Smooth scrolling animation
+    });
     e.preventDefault()
     const params = {
       search: searchRef.current.value
@@ -54,13 +62,24 @@ const Sales = () => {
             <EmptyItem />
             <EmptyItem />
           </>}
-          {latestProducts?.map((item, i) => (
+          {!loading && latestProducts?.map((item, i) => (
             <Item
               key={i}
               {...item}
 
             />
           ))}
+          {latestProducts.length === 0 && (
+            <div className="text-4xl font-semibold text-center block w-[100vw] my-10 text-gray-400 mx-auto">
+              <h1>
+                There are no products! Please comeback later!
+              </h1>
+            </div>
+          )}
+        </div>
+        <div className="block w-full text-center ">
+          <Pagination />
+
         </div>
       </div>
     </>

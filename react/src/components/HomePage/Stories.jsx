@@ -8,7 +8,7 @@ import { truncate } from 'lodash';
 import axiosClient from '../../api/axios';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../../app/ProductsSlice';
+import { fetchProducts, setFilterPage, setLoading } from '../../app/ProductsSlice';
 import EmptyCategory from '../utils/EmptyCategory';
 import { selectIsLoading, setIsLoading } from '../../app/ThemeSlice';
 
@@ -53,11 +53,14 @@ const Stories = () => {
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
 
   const handleCategoryClick = (category) => {
+    dispatch(setLoading(true))
+    dispatch(setFilterPage(true))
     dispatch(fetchProducts({ category: category }));
     window.scrollTo({
       top: 0,
       behavior: 'smooth' // Smooth scrolling animation
     });
+    //dispatch(setLoading(false))
 
   }
 

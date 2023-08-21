@@ -4,7 +4,7 @@ import axiosClient from "../api/axios";
 
 const initialState = {
   products: [],
-  params: {},
+  loading: true,
   filterPage: true,
 };
 
@@ -14,10 +14,12 @@ const ProductsSlice = createSlice({
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload;
+      state.loading = false
     },
     setFilterPage: (state, action) => {
       state.filterPage = action.payload;
     },
+
   },
 });
 
@@ -25,6 +27,7 @@ export const { setProducts, setFilterPage } = ProductsSlice.actions;
 
 export const selectProducts = (state) => state.products.products;
 export const selectFilterPage = (state) => state.products.filterPage;
+export const selectLoading = (state) => state.products.loading;
 
 export const fetchProducts = (params) => async (dispatch) => {
   try {

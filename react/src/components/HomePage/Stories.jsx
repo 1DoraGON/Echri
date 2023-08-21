@@ -7,16 +7,20 @@ import { ClockIcon } from "@heroicons/react/24/outline";
 import { truncate } from 'lodash';
 import axiosClient from '../../api/axios';
 import { toast } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../../app/ProductsSlice';
+import EmptyCategory from '../utils/EmptyCategory';
+import { selectIsLoading, setIsLoading } from '../../app/ThemeSlice';
 
 const Stories = () => {
   const [categories, setCategories] = useState([])
   const dispatch = useDispatch()
+  const isLoading = useSelector(selectIsLoading)
   useEffect(() => {
     const fetchCategories = async () => {
       await axiosClient.get('/api/categories/indexWithProducts').then((response) => {
         setCategories(response.data.categories)
+        dispatch(setIsLoading(false))
         console.log(response);
       }).catch((error) => {
         console.log(error);
@@ -48,8 +52,8 @@ const Stories = () => {
   };
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
 
-  const handleCategoryClick = (category) =>{
-    dispatch(fetchProducts({category:category}));
+  const handleCategoryClick = (category) => {
+    dispatch(fetchProducts({ category: category }));
     window.scrollTo({
       top: 0,
       behavior: 'smooth' // Smooth scrolling animation
@@ -63,6 +67,23 @@ const Stories = () => {
         <Title title="In our store we have:" />
         <div className="">
           <Splide className='mt-10' options={splideOptions}>
+            {isLoading && (
+              <>
+                <SplideSlide>
+                  <EmptyCategory />
+                </SplideSlide>
+                <SplideSlide>
+                  <EmptyCategory />
+                </SplideSlide>
+                <SplideSlide>
+                  <EmptyCategory />
+                </SplideSlide>
+                <SplideSlide>
+                  <EmptyCategory />
+                </SplideSlide>
+
+              </>
+            )}
             {categories?.map((val, i) => (
               <SplideSlide key={i} className='mb-0.5' >
                 <div className="relative grid items-center gap-4 pb-2 rounded-lg shadow shadow-slate-200 ring-1 ring-slate-200">
@@ -87,7 +108,7 @@ const Stories = () => {
                       , { length: 175 })} and many more ... </p>
                   </div>
                   <div className="flex items-center justify-center px-4 w-full">
-                    <button type='button' onClick={()=>{ handleCategoryClick(val.id) }} className='w-full bg-slate-900 bg-gradient-to-b from-slate-800 to-black shadow-md shadow-black text-center text-slate-100 py-1.5 button-theme'>Explore </button>
+                    <button type='button' onClick={() => { handleCategoryClick(val.id) }} className='w-full bg-slate-900 bg-gradient-to-b from-slate-800 to-black shadow-md shadow-black text-center text-slate-100 py-1.5 button-theme'>Explore </button>
                   </div>
                 </div>
               </SplideSlide>

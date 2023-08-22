@@ -78,7 +78,7 @@ const Sales = () => {
           )}
         </div>
         <div className="block w-full text-center ">
-          <Pagination />
+          {!loading && (<Pagination />)}
 
         </div>
       </div>

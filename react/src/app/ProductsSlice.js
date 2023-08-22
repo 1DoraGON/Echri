@@ -17,7 +17,9 @@ const ProductsSlice = createSlice({
   name: 'products',
   reducers: {
     setProducts: (state, action) => {
-      state.products = action.payload;
+      state.currentPage = action.payload.meta.current_page
+      state.lastPage = action.payload.meta.last_page
+      state.products = action.payload.data;
       state.loading = false
     },
     setParams: (state, action) => {
@@ -51,10 +53,10 @@ export const selectLastPage = (state) => state.products.lastPage;
 export const fetchProducts = (params) => async (dispatch) => {
   try {
     const response = await axiosClient.get('/api/products', { params });
+    console.log('products:', response);
     dispatch(setCurrentPage(response.data.meta.current_page))
     dispatch(setLastPage(response.data.meta.last_page))
-    dispatch(setProducts(response.data.data));
-    //console.log('products:', 25%7);
+    dispatch(setProducts({data:response.data.data, meta:response.data.meta}));
 
   } catch (error) {
     console.error('Error fetching products:', error);

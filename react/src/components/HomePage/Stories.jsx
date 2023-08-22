@@ -57,7 +57,7 @@ const Stories = () => {
     dispatch(setLoading(true))
     dispatch(setFilterPage(true))
     dispatch(setParams({...params, category: category}))
-    dispatch(fetchProducts(params));
+    //dispatch(fetchProducts(params));
     window.scrollTo({
       top: 0,
       behavior: 'smooth' // Smooth scrolling animation
@@ -65,7 +65,11 @@ const Stories = () => {
     //dispatch(setLoading(false))
 
   }
-
+  useEffect(() => {
+    if (params.category) {
+      dispatch(fetchProducts(params));
+    }
+  }, [params.category, dispatch,params]);
   return (
     <>
       <div className="nike-container mb-11">

@@ -8,7 +8,7 @@ import { truncate } from 'lodash';
 import axiosClient from '../../api/axios';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts, setFilterPage, setLoading } from '../../app/ProductsSlice';
+import { fetchProducts, selectParams, setFilterPage, setLoading, setParams } from '../../app/ProductsSlice';
 import EmptyCategory from '../utils/EmptyCategory';
 import { selectIsLoading, setIsLoading } from '../../app/ThemeSlice';
 
@@ -16,6 +16,7 @@ const Stories = () => {
   const [categories, setCategories] = useState([])
   const dispatch = useDispatch()
   const isLoading = useSelector(selectIsLoading)
+  const params = useSelector(selectParams)
   useEffect(() => {
     const fetchCategories = async () => {
       await axiosClient.get('/api/categories/indexWithProducts').then((response) => {
@@ -55,7 +56,8 @@ const Stories = () => {
   const handleCategoryClick = (category) => {
     dispatch(setLoading(true))
     dispatch(setFilterPage(true))
-    dispatch(fetchProducts({ category: category }));
+    dispatch(setParams({...params, category: category}))
+    dispatch(fetchProducts(params));
     window.scrollTo({
       top: 0,
       behavior: 'smooth' // Smooth scrolling animation

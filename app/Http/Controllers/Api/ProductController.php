@@ -14,13 +14,13 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = 18;
+        $perPage = 8;
         
         $products = Product::latest()
             ->filter($request->only(['search', 'category']))
             ->paginate($perPage);
     
-        return response()->json($products);
+        return ProductResource::collection($products);
     }
 
     public function store(Request $request)

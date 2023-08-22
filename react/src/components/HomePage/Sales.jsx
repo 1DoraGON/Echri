@@ -4,7 +4,7 @@ import Item from '../utils/Item'
 import { toast } from 'react-hot-toast'
 import axiosClient from '../../api/axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchProducts, selectFilterPage, selectLoading, selectProducts, setFilterPage, setLoading } from '../../app/ProductsSlice'
+import { fetchProducts, selectFilterPage, selectLoading, selectParams, selectProducts, setFilterPage, setLoading, setParams } from '../../app/ProductsSlice'
 import EmptyItem from '../utils/EmptyItem'
 import Pagination from '../utils/Pagination'
 
@@ -14,7 +14,7 @@ const Sales = () => {
   const dispatch = useDispatch()
   const latestProducts = useSelector(selectProducts)
   const loading = useSelector(selectLoading)
-
+  const params = useSelector(selectParams)
   useEffect(() => {
     const fetch = (params) => {
       dispatch(fetchProducts({ params }));
@@ -31,9 +31,9 @@ const Sales = () => {
       behavior: 'smooth' // Smooth scrolling animation
     });
     e.preventDefault()
-    const params = {
-      search: searchRef.current.value
-    }
+
+    dispatch(setParams({...params, search: searchRef.current.value}))
+
     dispatch(fetchProducts(params));
   }
   return (
@@ -69,7 +69,7 @@ const Sales = () => {
 
             />
           ))}
-          {latestProducts.length === 0 && (
+          {latestProducts.length === 0 && !loading && (
             <div className="text-4xl font-semibold text-center block w-[100vw] my-10 text-gray-400 mx-auto">
               <h1>
                 There are no products! Please comeback later!

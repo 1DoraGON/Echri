@@ -1,18 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import NewCartItem from '../Cart/NewCartItem'
 import { useSelector } from 'react-redux'
 import { selectCartItems } from '../../app/CartSlice'
+import CartInput from '../Cart/CartInput'
 
 const NewCart = () => {
   const cartItems = useSelector(selectCartItems)
-
+  const [formData,setFormData] = useState({
+    firstname:'',
+    lastname:'',
+    number:'',
+    full_address:'',
+    wilaya:'',
+    payment_method:''
+  })
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
   return (
 
 
     <>
       <div className="h-full min-h-screen bg-gray-100 pt-20">
         <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
-        <div className="mx-auto max-w-7xl justify-center px-6 flex space-x-6 xl:px-0 md:flex-col md:justify-between md:items-center">
+        <div className="mx-auto max-w-[92rem] justify-center px-6 flex space-x-6 xl:px-0 md:flex-col md:justify-between md:items-center">
           <div className="rounded-lg w-2/3 md:w-full">
             {cartItems.map((item, i) => (
               <NewCartItem key={i} item={item} />
@@ -20,7 +32,7 @@ const NewCart = () => {
 
           </div>
 
-          <div className="md:mt-6 md:w-full h-full rounded-lg border bg-white p-6 shadow-md mt-0 w-1/3 mx-5">
+          <div className="md:mt-6 md:w-full h-full rounded-lg border bg-white p-6 shadow-md mt-0 w-1/2 mx-5">
             <div className="mb-2 flex justify-between">
               <p className="text-gray-700">Subtotal</p>
               <p className="text-gray-700">$129.99</p>
@@ -36,6 +48,14 @@ const NewCart = () => {
                 <p className="mb-1 text-lg font-bold">$134.98 USD</p>
                 <p className="text-sm text-gray-700">including VAT</p>
               </div>
+            </div>
+            <div className="flex-row justify-between my-5">
+              <CartInput type={'text'} name={'firstname'} placeholder={'Firstname'} value={formData.firstname} handleChange={handleInputChange} />
+              <CartInput type={'text'} name={'lastname'} placeholder={'Lastname'} value={formData.lastname} handleChange={handleInputChange} />
+              <CartInput type={'number'} name={'number'} placeholder={'Number'} value={formData.number} handleChange={handleInputChange} />
+              <CartInput type={'text'} name={'full_address'} placeholder={'Full Address'} value={formData.full_address} handleChange={handleInputChange} />
+              <CartInput type={'text'} name={'wilaya'} placeholder={'Wilaya'} value={formData.wilaya} handleChange={handleInputChange} />
+              <CartInput type={'text'} name={'payment_method'} placeholder={'Payment Method'} value={formData.payment_method} handleChange={handleInputChange} />
             </div>
             <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
           </div>

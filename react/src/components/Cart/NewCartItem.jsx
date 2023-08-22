@@ -36,7 +36,7 @@ const NewCartItem = ({ item: { id, name, tags, main_image, price, cartQuantity }
       <div className="ml-4 flex w-full justify-between sm:ml-0 sm:flex-none sm:w-auto">
         <div className="sm:mt-5 mt-0 w-[60%]">
           <h2 className="text-lg font-bold text-gray-900">{name}</h2>
-          <div className="flex justify-start items-start w-[60%] flex-wrap">
+          <div className="flex justify-start items-start w-full flex-wrap">
             {tags?.split('||').map((tag, index) => (
               <div key={index} className="bg-blue-200 p-1 m-1 rounded-lg flex items-center">
                 <span className="text-xs">{tag}</span>

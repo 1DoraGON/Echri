@@ -14,7 +14,11 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = 8;
+        if ($request->has('index')) {
+            $products = Product::latest()->get(); // Retrieve all products
+            return ProductResource::collection($products);
+        }
+        $perPage = 2;
         
         $products = Product::latest()
             ->filter($request->only(['search', 'category']))

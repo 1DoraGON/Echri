@@ -3,10 +3,11 @@ import NewCartItem from '../Cart/NewCartItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkProducts, selectCartItems, selectCartTotalAmount, setTotals } from '../../app/CartSlice'
 import CartInput from '../Cart/CartInput'
-import { algerianStates } from '../utils/constants'
+import { algerianStates, paymentMethods } from '../utils/constants'
 
 const NewCart = () => {
   const wilayas = algerianStates
+  const methods = paymentMethods
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(setTotals())
@@ -65,21 +66,30 @@ const NewCart = () => {
               <CartInput type={'text'} name={'firstname'} placeholder={'Firstname'} value={formData.firstname} handleChange={handleInputChange} />
               <CartInput type={'text'} name={'lastname'} placeholder={'Lastname'} value={formData.lastname} handleChange={handleInputChange} />
               <CartInput type={'number'} name={'number'} placeholder={'Number'} value={formData.number} handleChange={handleInputChange} />
+              <select onChange={handleInputChange} className='block border hover:border-blue-500 border-slate-400 w-full rounded p-3  mb-4' name='wilaya' value={formData.wilaya} >
+                {formData.wilaya === '' && (<option selected>Select Your Wilaya</option>)}
+                {wilayas.map((wilaya, i) => (
+                  <option key={i} value={wilaya.id}>{wilaya.id + ' - ' + wilaya.name}</option>
+                ))}
+              </select>
               <CartInput type={'text'} name={'full_address'} placeholder={'Full Address'} value={formData.full_address} handleChange={handleInputChange} />
-              <CartInput type={'text'} name={'wilaya'} placeholder={'Wilaya'} value={formData.wilaya} handleChange={handleInputChange} />
-              <CartInput type={'text'} name={'payment_method'} placeholder={'Payment Method'} value={formData.payment_method} handleChange={handleInputChange} />
-              <div className="">
 
-                <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900">Select an option</label>
-                <select onChange={handleInputChange} className='bg-gray-50 border border-gray-300 hover:border-blue-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5' name='wilaya' value={formData.wilaya} >
-                {formData.wilaya==='' && (<option selected>Select Your Wilaya</option>)}
-                  {wilayas.map((wilaya, i) => (
-                    <option key={i} value={wilaya.id}>{wilaya.id + ' - ' + wilaya.name}</option>
-                  ))}
-                </select>
-              </div>
+
+              <select onChange={handleInputChange} className='block border hover:border-blue-500 border-slate-400 w-full rounded p-3  mb-4' name='payment_method' value={formData.payment_method} >
+                {formData.payment_method === '' && (<option selected>Select Your Payment Method</option>)}
+                {methods.map((method, i) => (
+                  <option key={i} value={method.id}>{method.name}</option>
+                ))}
+              </select>
+              {formData.payment_method === 'POSTE' && (
+                <>
+                <button className='text-blue-500 font-semibold border border-b-blue-500 hover:text-blue-600' type='button'>Please print this to pay your order!</button>
+                </>
+              )}
             </div>
+
             <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+
           </div>
         </div>
       </div>

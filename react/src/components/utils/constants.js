@@ -59,3 +59,8 @@ export const algerianStates = [
   { id: 58, name: "Ain Guezzam" },
 ];
 
+export const paymentMethods = [
+  {id:'EDAHABIA', name: 'EDAHABIA'},
+  {id:'CIB', name: 'CIB'},
+  {id:'POSTE', name: 'Algeria Poste Payment'}
+]

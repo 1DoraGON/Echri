@@ -1,18 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NewCartItem from '../Cart/NewCartItem'
-import { useSelector } from 'react-redux'
-import { selectCartItems } from '../../app/CartSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkProducts, selectCartItems, selectCartTotalAmount, setTotals } from '../../app/CartSlice'
 import CartInput from '../Cart/CartInput'
+import { algerianStates } from '../utils/constants'
 
 const NewCart = () => {
+  const wilayas = algerianStates
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(setTotals())
+
+  }, [])
   const cartItems = useSelector(selectCartItems)
-  const [formData,setFormData] = useState({
-    firstname:'',
-    lastname:'',
-    number:'',
-    full_address:'',
-    wilaya:'',
-    payment_method:''
+  useEffect(() => {
+    //console.log(cartItems);
+    dispatch(checkProducts(cartItems))
+  }, [])
+  const total = useSelector(selectCartTotalAmount)
+  const [formData, setFormData] = useState({
+    firstname: '',
+    lastname: '',
+    number: '',
+    full_address: '',
+    wilaya: '',
+    payment_method: ''
   })
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +57,7 @@ const NewCart = () => {
             <div className="flex justify-between">
               <p className="text-lg font-bold">Total</p>
               <div className="">
-                <p className="mb-1 text-lg font-bold">$134.98 USD</p>
+                <p className="mb-1 text-lg font-bold">{total} DZD</p>
                 <p className="text-sm text-gray-700">including VAT</p>
               </div>
             </div>
@@ -56,6 +68,16 @@ const NewCart = () => {
               <CartInput type={'text'} name={'full_address'} placeholder={'Full Address'} value={formData.full_address} handleChange={handleInputChange} />
               <CartInput type={'text'} name={'wilaya'} placeholder={'Wilaya'} value={formData.wilaya} handleChange={handleInputChange} />
               <CartInput type={'text'} name={'payment_method'} placeholder={'Payment Method'} value={formData.payment_method} handleChange={handleInputChange} />
+              <div className="">
+
+                <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900">Select an option</label>
+                <select onChange={handleInputChange} className='bg-gray-50 border border-gray-300 hover:border-blue-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5' name='wilaya' value={formData.wilaya} >
+                {formData.wilaya==='' && (<option selected>Select Your Wilaya</option>)}
+                  {wilayas.map((wilaya, i) => (
+                    <option key={i} value={wilaya.id}>{wilaya.id + ' - ' + wilaya.name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
           </div>

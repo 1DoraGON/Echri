@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-hot-toast";
 import { calculateCartTotals } from './utils'
+import axiosClient from "../api/axios";
 const initialState = {
   cartState: false,
   cartItems: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
@@ -23,11 +24,11 @@ const CartSlice = createSlice({
 
       if (itemIndex >= 0) {
         state.cartItems[itemIndex].cartQuantity += 1;
-        toast.success(`${action.payload.title} quantity increased to ${state.cartItems[itemIndex].cartQuantity}`)
+        toast.success(`${action.payload.name} quantity increased to ${state.cartItems[itemIndex].cartQuantity}`)
       } else {
         const tempProduct = { ...action.payload, cartQuantity: 1 }
         state.cartItems.push(tempProduct)
-        toast.success(`${action.payload.title} added to Cart`)
+        toast.success(`${action.payload.name} added to Cart`)
       }
       localStorage.setItem("cart", JSON.stringify(state.cartItems))
       const { totalAmount, totalQuantity } = calculateCartTotals(state.cartItems);
@@ -39,7 +40,6 @@ const CartSlice = createSlice({
 
       state.cartItems = filteredItems
       localStorage.setItem("cart", JSON.stringify(state.cartItems))
-      toast.success(`${action.payload.title} removed from Cart`)
       const { totalAmount, totalQuantity } = calculateCartTotals(state.cartItems);
       state.cartTotalAmount = totalAmount;
       state.cartTotalQantity = totalQuantity;
@@ -98,5 +98,26 @@ export const selectCartState = (state) => state.cart.cartState
 export const selectCartItems = (state) => state.cart.cartItems
 export const selectCartTotalAmount = (state) => state.cart.cartTotalAmount
 export const selectCartTotalQantity = (state) => state.cart.cartTotalQantity
+export const checkProducts = (cartItems) => async (dispatch) => {
+  try {
+    cartItems.map(async (product)=>{
+      await axiosClient.get('/api/products/'+product.id).then(response=>{
+        //todo
+        //console.log(response);
+      }).catch(err=>{
+        console.log(err);
+        if(err.response?.status === 404){
+          dispatch(setRemoveItemFromCart(product))
+        }
+      })
+    })
+    //console.log('products:', response);
+    //dispatch(setCurrentPage(response.data.meta.current_page))
+    //dispatch(setLastPage(response.data.meta.last_page))
+    //dispatch(setProducts({data:response.data.data, meta:response.data.meta}));
 
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  }
+};
 export default CartSlice.reducer

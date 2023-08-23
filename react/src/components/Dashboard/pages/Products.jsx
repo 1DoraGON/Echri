@@ -37,7 +37,8 @@ const Products = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     async function fetchData() {
-      await axiosClient.get('/api/products').then((response) => {
+      await axiosClient.get('/api/products',{params:{index:true}}).then((response) => {
+        console.log(response);
         const data = response.data.data;
 
         const transformedData = data.map((product) => ({

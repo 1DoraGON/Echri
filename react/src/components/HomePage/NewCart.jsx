@@ -13,6 +13,8 @@ const NewCart = () => {
     dispatch(setTotals())
 
   }, [])
+
+  
   const cartItems = useSelector(selectCartItems)
   useEffect(() => {
     //console.log(cartItems);

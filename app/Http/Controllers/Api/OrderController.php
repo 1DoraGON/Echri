@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Address;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -33,7 +34,12 @@ class OrderController extends Controller
             'lastname' => 'required|string',
             'wilaya' => 'required|string',
             'full_address' => 'required|string',
-            'phone_number' => 'required|string'
+            'phone_number' => 'required|string',
+            'products' => 'required|array',
+            'products.*.id' => 'required|integer|exists:products,id', // Validate product id
+            'products.*.description' => 'required|string', // Validate product description
+            'products.*.quantity' => 'required|integer', // Validate product quantity
+
         ]);
         // Extract 'wilaya' and 'full_address' fields into $address variable
         $address_data = [
@@ -42,12 +48,24 @@ class OrderController extends Controller
         ];
         $address = Address::create($address_data);
         // Remove 'wilaya' and 'full_address' fields from $data variable
+        $products = $data['products'];
+
+        unset($data['products']);
         unset($data['wilaya']);
         unset($data['full_address']);
 
         $data['address_id'] = $address->id;
         //return $data;
         $order = Order::create($data);
+        // Attach products to the order with pivot data
+        foreach ($products as $productData) {
+            $product = Product::find($productData['id']); // Get the product instance
+            $order->products()->attach($product, [
+                'quantity' => $productData['quantity'],
+                'description' => $productData['description']
+            ]);
+        }
+        return $order->products();
         return new OrderResource($order);
     }
 

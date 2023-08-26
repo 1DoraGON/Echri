@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('total_price', 8, 2);
             $table->unsignedBigInteger('user_id')->nullable(); // Foreign key column
-            $table->unsignedBigInteger('address_id'); // Foreign key column
+            $table->unsignedBigInteger('address_id')->nullable(); // Foreign key column
             $table->boolean('home_delivery');
             $table->string('status')->default('pending');
             $table->decimal('price_payed',8,2)->default(0);

@@ -46,6 +46,7 @@ class OrderController extends Controller
         unset($data['full_address']);
 
         $data['address_id'] = $address->id;
+        //return $data;
         $order = Order::create($data);
         return new OrderResource($order);
     }

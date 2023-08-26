@@ -5,6 +5,7 @@ import { checkProducts, selectCartItems, selectCartTotalAmount, setTotals } from
 import CartInput from '../Cart/CartInput'
 import { algerianStates, paymentMethods } from '../utils/constants'
 import paymentImage from '../../data/payment_image.jpg'
+import axiosClient from '../../api/axios'
 const NewCart = () => {
   const wilayas = algerianStates
   const methods = paymentMethods
@@ -47,14 +48,32 @@ const NewCart = () => {
     $table->string('lastname');
     $table->string('phone_number'); */
 
-  const handleCheckout = (e) => {
+  const handleCheckout = async (e) => {
     e.preventDefault();
     console.log(formData);
-    console.log(cartItems);
+    const products = cartItems.map((item)=>{
+      const newItem = {
+        id: item.id,
+        quantity: item.cartQuantity,
+        description: item.description
+      }
+      return newItem
+    })
     const payload = {
       total_price: total,
-
+      firstname: formData.firstname,
+      lastname: formData.lastname,
+      phone_number: formData.number,
+      wilaya: formData.wilaya,
+      full_address: formData.full_address,
+      price_payed: formData.delivery_payment==="true"? 400 : total,
+      home_delivery: JSON.parse(formData.home_delivery),
+      status:'pending',
+      products: products,
     }
+    const response = await axiosClient.post('/api/orders',payload)
+    console.log(response);
+    console.log(payload);
   }
   return (
 

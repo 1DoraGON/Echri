@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { checkProducts, selectCartItems, selectCartTotalAmount, setTotals } from '../../app/CartSlice'
 import CartInput from '../Cart/CartInput'
 import { algerianStates, paymentMethods } from '../utils/constants'
-
+import paymentImage from '../../data/payment_image.jpg'
 const NewCart = () => {
   const wilayas = algerianStates
   const methods = paymentMethods
@@ -14,7 +14,7 @@ const NewCart = () => {
 
   }, [])
 
-  
+
   const cartItems = useSelector(selectCartItems)
   useEffect(() => {
     //console.log(cartItems);
@@ -27,12 +27,35 @@ const NewCart = () => {
     number: '',
     full_address: '',
     wilaya: '',
-    payment_method: ''
+    payment_method: '',
+    home_delivery:null,
+    delivery_payment:null,
   })
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+  /*   $table->decimal('total_price', 8, 2);
+    $table->unsignedBigInteger('user_id')->nullable(); // Foreign key column
+    $table->unsignedBigInteger('address_id'); // Foreign key column
+    $table->boolean('home_delivery');
+    $table->string('status')->default('pending');
+    $table->decimal('price_payed',8,2)->default(0);
+    $table->string('payment_image')->nullable();
+    $table->text('message')->nullable();
+    $table->string('firstname');
+    $table->string('lastname');
+    $table->string('phone_number'); */
+
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    console.log(cartItems);
+    const payload = {
+      total_price: total,
+
+    }
+  }
   return (
 
 
@@ -84,13 +107,44 @@ const NewCart = () => {
                 ))}
               </select>
               {formData.payment_method === 'POSTE' && (
-                <>
-                <button className='text-blue-500 font-semibold border border-b-blue-500 hover:text-blue-600' type='button'>Please print this to pay your order!</button>
-                </>
-              )}
+                <a href={paymentImage} download="payment_image.jpg">
+
+                  <button className='text-blue-500 font-semibold border border-b-blue-500 hover:text-blue-600' type='button'>Please print this to pay your order!</button>
+                </a>)}
+
+              <h3 className="my-4 font-semibold text-gray-900">Select Delivery Type</h3>
+              <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+                <li className="w-full border-b border-gray-200 rounded-t-lg">
+                  <div className="flex items-center pl-3">
+                    <input onChange={handleInputChange} id="list-radio-license" type="radio" value={true} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "/>
+                      <label htmlFor="list-radio-license" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Home Delivery </label>
+                  </div>
+                </li>
+                <li className="w-full border-b border-gray-200 rounded-t-lg">
+                  <div className="flex items-center pl-3">
+                    <input onChange={handleInputChange} id="list-radio-id" type="radio" value={false} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "/>
+                      <label htmlFor="list-radio-id" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Yalidine center</label>
+                  </div>
+                </li>
+              </ul>
+              <h3 className="my-4 font-semibold text-gray-900">Select When To pay</h3>
+              <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+                <li className="w-full border-b border-gray-200 rounded-t-lg">
+                  <div className="flex items-center pl-3">
+                    <input onChange={handleInputChange} id="list-radio-license" type="radio" value={true} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "/>
+                      <label htmlFor="list-radio-license" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay only delivery taxes (pay your order when received) </label>
+                  </div>
+                </li>
+                <li className="w-full border-b border-gray-200 rounded-t-lg">
+                  <div className="flex items-center pl-3">
+                    <input onChange={handleInputChange} id="list-radio-id" type="radio" value={false} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "/>
+                      <label htmlFor="list-radio-id" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay everything (order and delivery)</label>
+                  </div>
+                </li>
+              </ul>
             </div>
 
-            <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+            <button onClick={(e)=>{handleCheckout(e)}} className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
 
           </div>
         </div>

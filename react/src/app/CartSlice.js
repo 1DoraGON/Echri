@@ -82,6 +82,11 @@ const CartSlice = createSlice({
       state.cartTotalAmount = totalAmount;
       state.cartTotalQantity = totalQuantity;
     },
+    setDescription: (state, action) => {
+      const indexItem = state.cartItems.findIndex((item) => item.id === action.payload.id)
+      state.cartItems[indexItem].description = action.payload.description;
+      localStorage.setItem("cart", JSON.stringify(state.cartItems))
+    },
     setTotals: (state, action) => {
       const { totalAmount, totalQuantity } = calculateCartTotals(state.cartItems);
       state.cartTotalAmount = totalAmount;
@@ -91,7 +96,7 @@ const CartSlice = createSlice({
   }
 })
 
-export const { setOpenCart,setQTY, setCloseCart, setAddItemToCart, setRemoveItemFromCart, setIncreaseQTY, setDecreaseQTY, setClearCart, setTotals } = CartSlice.actions
+export const { setDescription, setOpenCart,setQTY, setCloseCart, setAddItemToCart, setRemoveItemFromCart, setIncreaseQTY, setDecreaseQTY, setClearCart, setTotals } = CartSlice.actions
 
 export const selectCartState = (state) => state.cart.cartState
 

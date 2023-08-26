@@ -1,9 +1,10 @@
 import React, { useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { setDecreaseQTY, setIncreaseQTY, setQTY, setRemoveItemFromCart } from '../../app/CartSlice'
+import { setDecreaseQTY, setDescription, setIncreaseQTY, setQTY, setRemoveItemFromCart } from '../../app/CartSlice'
 
 const NewCartItem = ({ item: { id, name, tags, main_image, price, cartQuantity } }) => {
   const QTYRef = useRef()
+  const descriptionRef = useRef()
   const dispatch = useDispatch()
   const onRemoveItem = () => {
     dispatch(setRemoveItemFromCart({
@@ -29,6 +30,15 @@ const NewCartItem = ({ item: { id, name, tags, main_image, price, cartQuantity }
 
     }
   }
+  const handleChangeDescription = () => {
+    const description = descriptionRef.current.value
+    if (description) {
+      dispatch(setDescription({
+        id, name, description
+      }))
+
+    }
+  }
   const STORAGE_URL = 'http://127.0.0.1:8000/storage/'
   return (
     <div className="sm:justify-between md:flex-col mb-6 rounded-lg bg-white p-6 shadow-md flex justify-start">
@@ -44,7 +54,7 @@ const NewCartItem = ({ item: { id, name, tags, main_image, price, cartQuantity }
             ))}
           </div>
 
-          <textarea style={{ resize: 'none' }} id="message" rows="2" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your order, (size, color ...)"></textarea>
+          <textarea onChange={handleChangeDescription} ref={descriptionRef} style={{ resize: 'none' }} id="message" rows="2" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your order, (size, color ...)"></textarea>
         </div>
         <div className="mt-4 sm:flex sm:justify-between sm:space-x-0 sm:space-y-0 space-y-6 sm:mt-0 block space-x-6">
           <div className="flex items-center border-gray-100">

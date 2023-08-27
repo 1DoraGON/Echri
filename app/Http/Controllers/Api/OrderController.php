@@ -65,7 +65,6 @@ class OrderController extends Controller
                 'description' => $productData['description']
             ]);
         }
-        return $order->products();
         return new OrderResource($order);
     }
 

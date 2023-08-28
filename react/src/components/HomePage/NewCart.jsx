@@ -73,7 +73,9 @@ const NewCart = () => {
     }
     const response = await axiosClient.post('/api/orders',payload)
     console.log(response);
-    console.log(payload);
+    const id = response.data.data.id
+    const response2 = await axiosClient.get('/api/orders/'+id)
+    console.log('the retrieved order  ',response2);
   }
   return (
 

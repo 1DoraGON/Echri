@@ -12,6 +12,7 @@ import { toast } from 'react-hot-toast';
 import InfoAlert from '../utils/InfoAlert'
 import { selectInfoAlert, selectSuccesAlert, setInfoAlert, setSuccessAlert } from '../../app/ThemeSlice'
 import SuccessAlert from '../utils/SuccessAlert'
+import useAuth from '../../hooks/useAuth'
 
 const NewCart = () => {
   const wilayas = algerianStates
@@ -23,7 +24,7 @@ const NewCart = () => {
   const successAlert = useSelector(selectSuccesAlert)
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [orderId,setOrderId] = useState(null)
-
+  const auth = useAuth()
   const infoMsg = infoMessage
   const successMsg = successMessage
   useEffect(() => {
@@ -66,6 +67,7 @@ const NewCart = () => {
       return newItem
     })
     const payload = {
+      user_id: auth?.user?.id,
       total_price: total,
       firstname: formData.firstname,
       lastname: formData.lastname,
@@ -78,6 +80,10 @@ const NewCart = () => {
       products: products,
     }
     await axiosClient.post('/api/orders', payload).then(response => {
+      console.log(response);
+      axiosClient.get('/api/orders/'+response.data.data.id).then(response=>{
+        console.log(response);
+      })
       toast.success('Your order has been sent successfully it\'s pending now!')
       dispatch(setSuccessAlert(true))
       //toast('Hello, this is a toast message!',);

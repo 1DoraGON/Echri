@@ -19,15 +19,21 @@ export default RequireAuth; */
 import React, { useDebugValue } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { selectToken } from '../../app/UserSlice'
+import { selectToken, setUser } from '../../app/UserSlice'
 import useAuth from '../../hooks/useAuth'
+import axiosClient from '../../api/axios'
 
 const RequireAuth = () => {
   const auth = useAuth()
   const location = useLocation();
-  //useDebugValue(auth)
-  useDebugValue(location)
-
+  const dispatch = useDispatch();
+  if (auth && Object.keys(auth.user).length === 0) {
+    console.log('hahha',auth)
+    axiosClient.get('/api/user').then(response=>{
+      //console.log(response.data);
+      dispatch(setUser(response.data))
+    });
+  }
   return (
     auth? <Outlet /> : <Navigate to="/login" state={{from: location}} replace />
   )

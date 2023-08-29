@@ -1,5 +1,5 @@
 
-import { GuestLayout, Login, NotFound, Profile, SignUp} from './components/HomePage/index'
+import { ClientOrders, GuestLayout, Login, NewCart, NotFound, Profile, SignUp} from './components/HomePage/index'
 import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dashboard from './components/Views/Dashboard';
@@ -7,7 +7,6 @@ import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Ka
 
 import './App.css';
 import HomePage from './components/Views/HomePage';
-import NewCart from './components/HomePage/NewCart';
 import ClientLayout from './components/Layouts/ClientLayout';
 const router = createBrowserRouter( [
     
@@ -32,6 +31,10 @@ const router = createBrowserRouter( [
                     {
                         path:'/cart',
                         element:<NewCart />
+                    },
+                    {
+                        path:'/orders',
+                        element:<ClientOrders />
                     },
                     {
                         path:'/profile',

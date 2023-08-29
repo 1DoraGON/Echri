@@ -11,6 +11,8 @@ const initialState = {
   currentMode: localStorage.getItem('currentMode') ? JSON.parse(localStorage.getItem('currentMode')) : 'Dark',
   themeSettings: localStorage.getItem('themeSettings') ? JSON.parse(localStorage.getItem('themeSettings')) : false,
   activeMenu: false,
+  infoAlert: false,
+  successAlert: false,
   modalIsOpen:false,
   selectedProductId:null,
   isLoading:true,
@@ -68,6 +70,12 @@ const ThemeSlice = createSlice({
     setIsLoading: (state, action) => {
       state.isLoading = action.payload
     },
+    setInfoAlert: (state, action) => {
+      state.infoAlert = action.payload
+    },
+    setSuccessAlert: (state, action) => {
+      state.successAlert = action.payload
+    },
     
 /*     setIsClicked: (state, action) => {
       state. = action.payload
@@ -75,7 +83,7 @@ const ThemeSlice = createSlice({
   }
 })
 
-export const {setModalIsOpen,setSelectedProductId,setChat, setUserProfile, setCart, setNotification, setScreenSize, setThemeSettings, setCurrentMode, setCurrentColor, setActiveMenu,setIsLoading} = ThemeSlice.actions
+export const {setInfoAlert, setSuccessAlert, setModalIsOpen,setSelectedProductId,setChat, setUserProfile, setCart, setNotification, setScreenSize, setThemeSettings, setCurrentMode, setCurrentColor, setActiveMenu,setIsLoading} = ThemeSlice.actions
 
 
 export const selectChat = (state) => state.theme.chat
@@ -90,4 +98,6 @@ export const selectActiveMenu = (state) => state.theme.activeMenu
 export const selectModalIsOpen = (state) => state.theme.modalIsOpen
 export const selectProductId = (state) => state.theme.selectedProductId
 export const selectIsLoading = (state) => state.theme.isLoading
+export const selectSuccesAlert = (state) => state.theme.successAlert
+export const selectInfoAlert = (state) => state.theme.infoAlert
 export default ThemeSlice.reducer

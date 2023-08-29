@@ -3,28 +3,38 @@ import NewCartItem from '../Cart/NewCartItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkProducts, selectCartItems, selectCartTotalAmount, setTotals } from '../../app/CartSlice'
 import CartInput from '../Cart/CartInput'
-import { algerianStates, paymentMethods } from '../utils/constants'
+import { algerianStates, infoMessage, paymentMethods, successMessage } from '../utils/constants'
 import paymentImage from '../../data/payment_image.jpg'
 import axiosClient from '../../api/axios'
-import { toast } from 'react-hot-toast'
 import { setFilterPage } from '../../app/ProductsSlice'
+
+import { toast } from 'react-hot-toast';
+import InfoAlert from '../utils/InfoAlert'
+import { selectInfoAlert, selectSuccesAlert, setInfoAlert, setSuccessAlert } from '../../app/ThemeSlice'
+import SuccessAlert from '../utils/SuccessAlert'
+
 const NewCart = () => {
   const wilayas = algerianStates
   const methods = paymentMethods
   const dispatch = useDispatch()
-  const [errors,setErrors] = useState(null)
+  const [errors, setErrors] = useState(null)
+  const cartItems = useSelector(selectCartItems)
+  const infoAlert = useSelector(selectInfoAlert)
+  const successAlert = useSelector(selectSuccesAlert)
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
+  const [orderId,setOrderId] = useState(null)
+
+  const infoMsg = infoMessage
+  const successMsg = successMessage
   useEffect(() => {
     dispatch(setFilterPage(true))
     dispatch(setTotals())
-
-  }, [])
-
-
-  const cartItems = useSelector(selectCartItems)
-  useEffect(() => {
-    //console.log(cartItems);
+    dispatch(setInfoAlert(true))
     dispatch(checkProducts(cartItems))
   }, [])
+
+
+
   const total = useSelector(selectCartTotalAmount)
   const [formData, setFormData] = useState({
     firstname: '',
@@ -40,20 +50,12 @@ const NewCart = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  /*   $table->decimal('total_price', 8, 2);
-    $table->unsignedBigInteger('user_id')->nullable(); // Foreign key column
-    $table->unsignedBigInteger('address_id'); // Foreign key column
-    $table->boolean('home_delivery');
-    $table->string('status')->default('pending');
-    $table->decimal('price_payed',8,2)->default(0);
-    $table->string('payment_image')->nullable();
-    $table->text('message')->nullable();
-    $table->string('firstname');
-    $table->string('lastname');
-    $table->string('phone_number'); */
+
 
   const handleCheckout = async (e) => {
     e.preventDefault();
+    setButtonDisabled(true);
+
     console.log(formData);
     const products = cartItems.map((item) => {
       const newItem = {
@@ -76,10 +78,21 @@ const NewCart = () => {
       products: products,
     }
     await axiosClient.post('/api/orders', payload).then(response => {
-      toast.success('Your order have been sent, please wait the approval so you can pay, or call 0796750921 for fast approval!',{duration:15000})
+      toast.success('Your order has been sent successfully it\'s pending now!')
+      dispatch(setSuccessAlert(true))
+      //toast('Hello, this is a toast message!',);
       setErrors(null)
+      setOrderId(response.data.data.id)
+      setTimeout(() => {
+        setButtonDisabled(false);
+      }, 4000);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // Smooth scrolling animation
+      });
     }).catch(error => {
-      console.log(error);
+      //console.log(error);
+      setButtonDisabled(false);
       if (error.response?.status == 422) {
         setErrors(error.response?.data.errors)
 
@@ -90,8 +103,16 @@ const NewCart = () => {
 
 
     <>
+
       <div className="h-full min-h-screen bg-gray-100 pt-20">
+        {infoAlert && (
+          <InfoAlert title={'How it works?'} message={infoMsg} onClick={() => { }} onDismiss={(e) => { e.preventDefault(); dispatch(setInfoAlert(false)) }} button={false} />
+        )}
+        {successAlert && (
+          <SuccessAlert title={'Your order is penidng!'} message={successMsg+"Your order id is "+orderId} onClick={() => { }} onDismiss={(e) => { e.preventDefault(); dispatch(setSuccessAlert(false)) }} button={false} />
+        )}
         <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
+
         <div className="mx-auto max-w-[92rem] justify-center px-6 flex space-x-6 xl:px-0 md:flex-col md:justify-between md:items-center">
           <div className="rounded-lg w-2/3 md:w-full">
             {cartItems.map((item, i) => (
@@ -99,6 +120,7 @@ const NewCart = () => {
             ))}
 
           </div>
+
 
           <div className="md:mt-6 md:w-full h-full rounded-lg border bg-white p-6 shadow-md mt-0 w-1/2 mx-5">
             <div className="mb-2 flex justify-between">
@@ -156,14 +178,14 @@ const NewCart = () => {
               <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
                 <li className="w-full border-b border-gray-200 rounded-t-lg">
                   <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-license" type="radio" value={true} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
-                    <label htmlFor="list-radio-license" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Home Delivery </label>
+                    <input onChange={handleInputChange} id="list-radio-delivery-type-1" type="radio" value={true} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                    <label htmlFor="list-radio-delivery-type-1" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Home Delivery </label>
                   </div>
                 </li>
                 <li className="w-full border-b border-gray-200 rounded-t-lg">
                   <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-id" type="radio" value={false} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
-                    <label htmlFor="list-radio-id" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Yalidine center</label>
+                    <input onChange={handleInputChange} id="list-radio-delivery-type-2" type="radio" value={false} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                    <label htmlFor="list-radio-delivery-type-2" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Yalidine center</label>
                   </div>
                 </li>
               </ul>
@@ -171,20 +193,21 @@ const NewCart = () => {
               <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
                 <li className="w-full border-b border-gray-200 rounded-t-lg">
                   <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-license" type="radio" value={true} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
-                    <label htmlFor="list-radio-license" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay only delivery taxes (pay your order when received) </label>
+                    <input onChange={handleInputChange} id="list-radio-delivery-payment-1" type="radio" value={true} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                    <label htmlFor="list-radio-delivery-payment-1" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay only delivery taxes (pay your order when received) </label>
                   </div>
                 </li>
                 <li className="w-full border-b border-gray-200 rounded-t-lg">
                   <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-id" type="radio" value={false} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
-                    <label htmlFor="list-radio-id" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay everything (order and delivery)</label>
+                    <input onChange={handleInputChange} id="list-radio-delivery-payment-2" type="radio" value={false} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                    <label htmlFor="list-radio-delivery-payment-2" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay everything (order and delivery)</label>
                   </div>
                 </li>
               </ul>
             </div>
 
-            <button onClick={(e) => { handleCheckout(e) }} className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Send your order</button>
+            <button onClick={(e) => { handleCheckout(e) }} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isButtonDisabled}>Send your order</button>
 
           </div>
         </div>

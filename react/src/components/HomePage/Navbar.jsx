@@ -4,11 +4,12 @@ import logo from '../../assets/logo.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectCartTotalQantity, setOpenCart } from '../../app/CartSlice'
 import { selectFilterPage } from '../../app/ProductsSlice'
+import { useNavigate } from 'react-router-dom'
 const Navbar = () => {
   const filterPage = useSelector(selectFilterPage)
   const [navState, setNavState] = useState(false)
   const totalCount = useSelector(selectCartTotalQantity)
-
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const onCartToggle = () => {
     dispatch(setOpenCart({
@@ -23,6 +24,11 @@ const Navbar = () => {
       setNavState(false)
     }
   }
+
+  const handleNavigateHome = ()=>{
+    navigate('/products')
+  }
+  
   useEffect(()=>{
     window.addEventListener('scroll',onNavScroll)
 
@@ -34,7 +40,7 @@ const Navbar = () => {
     <>
       <header className={`${!navState? 'absolute top-7 left-0 right-0 opacity-100 z-50 ' : 'fixed top-0 left-0 right-0 h-[9vh] flex items-center justify-center opacity-100 z-[200] blur-effect-theme' } ${filterPage? '' :''}` }>
         <nav className="flex items-center justify-between nike-container">
-          <div className="flex items-center">
+          <div onClick={handleNavigateHome} className="flex items-center cursor-pointer">
             <img src={logo} alt="logo/img"
             className={`w-16 h-auto ${(navState || filterPage) && "filter brightness-0"}`} 
             />

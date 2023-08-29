@@ -6,11 +6,15 @@ import CartInput from '../Cart/CartInput'
 import { algerianStates, paymentMethods } from '../utils/constants'
 import paymentImage from '../../data/payment_image.jpg'
 import axiosClient from '../../api/axios'
+import { toast } from 'react-hot-toast'
+import { setFilterPage } from '../../app/ProductsSlice'
 const NewCart = () => {
   const wilayas = algerianStates
   const methods = paymentMethods
   const dispatch = useDispatch()
+  const [errors,setErrors] = useState(null)
   useEffect(() => {
+    dispatch(setFilterPage(true))
     dispatch(setTotals())
 
   }, [])
@@ -29,8 +33,8 @@ const NewCart = () => {
     full_address: '',
     wilaya: '',
     payment_method: '',
-    home_delivery:null,
-    delivery_payment:null,
+    home_delivery: null,
+    delivery_payment: null,
   })
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +55,7 @@ const NewCart = () => {
   const handleCheckout = async (e) => {
     e.preventDefault();
     console.log(formData);
-    const products = cartItems.map((item)=>{
+    const products = cartItems.map((item) => {
       const newItem = {
         id: item.id,
         quantity: item.cartQuantity,
@@ -66,16 +70,21 @@ const NewCart = () => {
       phone_number: formData.number,
       wilaya: formData.wilaya,
       full_address: formData.full_address,
-      price_payed: formData.delivery_payment==="true"? 400 : total,
+      price_payed: formData.delivery_payment === "true" ? 400 : total,
       home_delivery: JSON.parse(formData.home_delivery),
-      status:'pending',
+      status: 'pending',
       products: products,
     }
-    const response = await axiosClient.post('/api/orders',payload)
-    console.log(response);
-    const id = response.data.data.id
-    const response2 = await axiosClient.get('/api/orders/'+id)
-    console.log('the retrieved order  ',response2);
+    await axiosClient.post('/api/orders', payload).then(response => {
+      toast.success('Your order have been sent, please wait the approval so you can pay, or call 0796750921 for fast approval!',{duration:15000})
+      setErrors(null)
+    }).catch(error => {
+      console.log(error);
+      if (error.response?.status == 422) {
+        setErrors(error.response?.data.errors)
+
+      }
+    })
   }
   return (
 
@@ -108,6 +117,16 @@ const NewCart = () => {
                 <p className="text-sm text-gray-700">including VAT</p>
               </div>
             </div>
+            <div className="">
+
+              {errors &&
+                <ul className='alert'>
+                  {Object.keys(errors).map(key => (
+                    <li key={key}>{errors[key][0]}</li>
+                  ))}
+                  <p key={errors}></p>
+                </ul>}
+            </div>
             <div className="flex-row justify-between my-5">
               <CartInput type={'text'} name={'firstname'} placeholder={'Firstname'} value={formData.firstname} handleChange={handleInputChange} />
               <CartInput type={'text'} name={'lastname'} placeholder={'Lastname'} value={formData.lastname} handleChange={handleInputChange} />
@@ -137,14 +156,14 @@ const NewCart = () => {
               <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
                 <li className="w-full border-b border-gray-200 rounded-t-lg">
                   <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-license" type="radio" value={true} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "/>
-                      <label htmlFor="list-radio-license" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Home Delivery </label>
+                    <input onChange={handleInputChange} id="list-radio-license" type="radio" value={true} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                    <label htmlFor="list-radio-license" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Home Delivery </label>
                   </div>
                 </li>
                 <li className="w-full border-b border-gray-200 rounded-t-lg">
                   <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-id" type="radio" value={false} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "/>
-                      <label htmlFor="list-radio-id" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Yalidine center</label>
+                    <input onChange={handleInputChange} id="list-radio-id" type="radio" value={false} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                    <label htmlFor="list-radio-id" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Yalidine center</label>
                   </div>
                 </li>
               </ul>
@@ -152,20 +171,20 @@ const NewCart = () => {
               <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
                 <li className="w-full border-b border-gray-200 rounded-t-lg">
                   <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-license" type="radio" value={true} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "/>
-                      <label htmlFor="list-radio-license" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay only delivery taxes (pay your order when received) </label>
+                    <input onChange={handleInputChange} id="list-radio-license" type="radio" value={true} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                    <label htmlFor="list-radio-license" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay only delivery taxes (pay your order when received) </label>
                   </div>
                 </li>
                 <li className="w-full border-b border-gray-200 rounded-t-lg">
                   <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-id" type="radio" value={false} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "/>
-                      <label htmlFor="list-radio-id" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay everything (order and delivery)</label>
+                    <input onChange={handleInputChange} id="list-radio-id" type="radio" value={false} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                    <label htmlFor="list-radio-id" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay everything (order and delivery)</label>
                   </div>
                 </li>
               </ul>
             </div>
 
-            <button onClick={(e)=>{handleCheckout(e)}} className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+            <button onClick={(e) => { handleCheckout(e) }} className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Send your order</button>
 
           </div>
         </div>

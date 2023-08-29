@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import CartItem from './CartItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectCartTotalAmount, setTotals } from '../../app/CartSlice'
+import { useNavigate } from 'react-router-dom'
 
 const CartItems = ({cartItems}) => {
   const dispatch = useDispatch()
@@ -10,6 +11,12 @@ const CartItems = ({cartItems}) => {
     
   },[])
   const totalAmount = useSelector(selectCartTotalAmount)
+
+  const navigate = useNavigate()
+  
+  const handleNavigateCart = ()=>{
+    navigate('/cart')
+  }
   return (
     <>
       <div className=''>
@@ -26,7 +33,7 @@ const CartItems = ({cartItems}) => {
           </div>
           <div className="grid items-center gap-2">
             <p className="text-sm font-medium text-center">Taxes and Shipping Will Calculate At Shipping</p>
-            <button type="button" className="button-theme bg-theme-cart text-white">Check Out</button>
+            <button onClick={handleNavigateCart} type="button" className="button-theme bg-theme-cart text-white">Check Out</button>
           </div>
         </div>
 

@@ -7,8 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+
+    protected $with = ['products','address'];
     use HasFactory;
     protected $fillable = [
+        'address_id',
+        'user_id',
         'total_price',
         'status',
         'home_delivery',
@@ -32,6 +36,6 @@ class Order extends Model
 
     public function address()
     {
-        return $this->hasOne(Address::class); // Assuming your foreign key column in users table is 'address_id'
+        return $this->belongsTo(Address::class);
     }
 }

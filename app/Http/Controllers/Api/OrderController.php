@@ -8,6 +8,7 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Address;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -24,7 +25,7 @@ class OrderController extends Controller
     {
         $data = $request->validate([
             'total_price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'user_id' => 'nullable|integer',
+            'user_id' => 'required|integer',
             'home_delivery' => 'boolean',
             'status' => 'required|string',
             'price_payed' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
@@ -41,6 +42,7 @@ class OrderController extends Controller
             'products.*.quantity' => 'required|integer', // Validate product quantity
 
         ]);
+        //return $data;
         // Extract 'wilaya' and 'full_address' fields into $address variable
         $address_data = [
             'wilaya' => $data['wilaya'],
@@ -55,8 +57,9 @@ class OrderController extends Controller
         unset($data['full_address']);
 
         $data['address_id'] = $address->id;
-        //return $data;
         $order = Order::create($data);
+        //return $order;
+        
         // Attach products to the order with pivot data
         foreach ($products as $productData) {
             $product = Product::find($productData['id']); // Get the product instance
@@ -98,5 +101,13 @@ class OrderController extends Controller
     {
         $order->delete();
         return response()->json(['message' => 'Order deleted successfully']);
+    }
+
+    public function getUserOrders()
+    {
+        $user = Auth::user(); // Get the currently authenticated user
+        $orders = $user->orders; // Fetch orders associated with the user
+
+        return OrderResource::collection($orders);
     }
 }

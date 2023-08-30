@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Address extends Model
 {
     use HasFactory;
-    protected $fillable = ['wilaya','full_address'];
+    protected $fillable = ['wilaya', 'full_address'];
 
     public function user()
     {
         return $this->belongsTo(Order::class); // Assuming your foreign key column in users table is 'address_id'
+    }
+    public function order()
+    {
+        return $this->hasOne(Order::class);
     }
 }

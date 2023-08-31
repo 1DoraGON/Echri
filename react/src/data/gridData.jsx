@@ -34,6 +34,30 @@ export const modifyButtonTemplate = (props) => {
     </div>
   );
 } 
+export const modifyClientOrderButtonTemplate = (props) => {
+  const dispatch = useDispatch()
+  const handleDeleteClick = (productId) => {
+    dispatch(setSelectedProductId(productId));
+    dispatch(setModalIsOpen(true));
+  };
+  return (
+    <div className="flex items-center justify-between">
+      <TooltipComponent content="Modify"
+        position="Top" > 
+        <Link to={`/orders/${props.id}/update`} >
+          <PencilSquareIcon className="text-gray-800 hover:text-gray-600 cursor-pointer w-6 h-6" />
+        </Link>
+      </TooltipComponent>
+      <TooltipComponent content="Delete"
+        position="Top" >
+        {props.status ==='pending' && (
+        <TrashIcon onClick={()=>{handleDeleteClick({id:props.id,name:props.name})}} className="text-red-600 hover:text-red-800 cursor-pointer w-6 h-6" />
+        )}
+      </TooltipComponent>
+      
+    </div>
+  );
+} 
 export const productsGrid = [
   { type: 'checkbox', width: '50' },
   {
@@ -89,6 +113,60 @@ export const productsGrid = [
     headerText: '',
     width: '80',
     template: modifyButtonTemplate,
+    textAlign: 'Center',
+  },
+];
+export const clientOrdersGrid = [
+  //{ type: 'checkbox', width: '50' },
+/*   {
+    headerText: 'Image',
+    template: gridOrderImage,
+    textAlign: 'Center',
+    width: '120',
+  }, */
+  {
+    field: 'id',
+    headerText: 'Order ID',
+    width: '150',
+    textAlign: 'Center',
+  },
+  {
+    field: 'total_quantity',
+    headerText: 'Number of Products',
+    width: '150',
+    textAlign: 'Center',
+  },
+  {
+    field: 'total_price',
+    headerText: 'Total Price',
+    format: '0 DZD',
+    textAlign: 'Center',
+    width: '150',
+  },
+  {
+    field: 'status',
+    headerText: 'Status',
+    width: '120',
+    textAlign: 'Center',
+  },
+
+  {
+    field: 'products',
+    headerText: 'Order Products',
+    width: '150',
+    textAlign: 'Center',
+  },
+  {
+    field: 'created_at',
+    headerText: 'Ordered At',
+    width: '150',
+    textAlign: 'Center',
+  },
+  {
+    //field: 'created_at',
+    headerText: '',
+    width: '80',
+    template: modifyClientOrderButtonTemplate,
     textAlign: 'Center',
   },
 ];

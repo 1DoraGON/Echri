@@ -19,6 +19,7 @@ class OrderResource extends JsonResource
             return $this->products->map(function ($product) {
                 return [
                     'id' => $product->id,
+                    'name' => $product->name,
                     'description' => $product->pivot->description,
                     'quantity' => $product->pivot->quantity,
                     'total_price' => $product->pivot->quantity * $product->price,

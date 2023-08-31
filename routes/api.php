@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function(){
         return $request->user();
     });
     Route::get('/user/orders', [OrderController::class, 'getUserOrders']);
+    Route::get('/user/orders', [OrderController::class, 'destroyUserOrder']);
     Route::apiResource('/users',UserController::class);
     Route::apiResource('/products',ProductController::class);
     Route::apiResource('/orders',OrderController::class);

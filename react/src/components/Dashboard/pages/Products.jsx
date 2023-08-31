@@ -6,7 +6,6 @@ import {
   GridComponent,
   ColumnsDirective,
   ColumnDirective,
-  Resize,
   Sort,
   ContextMenu,
   Filter,

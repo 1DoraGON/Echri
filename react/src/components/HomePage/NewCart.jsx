@@ -13,40 +13,84 @@ import InfoAlert from '../utils/InfoAlert'
 import { selectInfoAlert, selectSuccesAlert, setInfoAlert, setSuccessAlert } from '../../app/ThemeSlice'
 import SuccessAlert from '../utils/SuccessAlert'
 import useAuth from '../../hooks/useAuth'
+import CartLabel from '../Cart/CartLabel'
+import { useParams } from 'react-router-dom'
 
 const NewCart = () => {
   const wilayas = algerianStates
   const methods = paymentMethods
+
+  const { id } = useParams();
+
+
   const dispatch = useDispatch()
   const [errors, setErrors] = useState(null)
   const cartItems = useSelector(selectCartItems)
   const infoAlert = useSelector(selectInfoAlert)
   const successAlert = useSelector(selectSuccesAlert)
   const [isButtonDisabled, setButtonDisabled] = useState(false);
-  const [orderId,setOrderId] = useState(null)
+  const [orderId, setOrderId] = useState(null)
   const auth = useAuth()
   const infoMsg = infoMessage
   const successMsg = successMessage
+  const { enableEdit, setEnableEdit } = useState(true)
+  const [orderProducts, setOrderProducts] = useState([])
+
+  const total = useSelector(selectCartTotalAmount)
+  const [formData, setFormData] = useState({})
+
+
   useEffect(() => {
+    console.log(id);
     dispatch(setFilterPage(true))
-    dispatch(setTotals())
     dispatch(setInfoAlert(true))
-    dispatch(checkProducts(cartItems))
+    const fetchOrderIfExists = async () => {
+      if (!id) {
+        setFormData({
+          firstname: '',
+          lastname: '',
+          number: '',
+          full_address: '',
+          wilaya: '',
+          payment_method: '',
+          home_delivery: null,
+          delivery_payment: null,
+        })
+        dispatch(setTotals())
+        dispatch(checkProducts(cartItems))
+      } else {
+        dispatch(setSuccessAlert(true))
+        await axiosClient.get('/api/orders/' + id).then(response => {
+          const data = response.data.data
+          if (data.status !== 'pending') {
+            setEnableEdit(false)
+          }
+          const form = {
+            firstname: data.firstname,
+            lastname: data.lastname,
+            number: data.number,
+            full_address: data.full_address,
+            wilaya: data.wilaya,
+            payment_method: data.payment_method,
+            home_delivery: data.home_delivery,
+            delivery_payment: data.delivery_payment,
+            total_price: data.total_price
+          }
+          console.log(form);
+          setFormData(form)
+          setOrderProducts(data.products)
+          console.log(response);
+        }).catch(error => {
+          console.log(error);
+        })
+      }
+    }
+    fetchOrderIfExists()
   }, [])
 
 
 
-  const total = useSelector(selectCartTotalAmount)
-  const [formData, setFormData] = useState({
-    firstname: '',
-    lastname: '',
-    number: '',
-    full_address: '',
-    wilaya: '',
-    payment_method: '',
-    home_delivery: null,
-    delivery_payment: null,
-  })
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -81,7 +125,7 @@ const NewCart = () => {
     }
     await axiosClient.post('/api/orders', payload).then(response => {
       console.log(response);
-      axiosClient.get('/api/orders/'+response.data.data.id).then(response=>{
+      axiosClient.get('/api/orders/' + response.data.data.id).then(response => {
         console.log(response);
       })
       toast.success('Your order has been sent successfully it\'s pending now!')
@@ -115,7 +159,7 @@ const NewCart = () => {
           <InfoAlert title={'How it works?'} message={infoMsg} onClick={() => { }} onDismiss={(e) => { e.preventDefault(); dispatch(setInfoAlert(false)) }} button={false} />
         )}
         {successAlert && (
-          <SuccessAlert title={'Your order is penidng!'} message={successMsg+"Your order id is "+orderId} onClick={() => { }} onDismiss={(e) => { e.preventDefault(); dispatch(setSuccessAlert(false)) }} button={false} />
+          <SuccessAlert title={'Your order is penidng!'} message={successMsg + "Your order id is " + orderId} onClick={() => { }} onDismiss={(e) => { e.preventDefault(); dispatch(setSuccessAlert(false)) }} button={false} />
         )}
         <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
 
@@ -156,9 +200,25 @@ const NewCart = () => {
                 </ul>}
             </div>
             <div className="flex-row justify-between my-5">
-              <CartInput type={'text'} name={'firstname'} placeholder={'Firstname'} value={formData.firstname} handleChange={handleInputChange} />
-              <CartInput type={'text'} name={'lastname'} placeholder={'Lastname'} value={formData.lastname} handleChange={handleInputChange} />
-              <CartInput type={'number'} name={'number'} placeholder={'Number'} value={formData.number} handleChange={handleInputChange} />
+              {id ? (
+                <>
+                  <CartLabel value={formData.firstname}  />
+                  <CartLabel value={formData.lastname}  />
+                  <CartLabel value={formData.number} />
+                </>
+              ) : (
+                <>
+                  <CartInput type={'text'} name={'firstname'} placeholder={'Firstname'} value={formData.firstname} handleChange={handleInputChange} />
+                  <CartInput type={'text'} name={'lastname'} placeholder={'Lastname'} value={formData.lastname} handleChange={handleInputChange} />
+                  <CartInput type={'number'} name={'number'} placeholder={'Number'} value={formData.number} handleChange={handleInputChange} />
+                </>
+              )}
+              {/*               {id? (
+
+              ) : (
+
+              )} */}
+
               <select onChange={handleInputChange} className='block border hover:border-blue-500 border-slate-400 w-full rounded p-3  mb-4' name='wilaya' value={formData.wilaya} >
                 {formData.wilaya === '' && (<option selected>Select Your Wilaya</option>)}
                 {wilayas.map((wilaya, i) => (

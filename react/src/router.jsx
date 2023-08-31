@@ -37,6 +37,10 @@ const router = createBrowserRouter( [
                         element:<ClientOrders />
                     },
                     {
+                        path:'/orders/:id',
+                        element:<NewCart />
+                    },
+                    {
                         path:'/profile',
                         element:<Profile/>
                     },

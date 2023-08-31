@@ -12,6 +12,20 @@ export const gridOrderImage = (props) => (
     />
   </div>
 );
+
+export const gridOrderStatus = (props) => {
+  const bg = props.status === 'pending' ? 'yellow' : props.status === 'confirmed' ? 'blue' : props.status === 'delivered' ? 'green' : props.status === 'canceled' ? 'red' : ''
+
+  return (
+    <button type="button" className="flex items-center justify-between text-center">
+      <span
+        style={{ backgroundColor: bg }}
+        className="w-4 h-4 rounded-full inline-block mr-2 text-center"
+      ></span>
+      <span className="text-md text-center capitalize">{props.status}</span>
+    </button>
+  );
+}
 export const modifyButtonTemplate = (props) => {
   const dispatch = useDispatch()
   const handleDeleteClick = (productId) => {
@@ -21,19 +35,19 @@ export const modifyButtonTemplate = (props) => {
   return (
     <div className="flex items-center justify-between">
       <TooltipComponent content="Modify"
-        position="Top" > 
+        position="Top" >
         <Link to={`/dashboard/products/${props.id}/update`} >
           <PencilSquareIcon className="text-gray-800 hover:text-gray-600 cursor-pointer w-6 h-6" />
         </Link>
       </TooltipComponent>
       <TooltipComponent content="Delete"
         position="Top" >
-        <TrashIcon onClick={()=>{handleDeleteClick({id:props.id,name:props.name})}} className="text-red-600 hover:text-red-800 cursor-pointer w-6 h-6" />
+        <TrashIcon onClick={() => { handleDeleteClick({ id: props.id, name: props.name }) }} className="text-red-600 hover:text-red-800 cursor-pointer w-6 h-6" />
       </TooltipComponent>
-      
+
     </div>
   );
-} 
+}
 export const modifyClientOrderButtonTemplate = (props) => {
   const dispatch = useDispatch()
   const handleDeleteClick = (productId) => {
@@ -43,21 +57,21 @@ export const modifyClientOrderButtonTemplate = (props) => {
   return (
     <div className="flex items-center justify-between">
       <TooltipComponent content="Modify"
-        position="Top" > 
-        <Link to={`/orders/${props.id}/update`} >
+        position="Top" >
+        <Link to={`/orders/${props.id}`} >
           <PencilSquareIcon className="text-gray-800 hover:text-gray-600 cursor-pointer w-6 h-6" />
         </Link>
       </TooltipComponent>
       <TooltipComponent content="Delete"
         position="Top" >
-        {props.status ==='pending' && (
-        <TrashIcon onClick={()=>{handleDeleteClick({id:props.id,name:props.name})}} className="text-red-600 hover:text-red-800 cursor-pointer w-6 h-6" />
+        {props.status === 'pending' && (
+          <TrashIcon onClick={() => { handleDeleteClick({ id: props.id, name: props.name }) }} className="text-red-600 hover:text-red-800 cursor-pointer w-6 h-6" />
         )}
       </TooltipComponent>
-      
+
     </div>
   );
-} 
+}
 export const productsGrid = [
   { type: 'checkbox', width: '50' },
   {
@@ -111,19 +125,19 @@ export const productsGrid = [
   {
     //field: 'created_at',
     headerText: '',
-    width: '80',
+    width: '90',
     template: modifyButtonTemplate,
     textAlign: 'Center',
   },
 ];
 export const clientOrdersGrid = [
   //{ type: 'checkbox', width: '50' },
-/*   {
-    headerText: 'Image',
-    template: gridOrderImage,
-    textAlign: 'Center',
-    width: '120',
-  }, */
+  /*   {
+      headerText: 'Image',
+      template: gridOrderImage,
+      textAlign: 'Center',
+      width: '120',
+    }, */
   {
     field: 'id',
     headerText: 'Order ID',
@@ -133,7 +147,7 @@ export const clientOrdersGrid = [
   {
     field: 'total_quantity',
     headerText: 'Number of Products',
-    width: '150',
+    width: '80',
     textAlign: 'Center',
   },
   {
@@ -146,6 +160,7 @@ export const clientOrdersGrid = [
   {
     field: 'status',
     headerText: 'Status',
+    template: gridOrderStatus,
     width: '120',
     textAlign: 'Center',
   },

@@ -59,7 +59,7 @@ class OrderController extends Controller
         $data['address_id'] = $address->id;
         $order = Order::create($data);
         //return $order;
-        
+
         // Attach products to the order with pivot data
         foreach ($products as $productData) {
             $product = Product::find($productData['id']); // Get the product instance
@@ -101,6 +101,38 @@ class OrderController extends Controller
     {
         $order->delete();
         return response()->json(['message' => 'Order deleted successfully']);
+    }
+
+    public function destroyUserOrder($id)
+    {
+        // Retrieve the authenticated user
+        $user = Auth::user();
+
+        // Retrieve the specific order associated with the user
+        $order = $user->orders->find($id);
+
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+        $order->delete();
+        return response()->json(['message' => 'Order deleted successfully']);
+    }
+
+    
+    public function getUserOrder($id)
+    {
+        // Retrieve the authenticated user
+        $user = Auth::user();
+
+        // Retrieve the specific order associated with the user
+        $order = $user->orders->find($id);
+
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+
+        // Return the order as a response
+        return new OrderResource($order);
     }
 
     public function getUserOrders()

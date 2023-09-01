@@ -46,6 +46,7 @@ class OrderResource extends JsonResource
             'message' => $this->message,
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
+            'payment_method' => $this->payment_method,
             'phone_number' => $this->phone_number,
             'products' => $products,
             'address' => $address, // Include the customized address data

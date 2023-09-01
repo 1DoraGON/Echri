@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('address_id')->nullable(); // Foreign key column
             $table->boolean('home_delivery');
             $table->string('status')->default('pending');
+            $table->string('payment_method');
             $table->decimal('price_payed',8,2)->default(0);
             $table->string('payment_image')->nullable();
             $table->text('message')->nullable();

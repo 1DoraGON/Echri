@@ -68,13 +68,14 @@ const NewCart = () => {
           const form = {
             firstname: data.firstname,
             lastname: data.lastname,
-            number: data.number,
-            full_address: data.full_address,
-            wilaya: data.wilaya,
+            number: data.phone_number,
+            full_address: data.address.full_address,
+            wilaya: data.address.wilaya,
             payment_method: data.payment_method,
             home_delivery: data.home_delivery,
             delivery_payment: data.delivery_payment,
-            total_price: data.total_price
+            total_price: data.total_price,
+            price_payed: data.price_payed
           }
           console.log(form);
           setFormData(form)
@@ -115,6 +116,7 @@ const NewCart = () => {
       total_price: total,
       firstname: formData.firstname,
       lastname: formData.lastname,
+      payment_method: formData.payment_method,
       phone_number: formData.number,
       wilaya: formData.wilaya,
       full_address: formData.full_address,
@@ -205,12 +207,67 @@ const NewCart = () => {
                   <CartLabel value={formData.firstname}  />
                   <CartLabel value={formData.lastname}  />
                   <CartLabel value={formData.number} />
+                  <CartLabel value={formData.wilaya} />
+                  <CartLabel value={formData.full_address} />
+                  <CartLabel value={formData.payment_method} />
+                  <CartLabel value={formData.home_delivery? 'Home Delivery' : 'Yalidine Center'} />
+                  <CartLabel value={formData.price_payed} />
                 </>
               ) : (
                 <>
                   <CartInput type={'text'} name={'firstname'} placeholder={'Firstname'} value={formData.firstname} handleChange={handleInputChange} />
                   <CartInput type={'text'} name={'lastname'} placeholder={'Lastname'} value={formData.lastname} handleChange={handleInputChange} />
                   <CartInput type={'number'} name={'number'} placeholder={'Number'} value={formData.number} handleChange={handleInputChange} />
+                <select onChange={handleInputChange} className='block border hover:border-blue-500 border-slate-400 w-full rounded p-3  mb-4' name='wilaya' value={formData.wilaya} >
+                  {formData.wilaya === '' && (<option selected>Select Your Wilaya</option>)}
+                  {wilayas.map((wilaya, i) => (
+                    <option key={i} value={wilaya.id}>{wilaya.id + ' - ' + wilaya.name}</option>
+                  ))}
+                </select>
+                <CartInput type={'text'} name={'full_address'} placeholder={'Full Address'} value={formData.full_address} handleChange={handleInputChange} />
+                
+                              <select onChange={handleInputChange} className='block border hover:border-blue-500 border-slate-400 w-full rounded p-3  mb-4' name='payment_method' value={formData.payment_method} >
+                                {formData.payment_method === '' && (<option selected>Select Your Payment Method</option>)}
+                                {methods.map((method, i) => (
+                                  <option key={i} value={method.id}>{method.name}</option>
+                                ))}
+                              </select>
+                              {formData.payment_method === 'POSTE' && (
+                                <a href={paymentImage} download="payment_image.jpg">
+                
+                                  <button className='text-blue-500 font-semibold border border-b-blue-500 hover:text-blue-600' type='button'>Please print this to pay your order!</button>
+                                </a>)}
+                
+                              <h3 className="my-4 font-semibold text-gray-900">Select Delivery Type</h3>
+                              <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+                                <li className="w-full border-b border-gray-200 rounded-t-lg">
+                                  <div className="flex items-center pl-3">
+                                    <input onChange={handleInputChange} id="list-radio-delivery-type-1" type="radio" value={true} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                                    <label htmlFor="list-radio-delivery-type-1" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Home Delivery </label>
+                                  </div>
+                                </li>
+                                <li className="w-full border-b border-gray-200 rounded-t-lg">
+                                  <div className="flex items-center pl-3">
+                                    <input onChange={handleInputChange} id="list-radio-delivery-type-2" type="radio" value={false} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                                    <label htmlFor="list-radio-delivery-type-2" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Yalidine center</label>
+                                  </div>
+                                </li>
+                              </ul>
+                              <h3 className="my-4 font-semibold text-gray-900">Select When To pay</h3>
+                              <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+                                <li className="w-full border-b border-gray-200 rounded-t-lg">
+                                  <div className="flex items-center pl-3">
+                                    <input onChange={handleInputChange} id="list-radio-delivery-payment-1" type="radio" value={true} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                                    <label htmlFor="list-radio-delivery-payment-1" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay only delivery taxes (pay your order when received) </label>
+                                  </div>
+                                </li>
+                                <li className="w-full border-b border-gray-200 rounded-t-lg">
+                                  <div className="flex items-center pl-3">
+                                    <input onChange={handleInputChange} id="list-radio-delivery-payment-2" type="radio" value={false} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
+                                    <label htmlFor="list-radio-delivery-payment-2" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay everything (order and delivery)</label>
+                                  </div>
+                                </li>
+                              </ul>
                 </>
               )}
               {/*               {id? (
@@ -219,57 +276,6 @@ const NewCart = () => {
 
               )} */}
 
-              <select onChange={handleInputChange} className='block border hover:border-blue-500 border-slate-400 w-full rounded p-3  mb-4' name='wilaya' value={formData.wilaya} >
-                {formData.wilaya === '' && (<option selected>Select Your Wilaya</option>)}
-                {wilayas.map((wilaya, i) => (
-                  <option key={i} value={wilaya.id}>{wilaya.id + ' - ' + wilaya.name}</option>
-                ))}
-              </select>
-              <CartInput type={'text'} name={'full_address'} placeholder={'Full Address'} value={formData.full_address} handleChange={handleInputChange} />
-
-
-              <select onChange={handleInputChange} className='block border hover:border-blue-500 border-slate-400 w-full rounded p-3  mb-4' name='payment_method' value={formData.payment_method} >
-                {formData.payment_method === '' && (<option selected>Select Your Payment Method</option>)}
-                {methods.map((method, i) => (
-                  <option key={i} value={method.id}>{method.name}</option>
-                ))}
-              </select>
-              {formData.payment_method === 'POSTE' && (
-                <a href={paymentImage} download="payment_image.jpg">
-
-                  <button className='text-blue-500 font-semibold border border-b-blue-500 hover:text-blue-600' type='button'>Please print this to pay your order!</button>
-                </a>)}
-
-              <h3 className="my-4 font-semibold text-gray-900">Select Delivery Type</h3>
-              <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
-                <li className="w-full border-b border-gray-200 rounded-t-lg">
-                  <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-delivery-type-1" type="radio" value={true} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
-                    <label htmlFor="list-radio-delivery-type-1" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Home Delivery </label>
-                  </div>
-                </li>
-                <li className="w-full border-b border-gray-200 rounded-t-lg">
-                  <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-delivery-type-2" type="radio" value={false} name="home_delivery" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
-                    <label htmlFor="list-radio-delivery-type-2" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Yalidine center</label>
-                  </div>
-                </li>
-              </ul>
-              <h3 className="my-4 font-semibold text-gray-900">Select When To pay</h3>
-              <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
-                <li className="w-full border-b border-gray-200 rounded-t-lg">
-                  <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-delivery-payment-1" type="radio" value={true} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
-                    <label htmlFor="list-radio-delivery-payment-1" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay only delivery taxes (pay your order when received) </label>
-                  </div>
-                </li>
-                <li className="w-full border-b border-gray-200 rounded-t-lg">
-                  <div className="flex items-center pl-3">
-                    <input onChange={handleInputChange} id="list-radio-delivery-payment-2" type="radio" value={false} name="delivery_payment" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 " />
-                    <label htmlFor="list-radio-delivery-payment-2" className="w-full py-3 ml-2 text-sm font-medium text-gray-900">Pay everything (order and delivery)</label>
-                  </div>
-                </li>
-              </ul>
             </div>
 
             <button onClick={(e) => { handleCheckout(e) }} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}

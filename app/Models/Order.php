@@ -17,6 +17,7 @@ class Order extends Model
         'status',
         'home_delivery',
         'price_payed',
+        'payment_method',
         'description',
         'message',
         'firstname',

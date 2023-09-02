@@ -108,7 +108,7 @@ export const checkProducts = (cartItems) => async (dispatch) => {
     cartItems.map(async (product)=>{
       await axiosClient.get('/api/products/'+product.id).then(response=>{
         //todo
-        //console.log(response);
+        console.log(response);
       }).catch(err=>{
         console.log(err);
         if(err.response?.status === 404){

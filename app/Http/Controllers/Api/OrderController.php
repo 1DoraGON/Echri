@@ -30,12 +30,13 @@ class OrderController extends Controller
             'status' => 'required|string',
             'price_payed' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'payment_image' => 'nullable|string',
+            'payment_method' => 'required|string',
             'message' => 'nullable|string',
             'firstname' => 'required|string',
             'lastname' => 'required|string',
             'wilaya' => 'required|string',
             'full_address' => 'required|string',
-            'phone_number' => 'required|string',
+            'phone_number' => 'required|numeric',
             'products' => 'required|array',
             'products.*.id' => 'required|integer|exists:products,id', // Validate product id
             'products.*.description' => 'required|string', // Validate product description

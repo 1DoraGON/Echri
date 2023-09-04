@@ -11,12 +11,14 @@ import { truncate } from 'lodash'
 import Modal from 'react-modal'
 import { toast } from 'react-hot-toast'
 import { selectModalIsOpen, selectProductId, setModalIsOpen } from '../../app/ThemeSlice'
+import LoadingScreen from '../utils/LoadingScreen'
 
 const ClientOrders = () => {
   const auth = useAuth()
   const dispatch = useDispatch()
   const modalIsOpen = useSelector(selectModalIsOpen)
   const productId = useSelector(selectProductId)
+  const [isLoading, setIsLoading] = useState(true)
   const [orders, setOrders] = useState([])
   useEffect(() => {
     dispatch(setFilterPage(true))
@@ -38,7 +40,9 @@ const ClientOrders = () => {
                         day: 'numeric',
                       }), */
           }));
+          
           setOrders(transformedData)
+          setIsLoading(false)
           console.log(response);
         })
       }
@@ -68,6 +72,9 @@ const ClientOrders = () => {
   }
   return (
     <div className='m-10 mt-20 md:m-2 p-10 min-h-screen  md:p-2 bg-gray-100 rounded-3xl'>
+      {isLoading && (
+        <LoadingScreen />
+      )}
       <Header category="Page" title="Orders" />
       <GridComponent id='gridcomp' dataSource={orders}
         allowPaging allowSorting>

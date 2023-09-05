@@ -30,15 +30,9 @@ const ClientOrders = () => {
             id: parseInt(order.id),
             total_quantity: order.products.length,
             total_price: parseFloat(order.total_price),
-            stock: parseInt(order.stock),
             status: order.status,
             products: truncate(order.products.map(product => product.name), 50),
             created_at: order.created_at, // Keep the original value for sorting
-            /*           formatted_created_at: new Date(product.created_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      }), */
           }));
           
           setOrders(transformedData)

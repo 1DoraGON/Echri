@@ -20,10 +20,12 @@ class OrderResource extends JsonResource
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
+                    'tags' => $product->tags,
+                    'main_image' => $product->main_image,
+                    'price' => $product->price,
                     'description' => $product->pivot->description,
                     'quantity' => $product->pivot->quantity,
                     'total_price' => $product->pivot->quantity * $product->price,
-                    'image' => $product->main_image,
                 ];
             });
         });

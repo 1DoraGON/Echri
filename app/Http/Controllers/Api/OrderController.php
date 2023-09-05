@@ -90,13 +90,34 @@ class OrderController extends Controller
             'firstname' => 'required|string',
             'lastname' => 'required|string',
             'wilaya' => 'required|string',
+            'payment_method' => 'required|string',
             'full_address' => 'required|string',
             'phone_number' => 'required|string'
         ]);
-
+    
+        // Check if the order has an associated address
+        if ($order->address) {
+            // Update the existing address
+            $order->address->update([
+                'wilaya' => $data['wilaya'],
+                'full_address' => $data['full_address'],
+            ]);
+        } else {
+            // Create a new address and associate it with the order
+            $address = Address::create([
+                'wilaya' => $data['wilaya'],
+                'full_address' => $data['full_address'],
+            ]);
+    
+            $order->address()->associate($address);
+        }
+    
+        // Update the order data
         $order->update($data);
+    
         return new OrderResource($order);
     }
+    
 
     public function destroy(Order $order)
     {

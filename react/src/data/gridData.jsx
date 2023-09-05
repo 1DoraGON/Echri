@@ -185,3 +185,64 @@ export const clientOrdersGrid = [
     textAlign: 'Center',
   },
 ];
+export const adminOrdersGrid = [
+  //{ type: 'checkbox', width: '50' },
+  /*   {
+      headerText: 'Image',
+      template: gridOrderImage,
+      textAlign: 'Center',
+      width: '120',
+    }, */
+  {
+    field: 'id',
+    headerText: 'Order ID',
+    width: '150',
+    textAlign: 'Center',
+  },
+  {
+    field: 'name',
+    headerText: 'Client Name',
+    width: '150',
+    textAlign: 'Center',
+  },
+  {
+    field: 'total_quantity',
+    headerText: 'Number of Products',
+    width: '80',
+    textAlign: 'Center',
+  },
+  {
+    field: 'total_price',
+    headerText: 'Total Price',
+    format: '0 DZD',
+    textAlign: 'Center',
+    width: '150',
+  },
+  {
+    field: 'status',
+    headerText: 'Status',
+    template: gridOrderStatus,
+    width: '120',
+    textAlign: 'Center',
+  },
+
+  {
+    field: 'products',
+    headerText: 'Order Products',
+    width: '150',
+    textAlign: 'Center',
+  },
+  {
+    field: 'created_at',
+    headerText: 'Ordered At',
+    width: '150',
+    textAlign: 'Center',
+  },
+  {
+    //field: 'created_at',
+    headerText: '',
+    width: '80',
+    template: modifyClientOrderButtonTemplate,
+    textAlign: 'Center',
+  },
+];

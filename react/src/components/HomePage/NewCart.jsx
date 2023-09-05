@@ -145,6 +145,7 @@ const NewCart = () => {
         //toast('Hello, this is a toast message!',);
         setErrors(null)
         setOrderId(response.data.data.id)
+        navigate('/orders/'+response.data.data.id)
         setTimeout(() => {
           setButtonDisabled(false);
         }, 4000);
@@ -181,6 +182,7 @@ const NewCart = () => {
         dispatch(setSuccessAlert(true))
         //toast('Hello, this is a toast message!',);
         setErrors(null)
+        
         //setOrderId(response.data.data.id)
         setTimeout(() => {
           setButtonDisabled(false);

@@ -3,7 +3,7 @@ import { ClientOrders, GuestLayout, Login, NewCart, NotFound, Profile, SignUp} f
 import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dashboard from './components/Views/Dashboard';
-import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor,ProductCreate, Products } from './components/Dashboard/pages';
+import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor,ProductCreate, Products, Order } from './components/Dashboard/pages';
 
 import './App.css';
 import HomePage from './components/Views/HomePage';
@@ -55,10 +55,7 @@ const router = createBrowserRouter( [
                         path: '/dashboard/ecommerce',
                         element: <Ecommerce />
                     },
-                    {
-                        path: '/dashboard/orders',
-                        element: <Orders />
-                    },
+
                     {
                         path: '/dashboard/employees',
                         element: <Employees />
@@ -126,6 +123,19 @@ const router = createBrowserRouter( [
                     {
                         path: '/dashboard/products/create',
                         element: <ProductCreate />
+                    },
+                    {
+                        path: '/dashboard/products/:productId/update', // Dynamic route with :productId parameter
+                        element: <ProductCreate />
+                    },
+                    /* Order management */
+                    {
+                        path: '/dashboard/orders',
+                        element: <Orders />
+                    },
+                    {
+                        path: '/dashboard/orders/:id',
+                        element: <Order />
                     },
                     {
                         path: '/dashboard/products/:productId/update', // Dynamic route with :productId parameter

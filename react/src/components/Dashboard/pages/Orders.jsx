@@ -1,89 +1,111 @@
-import { useEffect, useState } from 'react'
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, ExcelExport, PdfExport, Edit, Inject } from '@syncfusion/ej2-react-grids'
 
-import { Header } from '../Dashboard/components'
-import axiosClient from '../../api/axios'
-import useAuth from '../../hooks/useAuth'
-import { useDispatch, useSelector } from 'react-redux'
-import { setFilterPage } from '../../app/ProductsSlice'
-import { clientOrdersGrid } from '../../data/gridData'
+import { setFilterPage } from '../../../app/ProductsSlice'
+import { adminOrdersGrid, clientOrdersGrid } from '../../../data/gridData'
 import { truncate } from 'lodash'
 import Modal from 'react-modal'
 import { toast } from 'react-hot-toast'
-import { selectModalIsOpen, selectProductId, setModalIsOpen } from '../../app/ThemeSlice'
-import LoadingScreen from '../utils/LoadingScreen'
+import {
+  GridComponent,
+  ColumnsDirective,
+  ColumnDirective,
+  Sort,
+  ContextMenu,
+  Filter,
+  Page,
+  ExcelExport,
+  PdfExport,
+  Edit,
+  Inject,
+} from '@syncfusion/ej2-react-grids';
+import axiosClient from '../../../api/axios';
+import { Header } from '../components';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectModalIsOpen, selectProductId, setModalIsOpen } from '../../../app/ThemeSlice';
+import LoadingScreen from '../../utils/LoadingScreen'
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useHistory
 
 const Orders = () => {
-  const dispatch = useDispatch()
-  const modalIsOpen = useSelector(selectModalIsOpen)
-  const productId = useSelector(selectProductId)
-  const [isLoading, setIsLoading] = useState(true)
-  const [orders, setOrders] = useState([])
+  const navigate = useNavigate(); // Initialize useHistory
+  const dispatch = useDispatch();
+  const modalIsOpen = useSelector(selectModalIsOpen);
+  const productId = useSelector(selectProductId);
+  const [isLoading, setIsLoading] = useState(true);
+  const [orders, setOrders] = useState([]);
+
   useEffect(() => {
-    dispatch(setFilterPage(true))
+    dispatch(setFilterPage(true));
     const fetchOrders = async () => {
       await axiosClient.get('/api/user/orders').then(response => {
-        const data = response.data.data
-        const transformedData = data.map((order) => ({
+        const data = response.data.data;
+        const transformedData = data.map(order => ({
           id: parseInt(order.id),
           total_quantity: order.products.length,
           total_price: parseFloat(order.total_price),
-          name: truncate(order.firstname +' '+ order.lastname,60),
+          name: truncate(order.firstname + ' ' + order.lastname, 60),
           status: order.status,
           products: truncate(order.products.map(product => product.name), 50),
           created_at: order.created_at, // Keep the original value for sorting
         }));
-
-        setOrders(transformedData)
-        setIsLoading(false)
+        console.log(transformedData);
+        setOrders(transformedData);
+        setIsLoading(false);
         console.log(response);
-      })
-    }
-    fetchOrders()
-  }, [])
+      });
+    };
+    fetchOrders();
+  }, []);
 
-
-  const handleDelete = async (productId) => {
-
-    await axiosClient.delete('/api/user/orders/' + productId).then((response) => {
-
-      toast.success(response.data.message)
-      dispatch(setModalIsOpen(false))
-      const filterdedData = orders.filter((order) => order.id !== productId)
-      setOrders(filterdedData)
-
+  const handleDelete = async productId => {
+    await axiosClient.delete('/api/user/orders/' + productId).then(response => {
+      toast.success(response.data.message);
+      dispatch(setModalIsOpen(false));
+      const filterdedData = orders.filter(order => order.id !== productId);
+      setOrders(filterdedData);
       console.log(response);
-
       return true;
-    }).catch((err) => {
+    }).catch(err => {
       console.log(err);
+      toast.error('Oops! Something went wrong!');
+    });
+  };
 
-      toast.error('Oops! Somthing went wrong!')
-    })
+  const handleRowClick = (args) => {
+    // Get the selected row data
+    const selectedData = args.data;
+    console.log(args);
+    // Navigate to the order details page with the order ID
+    navigate(`/dashboard/orders/${selectedData.id}`);
+  };
 
-  }
   return (
     <div className='m-10 mt-20 md:m-2 p-10 min-h-screen  md:p-2 bg-gray-100 rounded-3xl'>
       {isLoading && (
         <LoadingScreen />
       )}
       <Header category="Page" title="Orders" />
-      <GridComponent id='gridcomp' dataSource={orders}
-        allowPaging allowSorting>
+      <GridComponent
+        id='gridcomp'
+        dataSource={orders}
+        allowPaging
+        allowSorting
+        allowRowClick // Enable row click
+        rowSelected={handleRowClick} // Handle row click
+      >
         <ColumnsDirective>
-          {clientOrdersGrid.map((item, i) => (
+          {adminOrdersGrid.map((item, i) => (
             <ColumnDirective key={i} {...item} />
           ))}
         </ColumnsDirective>
-        <Inject services={[Resize, Sort, ContextMenu, Filter, Page, ExcelExport, Edit, PdfExport]} />
+        <Inject services={[Sort, ContextMenu, Filter, Page, ExcelExport, Edit, PdfExport]} />
       </GridComponent>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => dispatch(setModalIsOpen(false))}
         style={{
           overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent dark overlay
-            zIndex: 1000, // Set a higher z-index to overlay above other content
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            zIndex: 1000,
           },
           content: {
             width: '400px',
@@ -91,13 +113,12 @@ const Orders = () => {
             margin: 'auto',
             background: '#f3f4f6',
             borderRadius: '8px',
-            zIndex: 1001, // Set a z-index higher than the overlay
+            zIndex: 1001,
           },
         }}
       >
         <h2 className="text-center">{productId ? 'Are you sure you want to delete product' : 'Are you sure you want to delete products?'} <span className='font-semibold'>{productId ? productId.name : ''}</span> </h2>
         <div className="absolute right-2 bottom-2">
-
           <button
             onClick={() => { handleDelete(productId.id, false) }}
             className=" mr-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-24"
@@ -113,7 +134,7 @@ const Orders = () => {
         </div>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default Orders
+export default Orders;

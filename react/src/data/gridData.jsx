@@ -196,7 +196,7 @@ export const adminOrdersGrid = [
   {
     field: 'id',
     headerText: 'Order ID',
-    width: '150',
+    width: '50',
     textAlign: 'Center',
   },
   {
@@ -207,8 +207,8 @@ export const adminOrdersGrid = [
   },
   {
     field: 'total_quantity',
-    headerText: 'Number of Products',
-    width: '80',
+    headerText: 'Products Count',
+    width: '100',
     textAlign: 'Center',
   },
   {

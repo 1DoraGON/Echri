@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import LoadingScreen from '../../utils/LoadingScreen';
 import OrderItem from '../../Cart/OrderItem';
 import ConfirmationModal from '../../utils/ConfirmationModal';
@@ -12,8 +12,9 @@ import { useParams } from 'react-router-dom';
 import MessageModal from '../../utils/MessageModal';
 
 const Order = () => {
-  
+  const text = 'Confirm the order means you should ship it to the specified address, and you can leace a message to the client here, leave it empty if you don\'t want to say anything.'
   const [isLoading, setIsLoading] = useState(true)
+  const messageRef = useRef()
   const wilayas = algerianStates
   const [orderProducts, setOrderProducts] = useState([])
   const dispatch = useDispatch()
@@ -112,7 +113,7 @@ const Order = () => {
                 </div>
               </div>
 
-              <ConfirmationModal id={'deleteOrder'} text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} isModalOpen={isModalOpen} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(formData.id) }} component={<MessageModal />} />
+              <ConfirmationModal id={'deleteOrder'} text={''} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} isModalOpen={isModalOpen} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(formData.id) }} component={<MessageModal text={text} confirmation={'Confirm Order'} placeholder={'Write your message here.'} reference={messageRef} handleClick={()=>{}} handleClose={toggleModal} />} />
 
           
             <div className="mb-2 flex justify-between">

@@ -9,6 +9,7 @@ import { selectModalIsOpen, setModalIsOpen } from '../../../app/ThemeSlice';
 import { toast } from 'react-hot-toast';
 import axiosClient from '../../../api/axios';
 import { useParams } from 'react-router-dom';
+import MessageModal from '../../utils/MessageModal';
 
 const Order = () => {
   
@@ -111,7 +112,7 @@ const Order = () => {
                 </div>
               </div>
 
-              <ConfirmationModal id={'deleteOrder'} text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} isModalOpen={isModalOpen} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(formData.id) }} />
+              <ConfirmationModal id={'deleteOrder'} text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} isModalOpen={isModalOpen} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(formData.id) }} component={<MessageModal />} />
 
           
             <div className="mb-2 flex justify-between">
@@ -156,7 +157,9 @@ const Order = () => {
           </div>
 
           <button onClick={(e) => { handleSave(e) }} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-            disabled={isButtonDisabled}>Save Order</button>
+            disabled={isButtonDisabled}>Confirm Order</button>
+          <button onClick={toggleModal} className={`mt-2 w-full rounded-md bg-red-500 py-1.5 font-medium text-blue-50 hover:bg-red-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={isButtonDisabled}>Cancel Order</button>
 
         </div>
       </div>

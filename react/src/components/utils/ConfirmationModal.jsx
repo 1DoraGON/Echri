@@ -1,6 +1,6 @@
 import Modal from 'react-modal'
 
-const ConfirmationModal = ({ id, isModalOpen, text, confirmation, cancel, handleClick, toggleModal }) => {
+const ConfirmationModal = ({ id, isModalOpen, text, confirmation, cancel, handleClick, toggleModal,component }) => {
   return (
     <>
       <Modal
@@ -21,7 +21,9 @@ const ConfirmationModal = ({ id, isModalOpen, text, confirmation, cancel, handle
           },
         }}
       >
-
+        {component ? (
+          component
+        ) : (
         <div
           id={id}
           tabIndex="-1"
@@ -82,6 +84,8 @@ const ConfirmationModal = ({ id, isModalOpen, text, confirmation, cancel, handle
             </div>
           </div>
         </div>
+
+        )}
       </Modal>
     </>
   );

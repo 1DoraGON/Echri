@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function(){
     });
     Route::get('/user/orders', [OrderController::class, 'getUserOrders']);
     Route::delete('/user/orders/{id}', [OrderController::class, 'destroyUserOrder']);
-    Route::post('/admin/orders/{id}', [OrderController::class, 'updateStatus']);
+    Route::put('/admin/orders/{order}', [OrderController::class, 'updateStatus']);
     Route::apiResource('/users',UserController::class);
     Route::apiResource('/products',ProductController::class);
     Route::apiResource('/orders',OrderController::class);

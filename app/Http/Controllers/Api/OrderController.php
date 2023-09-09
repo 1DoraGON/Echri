@@ -8,6 +8,8 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Address;
 use App\Models\Product;
+use App\Rules\PaymentMethodValidationRule;
+use App\Rules\StatusValidationRule;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -89,7 +91,7 @@ class OrderController extends Controller
             'firstname' => 'required|string',
             'lastname' => 'required|string',
             'wilaya' => 'required|string',
-            'payment_method' => 'required|string',
+            'payment_method' => ['required', new PaymentMethodValidationRule],
             'full_address' => 'required|string',
             'phone_number' => 'required|string'
         ]);
@@ -118,15 +120,18 @@ class OrderController extends Controller
     }
     public function updateStatus(Request $request, Order $order)
     {
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
         $data = $request->validate([
-            'status' => 'required|string'
+            'status' => ['required', new StatusValidationRule],
         ]);
 
 
         // Update the order data
         $order->update($data);
 
-        return new OrderResource($order);
+        return $order;
     }
 
 

@@ -67,5 +67,5 @@ export const paymentMethods = [
 
 
 export const infoMessage = "The ordering process consists of three distinct statuses. After submitting your order, it initially enters the \"Pending\" status while awaiting confirmation from the store. Once the store confirms your order, its status changes to \"Confirmed.\" At this point, you're required to make the payment, which could cover the order itself or just the delivery charge, depending on your preferences. After making the payment, the order transitions to the \"Paid\" status. Once the store delivers your order to you, the status is updated to \"Delivered.\" In case of any unforeseen events or cancellations, you can always refer to your order list to find out more information."
-
+export const statusMessage = "'Confirm the order means you should ship it to the specified address, and you can leave a message to the client here, leave it empty if you don\'t want to say anything.'"
 export const successMessage = "Your order has been submitted and is now awaiting confirmation from the store. During this time, you have the flexibility to modify or cancel your order. For a quicker response to your order, please contact us at 0796750921 to provide order details, enabling you to proceed with payment and prompt delivery. Once the store confirms your order, modifications and cancellations will no longer be possible. "

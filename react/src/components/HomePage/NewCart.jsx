@@ -36,11 +36,11 @@ const NewCart = () => {
   const [errors, setErrors] = useState(null)
   const cartItems = useSelector(selectCartItems)
   const infoAlert = useSelector(selectInfoAlert)
+  const infoMsg = infoMessage
   const successAlert = useSelector(selectSuccesAlert)
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [orderId, setOrderId] = useState(id? id : null)
   const auth = useAuth()
-  const infoMsg = infoMessage
   const successMsg = successMessage
   const [enableEdit, setEnableEdit] = useState(true)
   const [orderProducts, setOrderProducts] = useState([])

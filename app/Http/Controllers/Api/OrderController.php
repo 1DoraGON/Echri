@@ -83,7 +83,6 @@ class OrderController extends Controller
             'total_price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'user_id' => 'nullable|integer',
             'home_delivery' => 'boolean',
-            'status' => 'required|string',
             'price_payed' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'payment_image' => 'nullable|string',
             'message' => 'nullable|string',
@@ -94,7 +93,7 @@ class OrderController extends Controller
             'full_address' => 'required|string',
             'phone_number' => 'required|string'
         ]);
-    
+
         // Check if the order has an associated address
         if ($order->address) {
             // Update the existing address
@@ -108,16 +107,29 @@ class OrderController extends Controller
                 'wilaya' => $data['wilaya'],
                 'full_address' => $data['full_address'],
             ]);
-    
+
             $order->address()->associate($address);
         }
-    
+
         // Update the order data
         $order->update($data);
-    
+
         return new OrderResource($order);
     }
-    
+    public function updateStatus(Request $request, Order $order)
+    {
+        $data = $request->validate([
+            'status' => 'required|string'
+        ]);
+
+
+        // Update the order data
+        $order->update($data);
+
+        return new OrderResource($order);
+    }
+
+
 
     public function destroy(Order $order)
     {
@@ -140,7 +152,7 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order deleted successfully']);
     }
 
-    
+
     public function getUserOrder($id)
     {
         // Retrieve the authenticated user

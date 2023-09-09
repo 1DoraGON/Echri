@@ -62,16 +62,24 @@ const Order = () => {
 
   }
 
-  const handleDeleteOrder = async (id) => {
-    await axiosClient.delete('/api/orders/' + id).then(response => {
+  const handleCancelOrder = async () => {
+    await axiosClient.put('/api/admin/orders/' + id,{status:'canceled'}).then(response => {
       console.log(response);
-      toast.success('Your order has been deleted!')
+      toast.success('The order has been canceled!')
       toggleModal()
       //navigate('/orders')
 
     })
   }
 
+  const handleConfirmOrder = async () => {
+    await axiosClient.put('/api/admin/orders/'+id,{status:'confirmed'}).then(response=>{
+      console.log(response);
+      toast.success('The order has been confirmed, Now the client is able to pay his order!')
+    }).catch(error=>{
+      console.log(error);
+    })
+  }
   return (
     <>
     {isLoading && (
@@ -113,7 +121,7 @@ const Order = () => {
                 </div>
               </div>
 
-              <ConfirmationModal id={'deleteOrder'} text={''} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} isModalOpen={isModalOpen} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(formData.id) }} component={<MessageModal text={text} confirmation={'Confirm Order'} placeholder={'Write your message here.'} reference={messageRef} handleClick={()=>{}} handleClose={toggleModal} />} />
+              <ConfirmationModal id={'deleteOrder'} text={''} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} isModalOpen={isModalOpen} toggleModal={toggleModal} handleClick={() => {}} component={<MessageModal text={text} confirmation={'Confirm Order'} cancelation={'Cancel order'} placeholder={'Write your message here.'} reference={messageRef} handleClick={handleConfirmOrder} handleClose={toggleModal} handleCancel={handleCancelOrder} />} />
 
           
             <div className="mb-2 flex justify-between">
@@ -157,7 +165,7 @@ const Order = () => {
 
           </div>
 
-          <button onClick={(e) => { handleSave(e) }} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          <button onClick={toggleModal} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={isButtonDisabled}>Confirm Order</button>
           <button onClick={toggleModal} className={`mt-2 w-full rounded-md bg-red-500 py-1.5 font-medium text-blue-50 hover:bg-red-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={isButtonDisabled}>Cancel Order</button>

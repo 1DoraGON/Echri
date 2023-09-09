@@ -124,7 +124,7 @@ const Order = () => {
               </div>
             </div>
 
-            <ConfirmationModal id={'deleteOrder'} text={''} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} isModalOpen={isModalOpen} toggleModal={toggleModal} handleClick={() => { }} component={<MessageModal status={formData.status} text={text} confirmation={'Confirm Order'} cancelation={'Cancel order'} placeholder={'Write your message here.'} reference={messageRef} handleClick={handleConfirmOrder} handleClose={toggleModal} handleCancel={handleCancelOrder} />} />
+            <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<MessageModal status={formData.status} text={text} confirmation={'Confirm Order'} cancelation={'Cancel order'} placeholder={'Write your message here.'} reference={messageRef} handleClick={handleConfirmOrder} handleClose={toggleModal} handleCancel={handleCancelOrder} />} />
 
 
 

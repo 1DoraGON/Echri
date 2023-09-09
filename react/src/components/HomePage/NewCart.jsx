@@ -17,6 +17,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import OrderItem from '../Cart/OrderItem'
 import ConfirmationModal from '../utils/ConfirmationModal'
 import LoadingScreen from '../utils/LoadingScreen'
+import DeleteOrderModal from '../utils/DeleteOrderModal'
+import ShowMessageModal from '../utils/ShowMessageModal'
 
 const NewCart = () => {
   const wilayas = algerianStates
@@ -39,7 +41,7 @@ const NewCart = () => {
   const infoMsg = infoMessage
   const successAlert = useSelector(selectSuccesAlert)
   const [isButtonDisabled, setButtonDisabled] = useState(false);
-  const [orderId, setOrderId] = useState(id? id : null)
+  const [orderId, setOrderId] = useState(id ? id : null)
   const auth = useAuth()
   const successMsg = successMessage
   const [enableEdit, setEnableEdit] = useState(true)
@@ -73,7 +75,7 @@ const NewCart = () => {
         await axiosClient.get('/api/orders/' + id).then(response => {
           const data = response.data.data
           console.log(data);
-          if (JSON.stringify(data.status)!=='pending' ) {
+          if (JSON.stringify(data.status) !== 'pending') {
             setEnableEdit(false)
           }
           const form = {
@@ -85,6 +87,7 @@ const NewCart = () => {
             wilaya: JSON.parse(data.address.wilaya),
             payment_method: data.payment_method,
             home_delivery: data.home_delivery,
+            status: data.status,
             delivery_payment: data.delivery_payment,
             total_price: data.total_price,
             price_payed: data.price_payed
@@ -145,7 +148,7 @@ const NewCart = () => {
         //toast('Hello, this is a toast message!',);
         setErrors(null)
         setOrderId(response.data.data.id)
-        navigate('/orders/'+response.data.data.id)
+        navigate('/orders/' + response.data.data.id)
         setTimeout(() => {
           setButtonDisabled(false);
         }, 4000);
@@ -158,10 +161,10 @@ const NewCart = () => {
         setButtonDisabled(false);
         if (error.response?.status == 422) {
           setErrors(error.response?.data.errors)
-  
+
         }
       })
-      
+
     } else {
       const payload = {
         firstname: formData.firstname,
@@ -176,13 +179,13 @@ const NewCart = () => {
         status: 'pending',
         //status: 'pending',
       }
-      await axiosClient.put('/api/orders/'+id, payload).then(response => {
+      await axiosClient.put('/api/orders/' + id, payload).then(response => {
         console.log(response);
         toast.success('Your order has been Updated successfully!')
         dispatch(setSuccessAlert(true))
         //toast('Hello, this is a toast message!',);
         setErrors(null)
-        
+
         //setOrderId(response.data.data.id)
         setTimeout(() => {
           setButtonDisabled(false);
@@ -196,7 +199,7 @@ const NewCart = () => {
         setButtonDisabled(false);
         if (error.response?.status == 422) {
           setErrors(error.response?.data.errors)
-  
+
         }
       })
     }
@@ -262,7 +265,11 @@ const NewCart = () => {
                   </div>
                 </div>
 
-                <ConfirmationModal id={'deleteOrder'} text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} isModalOpen={isModalOpen} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(id) }} />
+                <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<DeleteOrderModal text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(id) }} />} />
+                {formData.message && formData.message !== '' && (
+
+                  <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<ShowMessageModal text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(id) }} />} />
+                )}
               </>
             )}
 
@@ -271,10 +278,18 @@ const NewCart = () => {
 
 
             {id && (
-              <div className="mb-2 flex justify-between">
-                <p className="text-gray-700">Order ID</p>
-                <p className="text-gray-700 font-bold">{formData.id}</p>
-              </div>
+              <>
+                <div className="mb-2 flex justify-between">
+                  <p className="text-gray-700">Order ID</p>
+                  <p className="text-gray-700 font-bold">{formData.id}</p>
+                </div>
+                <div className="mb-2 flex justify-between">
+                  <p className="text-gray-700 ">Order Status:</p>
+                  <div className=" capitalize">
+                    <span className={formData.status === 'pending' ? 'text-yellow-500' : formData.status === 'confirmed' ? 'text-blue-600' : formData.status === 'payed' ? 'text-green-600' : formData.status === 'canceled' ? 'text-red-600' : ''}>{formData.status}</span>
+                  </div>
+                </div>
+              </>
             )}
 
             <hr className="my-4" />
@@ -296,7 +311,7 @@ const NewCart = () => {
                 </ul>}
             </div>
             <div className="flex-row justify-between my-5">
-              {id && enableEdit ? (
+              {id && !enableEdit ? (
                 <>
                   <CartLabel value={formData.firstname} label={'Firstname'} />
                   <CartLabel value={formData.lastname} label={'Lastname'} />
@@ -308,6 +323,14 @@ const NewCart = () => {
                   <CartLabel value={formData.payment_method} label={'Payment Method'} />
                   <CartLabel value={formData.home_delivery ? 'Home Delivery' : 'Yalidine Center'} label={'Delivery Type'} />
                   <CartLabel value={formData.price_payed + ' DZD'} label={'Price Payed'} />
+                  {formData.status === 'confirmed' && formData.payment_method === "POSTE" && (
+                    <>
+
+                      <label className="my-4 font-semibold text-gray-900 mb-3" htmlFor="file_input">Upload Payment Recipe</label>
+                      <input className=" mt-3 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none " id="file_input" type="file" />
+
+                    </>
+                  )}
                 </>
               ) : (
                 <>
@@ -333,7 +356,7 @@ const NewCart = () => {
 
                       <button className='text-blue-500 font-semibold border border-b-blue-500 hover:text-blue-600' type='button'>Please print this to pay your order!</button>
                     </a>)}
-                  
+
                   <h3 className="my-4 font-semibold text-gray-900">Select Delivery Type</h3>
                   <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
                     <li className="w-full border-b border-gray-200 rounded-t-lg">
@@ -370,7 +393,7 @@ const NewCart = () => {
             </div>
 
             <button onClick={(e) => { handleCheckout(e) }} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isButtonDisabled}>{id? 'Update yout order' : 'Send your order'}</button>
+              disabled={isButtonDisabled}>{id ? 'Update yout order' : 'Send your order'}</button>
 
           </div>
         </div>

@@ -125,6 +125,7 @@ class OrderController extends Controller
         }
         $data = $request->validate([
             'status' => ['required', new StatusValidationRule],
+            'message' => 'nullable|string'
         ]);
 
 

@@ -1,8 +1,5 @@
-import React from 'react'
-
-const ShowMessageModal = ({message,title,toggleModal,cancelation,confirmation,handleCancel,handleClick}) => {
+const ShowMessageModal = ({message,title,toggleModal,cancelation}) => {
   return (
-    <div>
 
       <div
         tabIndex="-1"
@@ -32,14 +29,12 @@ const ShowMessageModal = ({message,title,toggleModal,cancelation,confirmation,ha
             </div>
 
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-              <button onClick={handleClick} data-modal-hide="defaultModal" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">{confirmation}</button>
-              <button onClick={handleCancel} data-modal-hide="defaultModal" type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">{cancelation}</button>
+
+              <button onClick={toggleModal} data-modal-hide="defaultModal" type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">{cancelation}</button>
             </div>
           </div>
         </div>
       </div>
-
-    </div>
   )
 }
 

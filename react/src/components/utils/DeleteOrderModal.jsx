@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DeleteOrderModal = (text, confirmation, cancel, handleClick, toggleModal) => {
+const DeleteOrderModal = ({text, confirmation, cancel, handleClick, toggleModal}) => {
   return (
     <div
       tabIndex="-1"

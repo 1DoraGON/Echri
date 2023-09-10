@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import NewCartItem from '../Cart/NewCartItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkProducts, selectCartItems, selectCartTotalAmount, setTotals } from '../../app/CartSlice'
@@ -19,12 +19,15 @@ import ConfirmationModal from '../utils/ConfirmationModal'
 import LoadingScreen from '../utils/LoadingScreen'
 import DeleteOrderModal from '../utils/DeleteOrderModal'
 import ShowMessageModal from '../utils/ShowMessageModal'
+import MessageModal from '../utils/MessageModal'
+import InfoAlretTopScreen from '../utils/InfoAlretTopScreen'
 
 const NewCart = () => {
   const wilayas = algerianStates
   const methods = paymentMethods
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [hasMessage,setHasMessage] = useState(false)
   const { id } = useParams();
   const isModalOpen = useSelector(selectModalIsOpen)
   const toggleModal = () => {
@@ -33,6 +36,7 @@ const NewCart = () => {
   }
 
   const [isLoading, setIsLoading] = useState(true)
+  const ref = useRef()
 
 
   const [errors, setErrors] = useState(null)
@@ -88,9 +92,13 @@ const NewCart = () => {
             payment_method: data.payment_method,
             home_delivery: data.home_delivery,
             status: data.status,
+            message: data.message,
             delivery_payment: data.delivery_payment,
             total_price: data.total_price,
             price_payed: data.price_payed
+          }
+          if(form.message) {
+            setHasMessage(true)
           }
           setFormData(form)
           console.log(form);
@@ -223,6 +231,9 @@ const NewCart = () => {
         <LoadingScreen />
       )}
       <div className="h-full min-h-screen bg-gray-100 pt-20">
+      {formData.message!=='' && hasMessage && (
+        <InfoAlretTopScreen text1={'You have a '} linkText={'message'} text2={' from the store considering your order.'} handleLinkClick={toggleModal} toggleAlert={()=>{setHasMessage(false)}} />
+      )}
         {infoAlert && (
           <InfoAlert title={'How it works?'} message={infoMsg} onClick={() => { }} onDismiss={(e) => { e.preventDefault(); dispatch(setInfoAlert(false)) }} button={false} />
         )}
@@ -250,25 +261,28 @@ const NewCart = () => {
           <div className="md:mt-6 md:w-full h-full rounded-lg border bg-white p-6 shadow-md mt-0 w-1/2 mx-5">
             {id && (
               <>
-                <div className="mb-2 w-full flex justify-end">
-                  <div className="self-end">
+                {enableEdit && (
+                  <>
+                    <div className="mb-2 w-full flex justify-end">
+                      <div className="self-end">
 
-                    <button
-                      id="deleteButton"
-                      onClick={toggleModal}
-                      type="button"
-                      className="text-red-500 hover:text-red-600 rounded-md flex items-center space-x-1 focus:outline-none focus:ring focus:ring-red-200"
-                    >
-                      <span className='text-xl mr-1'>&times;</span>
-                      Cancel Order
-                    </button>
-                  </div>
-                </div>
-
-                <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<DeleteOrderModal text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(id) }} />} />
-                {formData.message && formData.message !== '' && (
-
-                  <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<ShowMessageModal text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(id) }} />} />
+                        <button
+                          id="deleteButton"
+                          onClick={toggleModal}
+                          type="button"
+                          className="text-red-500 hover:text-red-600 rounded-md flex items-center space-x-1 focus:outline-none focus:ring focus:ring-red-200"
+                        >
+                          <span className='text-xl mr-1'>&times;</span>
+                          Cancel Order
+                        </button>
+                      </div>
+                    </div>
+                    <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal}
+                      component={<DeleteOrderModal text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(id) }} />} />
+                  </>
+                )}
+                {formData.message && formData.message && (
+                  <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<ShowMessageModal title={'You have a message from the store'} message={formData.message} cancelation={'Dismiss'} toggleModal={toggleModal} />} />
                 )}
               </>
             )}
@@ -285,8 +299,15 @@ const NewCart = () => {
                 </div>
                 <div className="mb-2 flex justify-between">
                   <p className="text-gray-700 ">Order Status:</p>
-                  <div className=" capitalize">
-                    <span className={formData.status === 'pending' ? 'text-yellow-500' : formData.status === 'confirmed' ? 'text-blue-600' : formData.status === 'payed' ? 'text-green-600' : formData.status === 'canceled' ? 'text-red-600' : ''}>{formData.status}</span>
+                  <div className=" capitalize" onClick={()=>{formData.message!==''? toggleModal() : null}}>
+                    <span className={formData.status === 'pending' ? 'text-yellow-600 flex items-center justify-between cursor-pointer hover:text-yellow-700' : formData.status === 'confirmed' ? 'text-blue-600 flex items-center justify-between cursor-pointer hover:text-blue-700' : formData.status === 'payed' ? 'text-green-600 flex items-center justify-between cursor-pointer hover:text-green-700' : formData.status === 'canceled' ? 'text-red-600 flex items-center justify-between cursor-pointer hover:text-red-700' : ''}>
+                      <svg className="flex-shrink-0 w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                      </svg>
+                      {formData.status} {formData.message ? ' (You have a message)' : ''}
+                    </span>
+
+
                   </div>
                 </div>
               </>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,9 @@ use App\Http\Controllers\SocialAuthController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/webhooks/chargily-pay', [WebhookController::class, 'handleWebhook']);
+
 
 Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
 //Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);

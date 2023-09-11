@@ -6,6 +6,7 @@ use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\ProxyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/proxy-to-chargily', [ProxyController::class,'proxyToChargily']);
 
     Route::post('/logout',[AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {

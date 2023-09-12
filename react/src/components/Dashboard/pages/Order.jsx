@@ -120,7 +120,7 @@ const Order = () => {
             <div className="mb-2 flex justify-between">
               <p className="text-gray-700 dark:text-gray-200">Order Status:</p>
               <div className=" capitalize">
-                <span className={formData.status === 'pending' ? 'text-yellow-500' : formData.status === 'confirmed' ? 'text-blue-600' : formData.status === 'payed' ? 'text-green-600' : formData.status === 'canceled' ? 'text-red-600' : ''}>{formData.status}</span>
+                <span className={formData.status === 'pending' ? 'text-yellow-500' : formData.status === 'confirmed' ? 'text-blue-600' : formData.status === 'paid' ? 'text-green-600' : formData.status === 'canceled' ? 'text-red-600' : ''}>{formData.status}</span>
               </div>
             </div>
 
@@ -159,7 +159,7 @@ const Order = () => {
               <CartLabel value={formData.full_address} label={'Full Address'} dark={true} />
               <CartLabel value={formData.payment_method} label={'Payment Method'} dark={true} />
               <CartLabel value={formData.home_delivery ? 'Home Delivery' : 'Yalidine Center'} label={'Delivery Type'} dark={true} />
-              <CartLabel value={formData.price_payed + ' DZD'} label={'Price Payed'} dark={true} />
+              <CartLabel value={formData.price_payed + ' DZD'} label={'Price Paid'} dark={true} />
 
 
             </div>

@@ -2,45 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 class WebhookController extends Controller
 {
-    public function handleChargilyPayWebhook(Request $request)
-    {
-        // Validate the webhook request
-        $validator = Validator::make($request->all(), [
-            // Define validation rules here based on the webhook payload
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => 'Invalid webhook request'], 400);
-        }
-
-        // Verify the webhook signature
-        $signature = $request->header('Signature');
-        $computedSignature = hash_hmac('sha256', $request->getContent(), 'YOUR_API_SECRET');
-
-        if (!hash_equals($computedSignature, $signature)) {
-            return response()->json(['error' => 'Invalid signature'], 401);
-        }
-
-        // Handle the webhook data (payment confirmation or failure)
-        $payload = $request->all();
-
-        if ($payload['invoice']['status'] === 'paid') {
-            // Handle payment confirmation
-            // Update your application's records, send notifications, etc.
-        } elseif ($payload['invoice']['status'] === 'failed') {
-            // Handle payment failure
-            // Update your application's records, send notifications, etc.
-        }
-
-        return response()->json(['message' => 'Webhook handled successfully'], 200);
-    }
-
 
     public function handleWebhook(Request $request)
     {
@@ -60,15 +28,23 @@ class WebhookController extends Controller
             $paymentData = json_decode($bodyContent, true);
     
             // Log the JSON data to the terminal (console)
-            dump($paymentData); // or dd($paymentData) to dump and terminate script
+            dump($paymentData);
     
-            // Check the invoice status and take appropriate actions
-            if ($paymentData['invoice']['status'] === 'paid') {
-                // Invoice is paid, confirm the order or perform any necessary actions
-                // Your code here...
-            } elseif ($paymentData['invoice']['status'] === 'failed') {
-                // Payment failed, handle the failure scenario
-                // Your code here...
+            // Retrieve the Order based on invoice_number
+            $order = Order::where('id', $paymentData['invoice']['invoice_number'])->first();
+    
+            if ($order) {
+                // Check the invoice status and update the order accordingly
+                if ($paymentData['invoice']['status'] === 'paid') {
+                    $order->update(['status' => 'paid']);
+                    // Additional actions for a successful payment...
+                } elseif ($paymentData['invoice']['status'] === 'failed') {
+                    $order->update(['status' => 'failed']);
+                    // Additional actions for a failed payment...
+                }
+            } else {
+                // Order not found, log an error or handle as needed
+                Log::error('Order not found for invoice_number: ' . $paymentData['invoice']['invoice_number']);
             }
     
             // Return a response to Chargily to acknowledge receipt of the webhook

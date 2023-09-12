@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import NewCartItem from '../Cart/NewCartItem'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkProducts, selectCartItems, selectCartTotalAmount, setTotals } from '../../app/CartSlice'
@@ -28,7 +28,7 @@ const NewCart = () => {
   const methods = paymentMethods
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [hasMessage,setHasMessage] = useState(false)
+  const [hasMessage, setHasMessage] = useState(false)
   const { id } = useParams();
   const isModalOpen = useSelector(selectModalIsOpen)
   const toggleModal = () => {
@@ -56,7 +56,7 @@ const NewCart = () => {
   const [formData, setFormData] = useState({})
 
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     console.log(id);
     dispatch(setFilterPage(true))
     dispatch(setInfoAlert(true))
@@ -98,8 +98,15 @@ const NewCart = () => {
             total_price: data.total_price,
             price_payed: data.price_payed
           }
-          if(form.message) {
+          if (form.message) {
             setHasMessage(true)
+          }
+          if (form.status === 'paid') {
+            toast.success('Your have paid your order! it will be delivered soon!')
+
+          }
+          if (form.status === 'failed') {
+            toast.error('The order payment has been failed! please try later!')
           }
           setFormData(form)
           console.log(form);
@@ -178,51 +185,51 @@ const NewCart = () => {
       const payload = {
         client: auth.user.firstname + ' ' + auth.user.lastname,
         client_email: auth.user.email,
-        invoice_number:id,
+        invoice_number: id,
         amount: formData.total_price,
         discount: 0,
         back_url: 'https://www.google.com',
         webhook_url: 'https://your-website.com/api/payment-webhook',
         mode: formData.payment_method,
-        comment: 'Payment for Order #'+id
-        
+        comment: 'Payment for Order #' + id
+
       }
       console.log(CHARGILY_API_KEY);
       console.log(payload);
-      axiosClient.post('/api/proxy-to-chargily', payload).then(response=>{
+      axiosClient.post('/api/proxy-to-chargily', payload).then(response => {
         console.log(response);
-      }).catch(err=>{
+      }).catch(err => {
         console.log(err);
       })
 
       const invoice = {
-        "amount":600,
-        "invoice_number":23,
-        "client":"Ahmed malek", // add a text field to allow the user to enter his name, or get it from a context api (depends on the project architecture)
-        "mode":"CIB",
-        "webhook_url":"https://your_beeceptor_url.free.beeceptor.com", // here is the webhook url, use beecptor to easly see the post request and it's body, you will use this in backened to save and validate the transactions.
-        "back_url":"https://www.youtube.com/", // to where the user will be redirected after he finish/cancel the payement 
-        "discount" :0
-    }
+        "amount": 600,
+        "invoice_number": 23,
+        "client": "Ahmed malek", // add a text field to allow the user to enter his name, or get it from a context api (depends on the project architecture)
+        "mode": "CIB",
+        "webhook_url": "https://your_beeceptor_url.free.beeceptor.com", // here is the webhook url, use beecptor to easly see the post request and it's body, you will use this in backened to save and validate the transactions.
+        "back_url": "https://www.youtube.com/", // to where the user will be redirected after he finish/cancel the payement 
+        "discount": 0
+      }
 
       //chargilyPay(CHARGILY_API_KEY,payload)
-/*         // Define your API key and other request data
-        const API_KEY = 'YOUR_API_KEY';
-        const checkoutData = {
-          client: 'Your Client Name',
-          client_email: 'client@example.com',
-          invoice_number: '123456', // Replace with your order number
-          amount: 100, // Replace with your order total amount
-          discount: 10, // Replace with your discount percentage
-          back_url: 'https://your-website.com/checkout/success', // Replace with your success URL
-          webhook_url: 'https://your-website.com/api/payment-webhook', // Replace with your webhook URL
-          mode: 'EDAHABIA', // or 'CIB', choose the payment method
-          comment: 'Payment for Order #123456', // Replace with your payment description
-        }; */
-    
+      /*         // Define your API key and other request data
+              const API_KEY = 'YOUR_API_KEY';
+              const checkoutData = {
+                client: 'Your Client Name',
+                client_email: 'client@example.com',
+                invoice_number: '123456', // Replace with your order number
+                amount: 100, // Replace with your order total amount
+                discount: 10, // Replace with your discount percentage
+                back_url: 'https://your-website.com/checkout/success', // Replace with your success URL
+                webhook_url: 'https://your-website.com/api/payment-webhook', // Replace with your webhook URL
+                mode: 'EDAHABIA', // or 'CIB', choose the payment method
+                comment: 'Payment for Order #123456', // Replace with your payment description
+              }; */
+
 
     }
-    
+
     else {
       const payload = {
         firstname: formData.firstname,
@@ -281,9 +288,10 @@ const NewCart = () => {
         <LoadingScreen />
       )}
       <div className="h-full min-h-screen bg-gray-100 pt-20">
-      {formData.message!=='' && hasMessage && (
-        <InfoAlretTopScreen text1={'You have a '} linkText={'message'} text2={' from the store considering your order.'} handleLinkClick={toggleModal} toggleAlert={()=>{setHasMessage(false)}} />
-      )}
+        {formData.message !== '' && hasMessage && (
+          <InfoAlretTopScreen text1={'You have a '} linkText={'message'} text2={' from the store considering your order.'} handleLinkClick={toggleModal} toggleAlert={() => { setHasMessage(false) }} />
+        )}
+
         {infoAlert && (
           <InfoAlert title={'How it works?'} message={infoMsg} onClick={() => { }} onDismiss={(e) => { e.preventDefault(); dispatch(setInfoAlert(false)) }} button={false} />
         )}
@@ -331,7 +339,7 @@ const NewCart = () => {
                       component={<DeleteOrderModal text={'Are you sure you want to cancel this order?'} confirmation={'Yes, I\'m sure'} cancel={'No, Keep it'} toggleModal={toggleModal} handleClick={() => { handleDeleteOrder(id) }} />} />
                   </>
                 )}
-                {formData.message && formData.message && (
+                {formData.message && (
                   <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<ShowMessageModal title={'You have a message from the store'} message={formData.message} cancelation={'Dismiss'} toggleModal={toggleModal} />} />
                 )}
               </>
@@ -349,12 +357,12 @@ const NewCart = () => {
                 </div>
                 <div className="mb-2 flex justify-between">
                   <p className="text-gray-700 ">Order Status:</p>
-                  <div className=" capitalize" onClick={()=>{formData.message!==''? toggleModal() : null}}>
-                    <span className={formData.status === 'pending' ? 'text-yellow-600 flex items-center justify-between cursor-pointer hover:text-yellow-700' : formData.status === 'confirmed' ? 'text-blue-600 flex items-center justify-between cursor-pointer hover:text-blue-700' : formData.status === 'payed' ? 'text-green-600 flex items-center justify-between cursor-pointer hover:text-green-700' : formData.status === 'canceled' ? 'text-red-600 flex items-center justify-between cursor-pointer hover:text-red-700' : ''}>
+                  <div className=" capitalize" onClick={() => { formData.message !== '' ? toggleModal() : null }}>
+                    <span className={formData.status === 'pending' ? 'text-yellow-600 flex items-center justify-between cursor-pointer hover:text-yellow-700' : formData.status === 'confirmed' ? 'text-blue-600 flex items-center justify-between cursor-pointer hover:text-blue-700' : formData.status === 'paid' ? 'text-green-600 flex items-center justify-between cursor-pointer hover:text-green-700' : formData.status === 'canceled' ? 'text-red-600 flex items-center justify-between cursor-pointer hover:text-red-700' : 'text-orange-600 flex items-center justify-between cursor-pointer hover:text-orange-700'}>
                       <svg className="flex-shrink-0 w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                       </svg>
-                      {formData.status} {formData.message ? ' (You have a message)' : ''}
+                      {formData.status} {formData.status === 'failed' ? '(Checkout process failed. Try again)' : formData.message ? ' (You have a message)' : ''}
                     </span>
 
 
@@ -462,9 +470,11 @@ const NewCart = () => {
               )}
 
             </div>
+            {formData.status !== 'paid' && (
 
-            <button onClick={(e) => { handleCheckout(e) }} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isButtonDisabled}>{id && enableEdit ? 'Update yout order' : id && formData.status === 'confirmed'? 'Checkout' : 'Send your order'}</button>
+              <button onClick={(e) => { handleCheckout(e) }} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isButtonDisabled}>{id && enableEdit ? 'Update yout order' : id && formData.status === 'confirmed' || formData.status === 'failed' ? 'Checkout' : 'Send your order'}</button>
+            )}
 
           </div>
         </div>

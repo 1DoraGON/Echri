@@ -14,7 +14,7 @@ export const gridOrderImage = (props) => (
 );
 
 export const gridOrderStatus = (props) => {
-  const bg = props.status === 'pending' ? 'yellow' : props.status === 'confirmed' ? 'blue' : props.status === 'delivered' ? 'green' : props.status === 'canceled' ? 'red' : ''
+  const bg = props.status === 'pending' ? 'yellow' : props.status === 'confirmed' ? 'blue' : props.status === 'delivered' ? 'green' : props.status === 'canceled' ? 'red' : props.status==='paid' ? 'green' : props.status === 'failed'? 'red' : ''
 
   return (
     <button type="button" className="flex items-center justify-between text-center">

@@ -181,7 +181,7 @@ const NewCart = () => {
         }
       })
 
-    } else if (formData.status === 'confirmed') {
+    } else if (formData.status === 'confirmed' && formData.payment_method !== 'POSTE') {
       const payload = {
         client: auth.user.firstname + ' ' + auth.user.lastname,
         client_email: auth.user.email,
@@ -194,40 +194,14 @@ const NewCart = () => {
         comment: 'Payment for Order #' + id
 
       }
-      console.log(CHARGILY_API_KEY);
-      console.log(payload);
+
       axiosClient.post('/api/proxy-to-chargily', payload).then(response => {
         console.log(response);
+
+        window.location.replace(response.data.checkout_url);
       }).catch(err => {
         console.log(err);
       })
-
-      const invoice = {
-        "amount": 600,
-        "invoice_number": 23,
-        "client": "Ahmed malek", // add a text field to allow the user to enter his name, or get it from a context api (depends on the project architecture)
-        "mode": "CIB",
-        "webhook_url": "https://your_beeceptor_url.free.beeceptor.com", // here is the webhook url, use beecptor to easly see the post request and it's body, you will use this in backened to save and validate the transactions.
-        "back_url": "https://www.youtube.com/", // to where the user will be redirected after he finish/cancel the payement 
-        "discount": 0
-      }
-
-      //chargilyPay(CHARGILY_API_KEY,payload)
-      /*         // Define your API key and other request data
-              const API_KEY = 'YOUR_API_KEY';
-              const checkoutData = {
-                client: 'Your Client Name',
-                client_email: 'client@example.com',
-                invoice_number: '123456', // Replace with your order number
-                amount: 100, // Replace with your order total amount
-                discount: 10, // Replace with your discount percentage
-                back_url: 'https://your-website.com/checkout/success', // Replace with your success URL
-                webhook_url: 'https://your-website.com/api/payment-webhook', // Replace with your webhook URL
-                mode: 'EDAHABIA', // or 'CIB', choose the payment method
-                comment: 'Payment for Order #123456', // Replace with your payment description
-              }; */
-
-
     }
 
     else {
@@ -242,7 +216,6 @@ const NewCart = () => {
         home_delivery: JSON.parse(formData.home_delivery),
         total_price: formData.total_price,
         status: 'pending',
-        //status: 'pending',
       }
       await axiosClient.put('/api/orders/' + id, payload).then(response => {
         console.log(response);

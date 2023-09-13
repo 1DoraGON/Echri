@@ -1,5 +1,5 @@
 
-import { ClientOrders, GuestLayout, Login, NewCart, NotFound, Profile, SignUp} from './components/HomePage/index'
+import { ClientOrders, GuestLayout, Login, NewCart, NotFound, Product, Profile, SignUp} from './components/HomePage/index'
 import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dashboard from './components/Views/Dashboard';
@@ -27,6 +27,10 @@ const router = createBrowserRouter( [
                     {
                         path:'/products',
                         element:<HomePage />
+                    },
+                    {
+                        path:'/products/:id',
+                        element:<Product />
                     },
                     {
                         path:'/cart',

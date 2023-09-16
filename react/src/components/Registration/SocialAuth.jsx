@@ -14,7 +14,8 @@ const SocialAuth = ({setErrors}) => {
   const dispatch = useDispatch()
 
 
-  const FacebookId = "242567552035675"
+  //const FacebookId = "242567552035675"
+  const FacebookId = "616806877292406"
   const fbAuth = async (response) => {
     const data = response.data
     const payload = {

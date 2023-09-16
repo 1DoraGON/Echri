@@ -23,8 +23,7 @@ const CartSlice = createSlice({
       const itemIndex = state.cartItems.findIndex((item) => item.id === action.payload.id)
 
       if (itemIndex >= 0) {
-        state.cartItems[itemIndex].cartQuantity += 1;
-        toast.success(`${action.payload.name} quantity increased to ${state.cartItems[itemIndex].cartQuantity}`)
+        toast.success(`${action.payload.name} already exists in the cart!`)
       } else {
         const tempProduct = { ...action.payload, cartQuantity: 1 }
         state.cartItems.push(tempProduct)
@@ -46,7 +45,7 @@ const CartSlice = createSlice({
     },
     setDecreaseQTY: (state, action) => {
       const indexItem = state.cartItems.findIndex((item) => item.id === action.payload.id)
-      if (action.payload.cartQuantity > 0) {
+      if (action.payload.cartQuantity > 1) {
         state.cartItems[indexItem].cartQuantity -= 1;
       } else {
         const filteredItems = state.cartItems.filter((item) => item.id !== action.payload.id)
@@ -82,9 +81,9 @@ const CartSlice = createSlice({
       state.cartTotalAmount = totalAmount;
       state.cartTotalQantity = totalQuantity;
     },
-    setDescription: (state, action) => {
+    setMessage: (state, action) => {
       const indexItem = state.cartItems.findIndex((item) => item.id === action.payload.id)
-      state.cartItems[indexItem].description = action.payload.description;
+      state.cartItems[indexItem].message = action.payload.message;
       localStorage.setItem("cart", JSON.stringify(state.cartItems))
     },
     setTotals: (state, action) => {
@@ -96,7 +95,7 @@ const CartSlice = createSlice({
   }
 })
 
-export const { setDescription, setOpenCart,setQTY, setCloseCart, setAddItemToCart, setRemoveItemFromCart, setIncreaseQTY, setDecreaseQTY, setClearCart, setTotals } = CartSlice.actions
+export const { setMessage, setOpenCart,setQTY, setCloseCart, setAddItemToCart, setRemoveItemFromCart, setIncreaseQTY, setDecreaseQTY, setClearCart, setTotals } = CartSlice.actions
 
 export const selectCartState = (state) => state.cart.cartState
 

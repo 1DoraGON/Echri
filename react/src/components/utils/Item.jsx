@@ -3,6 +3,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { setAddItemToCart } from '../../app/CartSlice'
 import { truncate } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 const Item = ({
     id,
@@ -14,7 +15,7 @@ const Item = ({
     main_image,
     price,
 }) => {
-
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const onAddToCart = () => {
@@ -37,7 +38,7 @@ const Item = ({
     //const STORAGE_URL = 'http://127.0.0.1:8000/storage/'
     return (
 
-        <div className="max-w-sm bg-blue-100 shadow-lg rounded-lg overflow-hidden my-10 transition-all duration-700 ease-in-out w-full hover:scale-105">
+        <div onClick={()=>{navigate('/products/'+id)}} className="cursor-pointer max-w-sm bg-blue-100 shadow-lg rounded-lg overflow-hidden my-10 transition-all duration-700 ease-in-out w-full hover:scale-105">
             <div className="px-4 py-2">
                 <h1 className="text-gray-900 font-bold text-xl lg:text-lg lg:leading-5 leading-5 lg:h-16 h-14 uppercase">{truncate(name, { length: 50 })}</h1>
                 <p className="text-gray-600 leading-3 h-12 text-sm mt-1">{truncate(description, { length: 70 })}</p>

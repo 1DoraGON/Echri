@@ -1,10 +1,10 @@
 import React, { useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { setDecreaseQTY, setDescription, setIncreaseQTY, setQTY, setRemoveItemFromCart } from '../../app/CartSlice'
+import { setDecreaseQTY, setMessage, setIncreaseQTY, setQTY, setRemoveItemFromCart } from '../../app/CartSlice'
 
-const NewCartItem = ({ item: { id, name, tags, main_image, price, cartQuantity } }) => {
+const NewCartItem = ({ item: { id, name, tags, main_image, price, cartQuantity, message } }) => {
   const QTYRef = useRef()
-  const descriptionRef = useRef()
+  const messageRef = useRef()
   const dispatch = useDispatch()
   const onRemoveItem = () => {
     dispatch(setRemoveItemFromCart({
@@ -30,11 +30,11 @@ const NewCartItem = ({ item: { id, name, tags, main_image, price, cartQuantity }
 
     }
   }
-  const handleChangeDescription = () => {
-    const description = descriptionRef.current.value
-    if (description) {
-      dispatch(setDescription({
-        id, name, description
+  const handleChangeMessage = () => {
+    const message = messageRef.current.value
+    if (message) {
+      dispatch(setMessage({
+        id, name, message
       }))
 
     }
@@ -54,7 +54,7 @@ const NewCartItem = ({ item: { id, name, tags, main_image, price, cartQuantity }
             ))}
           </div>
 
-          <textarea onChange={handleChangeDescription} ref={descriptionRef} rows="2" style={{ resize: 'none' }} id="message" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your order, (size, color ...)"></textarea>
+          <textarea onChange={handleChangeMessage} ref={messageRef} rows="2" style={{ resize: 'none' }} id="message" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your order, (size, color ...)"></textarea>
         </div>
         <div className="mt-4 sm:flex sm:justify-between sm:space-x-0 sm:space-y-0 space-y-6 sm:mt-0 block space-x-6">
           <div className="flex items-center border-gray-100">

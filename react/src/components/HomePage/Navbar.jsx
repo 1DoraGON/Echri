@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { HeartIcon, MagnifyingGlassIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
 import logo from '../../assets/logo.png'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCartTotalQantity, setOpenCart } from '../../app/CartSlice'
+import { selectCartTotalQantity, setOpenCart, setTotals } from '../../app/CartSlice'
 import { selectFilterPage } from '../../app/ProductsSlice'
 import { useNavigate } from 'react-router-dom'
 const Navbar = () => {
@@ -30,6 +30,7 @@ const Navbar = () => {
   }
   
   useEffect(()=>{
+    dispatch(setTotals())
     window.addEventListener('scroll',onNavScroll)
 
     return () => {
@@ -38,7 +39,7 @@ const Navbar = () => {
   },[])
   return (
     <>
-      <header className={`${!navState? 'absolute top-7 left-0 right-0 opacity-100 z-50 ' : 'fixed top-0 left-0 right-0 h-[9vh] flex items-center justify-center opacity-100 z-[200] blur-effect-theme' } ${filterPage? '' :''}` }>
+      <header className={`${!navState? 'absolute top-7 left-0 right-0 opacity-100 z-50 ' : 'fixed top-0 left-0 right-0 h-[9vh] flex items-center justify-center opacity-100 z-[200] blur-effect-theme' } ${filterPage && navState? 'fixed top-0 left-0 right-0 h-[9vh] flex items-center justify-center opacity-100 z-[1000] blur-effect-theme' :''}` }>
         <nav className="flex items-center justify-between nike-container">
           <div onClick={handleNavigateHome} className="flex items-center cursor-pointer">
             <img src={logo} alt="logo/img"

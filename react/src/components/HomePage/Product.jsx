@@ -6,14 +6,17 @@ import { useParams } from "react-router-dom"
 import toast from "react-hot-toast"
 import { Splide, SplideSlide } from "@splidejs/react-splide"
 import { setAddItemToCart, setQTY } from "../../app/CartSlice"
+import LoadingScreen from "../utils/LoadingScreen"
 
 const Product = () => {
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
   const [isButtonDisabled, setButtonDisabled] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(true)
+
   const dispatch = useDispatch()
   const [quantity, setQuantity] = useState(1)
-  const descriptionRef = useRef()
+  const messageRef = useRef()
   const [product, setProduct] = useState({})
   const { id } = useParams()
 
@@ -47,6 +50,7 @@ const Product = () => {
         console.log(err);
         toast.error('Oops! Something went wrong, please try later.')
       })
+      setIsLoading(false)
     }
     fetchProduct()
 
@@ -55,24 +59,31 @@ const Product = () => {
 
 
   const onAddToCart = () => {
-      const item = {
-          id: product.id,
-          color_start: product.color_start,
-          color_end: product.color_end,
-          name: product.name,
-          tags: product.tags,
-          main_image: product.main_image,
-          price: product.price,
-          description: descriptionRef.current.value
-      }
-      console.log(item);
-      /*         color: "from-blue-600 to-blue-500",
-      shadow: "shadow-lg shadow-blue-500", */
-      dispatch(setAddItemToCart(item))
-      dispatch(setQTY({id:product.id,QTY:quantity}))
+    setButtonDisabled(true)
+    const item = {
+      id: product.id,
+      color_start: product.color_start,
+      color_end: product.color_end,
+      name: product.name,
+      tags: product.tags,
+      main_image: product.main_image,
+      price: product.price,
+      message: messageRef.current.value
+    }
+    console.log(item);
+    /*         color: "from-blue-600 to-blue-500",
+    shadow: "shadow-lg shadow-blue-500", */
+    dispatch(setAddItemToCart(item))
+    dispatch(setQTY({ id: product.id, QTY: quantity }))
+    setTimeout(() => {
+      setButtonDisabled(false);
+    }, 2000);
   }
   return (
     <div>
+      {isLoading && (
+        <LoadingScreen />
+      )}
       <section className="text-gray-700 body-font overflow-hidden bg-white">
         <div className="container px-5 py-24 mx-auto">
           <div className="w-4/5 lg:w-full mx-auto flex flex-wrap items-center">
@@ -153,7 +164,7 @@ const Product = () => {
               </div>
               <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
 
-                <textarea ref={descriptionRef} rows="2" style={{ resize: 'none' }} id="message" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your order, (size, color ...)"></textarea>
+                <textarea ref={messageRef} rows="2" style={{ resize: 'none' }} id="message" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your order, (size, color ...)"></textarea>
               </div>
               <div className="flex">
                 <span className="title-font font-medium text-2xl text-gray-900">{product.price} DZD</span>

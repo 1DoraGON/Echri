@@ -13,17 +13,18 @@ use App\Http\Requests\SocialAuthRequest;
 class AuthController extends Controller
 {
     //
-    public function login(LoginRequest $request){
+    public function login(LoginRequest $request)
+    {
         $credentials = $request->validated();
-        if (!Auth::attempt($credentials)){
+        if (!Auth::attempt($credentials)) {
             return response([
-                'errors' => ['password'=>['Provided email address or password is incorrect']]
-            ],422);
+                'errors' => ['password' => ['Provided email address or password is incorrect']]
+            ], 422);
         }
         /** @var User $user */
         $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
-        return response(compact('user','token'));
+        return response(compact('user', 'token'));
     }
 
     public function signup(SignupRequest $request)
@@ -42,34 +43,41 @@ class AuthController extends Controller
     }
     public function socialAuth(SocialAuthRequest $request)
     {
+
         $data = $request->validated();
-    
-        // Check if the email already exists in the database
-        if (User::where('email', $data['email'])->exists()) {
-            // If the user already exists, log them in and return the token
-            $user = User::where('email', $data['email'])->first();
-            $token = $user->createToken('main')->plainTextToken;
-            return response(compact('user', 'token'));
+        if ($data['email']) {
+            // Check if the email already exists in the database
+            if (User::where('email', $data['email'])->exists()) {
+                // If the user already exists, log them in and return the token
+                $user = User::where('email', $data['email'])->first();
+                $token = $user->createToken('main')->plainTextToken;
+                return response(compact('user', 'token'));
+            } else {
+                // If the user does not exist, create a new user without a password
+                $user = User::create([
+                    'firstname' => $data['firstname'] ?? '',
+                    'lastname' => $data['lastname'] ?? '',
+                    'email' => $data['email'],
+                    'password' => '', // Set password to an empty string or null
+                ]);
+                $user->picture = $data['picture'];
+                $user->is_social_auth = 1;
+                $user->save();
+
+                $token = $user->createToken('main')->plainTextToken;
+                return response(compact('user', 'token'));
+            }
         } else {
-            // If the user does not exist, create a new user without a password
-            $user = User::create([
-                'firstname' => $data['firstname'] ?? '',
-                'lastname' => $data['lastname'] ?? '',
-                'email' => $data['email'],
-                'password' => '', // Set password to an empty string or null
-            ]);
-            $user->picture = $data['picture'];
-            $user->is_social_auth = 1;
-            $user->save();
-    
-            $token = $user->createToken('main')->plainTextToken;
-            return response(compact('user', 'token'));
+            // Return an error response indicating that Facebook should be linked to an email address
+            $errors= ['email' => ['Facebook account should be linked to an email address']];
+            return response(compact('errors'), 422);
         }
     }
-    
-    public function logout(Request $request){
+
+    public function logout(Request $request)
+    {
         $user = $request->user();
         $user->currentAccessToken()->delete();
-        return response('',204);
+        return response('', 204);
     }
 }

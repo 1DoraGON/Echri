@@ -5,7 +5,7 @@ const CartInput = ({type,name,placeholder,value,handleChange}) => {
     <input
       required
       type={type}
-      className="block border hover:border-blue-500 border-slate-400 w-full p-3 rounded mb-4"
+      className=" border hover:border-blue-500 border-slate-400 block w-full p-3 rounded mb-4"
       name={name}
       value={value}
       onChange={handleChange}

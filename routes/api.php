@@ -28,6 +28,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::put('/user/changeImage', [UserController::class, 'changeImage']);
+
     Route::get('/user/orders', [OrderController::class, 'getUserOrders']);
     Route::delete('/user/orders/{id}', [OrderController::class, 'destroyUserOrder']);
     Route::put('/admin/orders/{order}', [OrderController::class, 'updateStatus']);

@@ -7,6 +7,8 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -15,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return UserResource::collection(User::query()->orderBy('id','desc')->paginate(50));
+        return UserResource::collection(User::query()->orderBy('id', 'desc')->paginate(50));
     }
 
     /**
@@ -26,7 +28,7 @@ class UserController extends Controller
         $data = $request->validated();
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
-        return response(new UserResource($user),201);
+        return response(new UserResource($user), 201);
     }
 
     /**
@@ -43,7 +45,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
-        if(isset($data['password'])){
+        if (isset($data['password'])) {
             $data['password'] = bcrypt($data['password']);
         }
         $user->update($data);
@@ -53,9 +55,22 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    public function changeImage(Request $request)
+    {
+        $data = $request->validate([
+            'picture' => 'required|image|mimes:jpeg,png,jpg,gif',
+        ]);
+        $imagePath = $data['picture'];
+        $imagePath = $imagePath->store('user_images', 'public');
+        $data['picture'] = $imagePath;
+        $user = Auth::user();
+        $user->picture = $imagePath;
+        $user->save();
+        return new UserResource($user);
+    }
     public function destroy(User $user)
     {
         $user->delete();
-        return response('',204);
+        return response('', 204);
     }
 }

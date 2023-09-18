@@ -9,6 +9,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -64,6 +65,13 @@ class UserController extends Controller
         $imagePath = $imagePath->store('user_images', 'public');
         $data['picture'] = $imagePath;
         $user = Auth::user();
+        try {
+            if (!empty($user->picture) && Storage::disk('public')->exists($user->picture)) {
+                Storage::disk('public')->delete($user->picture);
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
         $user->picture = $imagePath;
         $user->save();
         return new UserResource($user);

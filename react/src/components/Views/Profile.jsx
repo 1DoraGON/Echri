@@ -17,6 +17,7 @@ const Profile = () => {
   const auth = useAuth()
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
   const [image, setImage] = useState(null)
+  const [isModalOpen,setIsModalOpen] = useState(false)
   const handleImageModify = () => {
     // Trigger a click event on the input field
     const inputElement = document.getElementById('image');
@@ -90,9 +91,12 @@ const Profile = () => {
           iconBg: 'rgb(254, 201, 15)',
         }, */
   ];
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen)
+  }
   return (
     <div className="nav-item absolute right-1 top-16 bg-white p-8 rounded-lg w-96">
-      <ConfirmationModal component={<ModifyPasswordModal isButtonDisabled={false} />} />
+      <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<ModifyPasswordModal isButtonDisabled={false} />} />
       <div className="flex justify-between items-center">
         <p className="font-semibold text-lg">User Profile</p>
         <Button

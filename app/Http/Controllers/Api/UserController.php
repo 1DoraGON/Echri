@@ -52,6 +52,15 @@ class UserController extends Controller
         $user->update($data);
         return new UserResource($user);
     }
+    public function updatePassword(UpdateUserRequest $request, User $user)
+    {
+        $data = $request->validated();
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+        $user->update($data);
+        return new UserResource($user);
+    }
 
     /**
      * Remove the specified resource from storage.

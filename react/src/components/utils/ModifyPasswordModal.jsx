@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import CartInput from '../Cart/CartInput'
+import axiosClient from '../../../api/axios';
 
 const ModifyPasswordModal = ({isButtonDisabled }) => {
   const [form,setForm] = useState({
@@ -9,8 +10,17 @@ const ModifyPasswordModal = ({isButtonDisabled }) => {
   })
   const [errors,setErrors] = useState([])
   
-  const handleClick = () => {
-
+  const handleClick = async () => {
+    const payload = {
+      current_password: form.current,
+      new_password: form.new,
+      confirm_password: form.confirmation,
+    }
+    await axiosClient.put('/api/user/updatePassword',payload).then(response=>{
+      console.log(response);
+    }).catch(error=>{
+      console.log(error);
+    })
   }
 
   const handleInputChange = (e) => {

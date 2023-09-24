@@ -53,7 +53,9 @@ const Profile = () => {
     //   // Handle errors
     // });
   }
-
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen)
+  }
   const userProfileData = [
     {
       icon: <AiOutlineShoppingCart className='w-8 h-8' />,
@@ -63,7 +65,7 @@ const Profile = () => {
       iconBg: '#E5FAFB',
     },
     {
-      icon: <MdPassword className='w-8 h-8' />,
+      icon: <MdPassword onClick={toggleModal} className='w-8 h-8' />,
       title: 'Modify Password',
       desc: 'Change your password',
       iconColor: 'rgb(0, 194, 146)',
@@ -91,9 +93,7 @@ const Profile = () => {
           iconBg: 'rgb(254, 201, 15)',
         }, */
   ];
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen)
-  }
+
   return (
     <div className="nav-item absolute right-1 top-16 bg-white p-8 rounded-lg w-96">
       <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<ModifyPasswordModal isButtonDisabled={false} />} />

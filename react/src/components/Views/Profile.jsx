@@ -96,7 +96,7 @@ const Profile = () => {
 
   return (
     <div className="nav-item absolute right-1 top-16 bg-white p-8 rounded-lg w-96">
-      <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<ModifyPasswordModal isButtonDisabled={false} />} />
+      <ConfirmationModal isModalOpen={isModalOpen} toggleModal={toggleModal} component={<ModifyPasswordModal isButtonDisabled={false} toggleModal={toggleModal} />} />
       <div className="flex justify-between items-center">
         <p className="font-semibold text-lg">User Profile</p>
         <Button

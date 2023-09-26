@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator; // Import Validator
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,8 +19,16 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+
+    public function boot()
     {
-        //
+        $this->registerPasswordValidationRule();
+    }
+
+    protected function registerPasswordValidationRule()
+    {
+        Validator::extend('current_password', function ($attribute, $value, $parameters, $validator) {
+            return Hash::check($value, auth()->user()->password);
+        });
     }
 }

@@ -52,28 +52,28 @@ class UserController extends Controller
         $user->update($data);
         return new UserResource($user);
     }
-public function updatePassword(Request $request)
-{
-    $request->validate([
-        'current_password' => [
-            'required',
-            'current_password', // Using the custom validation rule
-        ],
-        'new_password' => [
-            'required',
-            'string',
-            'min:8', // Adjust the minimum password length as needed
-            'confirmed', // This rule requires a password_confirmation field in the request
-        ],
-    ]);
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => [
+                'required',
+                'current_password', // Using the custom validation rule
+            ],
+            'new_password' => [
+                'required',
+                'string',
+                'min:8', // Adjust the minimum password length as needed
+                'confirmed', // This rule requires a password_confirmation field in the request
+            ],
+        ]);
 
-    // Update the user's password
-    auth()->user()->update([
-        'password' => Hash::make($request->input('new_password')),
-    ]);
+        // Update the user's password
+        auth()->user()->update([
+            'password' => Hash::make($request->input('new_password')),
+        ]);
 
-    return response()->json(['message' => 'Password updated successfully']);
-}
+        return response()->json(['message' => 'Password updated successfully']);
+    }
     /**
      * Remove the specified resource from storage.
      */

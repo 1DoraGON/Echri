@@ -13,8 +13,10 @@ import { useState } from 'react';
 import axiosClient from '../../api/axios';
 import ConfirmationModal from '../utils/ConfirmationModal';
 import ModifyPasswordModal from '../utils/ModifyPasswordModal';
+import { useNavigate } from 'react-router-dom';
 const Profile = () => {
   const auth = useAuth()
+  const navigate = useNavigate()
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
   const [image, setImage] = useState(null)
   const [isModalOpen,setIsModalOpen] = useState(false)
@@ -56,18 +58,28 @@ const Profile = () => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen)
   }
+
+  const handleClick = () => {}
+  const handleNavigateOrders = () => {
+    navigate('/orders')
+  }
+  const handleNavigateProducts = () => {
+    navigate('/products')
+  }
   const userProfileData = [
     {
       icon: <AiOutlineShoppingCart className='w-8 h-8' />,
       title: 'My Orders',
       desc: 'All the orders with their details',
+      handleClick: handleNavigateOrders,
       iconColor: '#03C9D7',
       iconBg: '#E5FAFB',
     },
     {
-      icon: <MdPassword onClick={toggleModal} className='w-8 h-8' />,
+      icon: <MdPassword className='w-8 h-8' />,
       title: 'Modify Password',
       desc: 'Change your password',
+      handleClick: toggleModal,
       iconColor: 'rgb(0, 194, 146)',
       iconBg: 'rgb(235, 250, 242)',
     },
@@ -75,8 +87,9 @@ const Profile = () => {
       icon: <AiOutlineShoppingCart className='w-8 h-8' />,
       title: 'My Orders',
       desc: 'All the orders with their details',
-      iconColor: '#03C9D7',
-      iconBg: '#E5FAFB',
+      handleClick: handleNavigateProducts,
+      iconColor: 'rgb(255, 244, 229)',
+      iconBg: 'rgb(254, 201, 15)',
     },
     /*     {
           icon: <BsShield />,
@@ -140,7 +153,7 @@ const Profile = () => {
       </div>
       <div>
         {userProfileData.map((item, index) => (
-          <div key={index} className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer">
+          <div onClick={item.handleClick} key={index} className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer">
             <button
               type="button"
               style={{ color: item.iconColor, backgroundColor: item.iconBg }}

@@ -19,7 +19,7 @@ const Profile = () => {
   const navigate = useNavigate()
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
   const [image, setImage] = useState(null)
-  const [isModalOpen,setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const handleImageModify = () => {
     // Trigger a click event on the input field
     const inputElement = document.getElementById('image');
@@ -36,10 +36,10 @@ const Profile = () => {
     setImage(selectedImage);
     const formData = new FormData()
     formData.append('_method', 'put');
-    formData.append('picture',selectedImage)
-    await axiosClient.post('/api/user/changeImage',formData).then(response=>{
+    formData.append('picture', selectedImage)
+    await axiosClient.post('/api/user/changeImage', formData).then(response => {
       console.log(response);
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error);
     })
     // Example of sending a request to your backend
@@ -59,15 +59,26 @@ const Profile = () => {
     setIsModalOpen(!isModalOpen)
   }
 
-  const handleClick = () => {}
   const handleNavigateOrders = () => {
     navigate('/orders')
   }
-  const handleNavigateProducts = () => {
-    navigate('/products')
+  const handleNavigateCart = () => {
+    navigate('/cart')
   }
+  const handleLogout = async () => {
+    try {
+      await axiosClient.post('/api/logout');
+      localStorage.removeItem('ACCESS_TOKEN'); // Remove token before reload
+      window.location.href = '/login';
+      //window.location.reload();
+    } catch (error) {
+      console.error(error);
+      // Handle error if the logout request fails
+    }
+  };
   const userProfileData = [
     {
+      enabled: true,
       icon: <AiOutlineShoppingCart className='w-8 h-8' />,
       title: 'My Orders',
       desc: 'All the orders with their details',
@@ -76,6 +87,7 @@ const Profile = () => {
       iconBg: '#E5FAFB',
     },
     {
+      enabled: !auth.user.is_social_auth,
       icon: <MdPassword className='w-8 h-8' />,
       title: 'Modify Password',
       desc: 'Change your password',
@@ -84,10 +96,11 @@ const Profile = () => {
       iconBg: 'rgb(235, 250, 242)',
     },
     {
-      icon: <AiOutlineShoppingCart className='w-8 h-8' />,
-      title: 'My Orders',
-      desc: 'All the orders with their details',
-      handleClick: handleNavigateProducts,
+      enabled: true,
+      icon: <ShoppingBagIcon className='w-8 h-8' />,
+      title: 'My Cart',
+      desc: 'Check all the cart items and proceed for checkout',
+      handleClick: handleNavigateCart,
       iconColor: 'rgb(255, 244, 229)',
       iconBg: 'rgb(254, 201, 15)',
     },
@@ -153,24 +166,30 @@ const Profile = () => {
       </div>
       <div>
         {userProfileData.map((item, index) => (
-          <div onClick={item.handleClick} key={index} className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer">
-            <button
-              type="button"
-              style={{ color: item.iconColor, backgroundColor: item.iconBg }}
-              className=" text-xl rounded-lg p-3 hover:bg-light-gray"
-            >
-              {item.icon}
-            </button>
+          <>
+            {item.enabled && (
 
-            <div>
-              <p className="font-semibold ">{item.title}</p>
-              <p className="text-gray-500 text-sm"> {item.desc} </p>
-            </div>
-          </div>
+              <div onClick={item.handleClick} key={index} className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer">
+                <button
+                  type="button"
+                  style={{ color: item.iconColor, backgroundColor: item.iconBg }}
+                  className=" text-xl rounded-lg p-3 hover:bg-light-gray"
+                >
+                  {item.icon}
+                </button>
+
+                <div>
+                  <p className="font-semibold ">{item.title}</p>
+                  <p className="text-gray-500 text-sm"> {item.desc} </p>
+                </div>
+              </div>
+            )}
+          </>
         ))}
       </div>
       <div className="mt-5">
         <Button
+          handleClick={handleLogout}
           color="white"
           bgColor={'black'}
           text="Logout"

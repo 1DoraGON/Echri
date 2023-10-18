@@ -9,13 +9,16 @@ import { MdPassword } from 'react-icons/md';
 import { BsPencil } from 'react-icons/bs';
 import { AtSymbolIcon } from '@heroicons/react/24/outline'
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axiosClient from '../../api/axios';
 import ConfirmationModal from '../utils/ConfirmationModal';
 import ModifyPasswordModal from '../utils/ModifyPasswordModal';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../app/UserSlice';
 const Profile = () => {
   const auth = useAuth()
+
   const navigate = useNavigate()
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
   const [image, setImage] = useState(null)

@@ -21,10 +21,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function(){
-    Route::post('/proxy-to-chargily', [ProxyController::class,'proxyToChargily']);
 
-    Route::post('/logout',[AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/proxy-to-chargily', [ProxyController::class, 'proxyToChargily']);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -34,27 +35,22 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('/user/orders/{id}', [OrderController::class, 'destroyUserOrder']);
     Route::put('/user/updatePassword', [UserController::class, 'updatePassword']);
     Route::put('/admin/orders/{order}', [OrderController::class, 'updateStatus']);
-    Route::apiResource('/users',UserController::class);
-    Route::apiResource('/products',ProductController::class);
-    Route::apiResource('/orders',OrderController::class);
-    Route::get('categories/indexWithProducts', [CategoryController::class, 'indexWithProducts']);
-    Route::apiResource('/categories',CategoryController::class);
-
+    Route::apiResource('/users', UserController::class);
+    Route::apiResource('/orders', OrderController::class);
+    Route::apiResource('/categories', CategoryController::class);
+    Route::apiResource('/products', ProductController::class);
 
 });
-Route::post('/test', function (Request $request) {
-    $email = $request->input('email');
-    $password = $request->input('password');
 
-    // Check if email is 'test@test' and password is 'password'
-    if ($email === 'test' && $password === 'test') {
-        return response()->json(['message' => 'ok'], 200);
-    } else {
-        return response()->json(['message' => 'Invalid credentials'], 401);
-    }
+Route::get('/products', [ProductController::class, 'index']); // Products Index
+Route::get('/products/{id}', [ProductController::class, 'show']); // Products Show
+Route::get('/categories', [CategoryController::class, 'index']); // Products Index
+//Route::get('/categories/indexWithProducts', [CategoryController::class, 'indexWithProducts']);
+Route::get('/categories/{id}', [CategoryController::class, 'show']); // Products Index
+// Guest Routes (accessible only to non-authenticated users)
+Route::middleware('guest')->group(function () {
+    Route::post('/signup', [AuthController::class, 'signup']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/socialauth', [AuthController::class, 'socialAuth']);// Public Routes (accessible to everyone, including guests)
+    
 });
-
-
-Route::post('/signup',[AuthController::class, 'signup']);
-Route::post('/login',[AuthController::class, 'login']);
-Route::post('/socialauth',[AuthController::class, 'socialAuth']);

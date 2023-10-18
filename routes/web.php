@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\WebhookController;
@@ -20,6 +21,7 @@ Route::get('/', function () {
 });
 
 Route::post('/webhooks/chargily-pay', [WebhookController::class, 'handleWebhook']);
+Route::get('/categories/indexWithProducts', [CategoryController::class, 'indexWithProducts']);
 
 
 Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);

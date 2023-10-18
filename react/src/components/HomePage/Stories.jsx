@@ -19,7 +19,7 @@ const Stories = () => {
   const params = useSelector(selectParams)
   useEffect(() => {
     const fetchCategories = async () => {
-      await axiosClient.get('/api/categories/indexWithProducts').then((response) => {
+      await axiosClient.get('/categories/indexWithProducts').then((response) => {
         setCategories(response.data.categories)
         dispatch(setIsLoading(false))
         console.log(response);

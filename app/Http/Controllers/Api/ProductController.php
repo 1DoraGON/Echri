@@ -18,7 +18,7 @@ class ProductController extends Controller
             $products = Product::latest()->get(); // Retrieve all products
             return ProductResource::collection($products);
         }
-        $perPage = 2;
+        $perPage = 20;
         
         $products = Product::latest()
             ->filter($request->only(['search', 'category']))

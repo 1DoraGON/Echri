@@ -1,52 +1,66 @@
 
-import { ClientOrders, GuestLayout, Login, NewCart, NotFound, Product, Profile, SignUp} from './components/HomePage/index'
+import { ClientOrders, GuestLayout, Login, NewCart, NotFound, Product, Profile, SignUp } from './components/HomePage/index'
 import DefaultLayout from "./components/Layouts/DefaultLayout";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dashboard from './components/Views/Dashboard';
-import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor,ProductCreate, Products, Order } from './components/Dashboard/pages';
+import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor, ProductCreate, Products, Order } from './components/Dashboard/pages';
 
 import './App.css';
 import HomePage from './components/Views/HomePage';
 import ClientLayout from './components/Layouts/ClientLayout';
-const router = createBrowserRouter( [
-    
+const router = createBrowserRouter([
+
+    {
+        path: '/products',
+        element: <ClientLayout />,
+        children: [
+            {
+                path: '/products',
+                element: <HomePage />
+            },
+            {
+                path: '/products/:id',
+                element: <Product />
+            },
+        ]
+    },
     {
         /* require login */
-        path:'/',
-        element:<DefaultLayout />,
+        path: '/',
+        element: <DefaultLayout />,
         children: [
 
             {
-                path:'/',
-                element:<Navigate to="/dashboard" />
+                path: '/',
+                element: <Navigate to="/dashboard" />
             },
             {
-                path:'/',
-                element:<ClientLayout />,
+                path: '/',
+                element: <ClientLayout />,
                 children: [
 
                     {
-                        path:'/cart',
-                        element:<NewCart />
+                        path: '/cart',
+                        element: <NewCart />
                     },
                     {
-                        path:'/orders',
-                        element:<ClientOrders />
+                        path: '/orders',
+                        element: <ClientOrders />
                     },
                     {
-                        path:'/orders/:id',
-                        element:<NewCart />
+                        path: '/orders/:id',
+                        element: <NewCart />
                     },
                     {
-                        path:'/profile',
-                        element:<Profile/>
+                        path: '/profile',
+                        element: <Profile />
                     },
                 ]
             },
 
             {
-                path:'/dashboard',
-                element:<Dashboard />,
+                path: '/dashboard',
+                element: <Dashboard />,
                 children: [
                     {
                         path: '/dashboard/ecommerce',
@@ -143,39 +157,32 @@ const router = createBrowserRouter( [
 
         ]
     },
-        /* guest */
-    
+    /* guest */
+
     {
-        path:'/',
-        element:<GuestLayout />,
+        path: '/',
+        element: <GuestLayout />,
         children: [
+
             {
-                path:'/products',
-                element:<HomePage />
+                path: '/login',
+                element: <Login />
             },
             {
-                path:'/products/:id',
-                element:<Product />
-            },
-            {
-                path:'/login',
-                element:<Login />
-            },
-            {
-                path:'/signup',
-                element:<SignUp />
+                path: '/signup',
+                element: <SignUp />
             },
         ]
     },
-    
+
 
     {
-        path:'/404',
-        element:<NotFound />
+        path: '/404',
+        element: <NotFound />
     },
     {
-        path:'/*',
-        element:<NotFound />
+        path: '/*',
+        element: <NotFound />
     },
 
 ])

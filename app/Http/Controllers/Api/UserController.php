@@ -55,6 +55,7 @@ class UserController extends Controller
     }
     public function updatePassword(Request $request)
     {
+        //return $request;
         $request->validate([
             'current_password' => [
                 'required',

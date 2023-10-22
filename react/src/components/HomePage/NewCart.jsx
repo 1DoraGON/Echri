@@ -20,7 +20,6 @@ import LoadingScreen from '../utils/LoadingScreen'
 import DeleteOrderModal from '../utils/DeleteOrderModal'
 import ShowMessageModal from '../utils/ShowMessageModal'
 import InfoAlretTopScreen from '../utils/InfoAlretTopScreen'
-import NotFound from '../Views/NotFound'
 import Empty from '../utils/Empty'
 
 const NewCart = () => {
@@ -78,7 +77,9 @@ const NewCart = () => {
         await axiosClient.get('/api/orders/' + id).then(response => {
           const data = response.data.data
           console.log(data);
-          if (JSON.stringify(data.status) !== 'pending') {
+          if (data.status !== 'pending') {
+            //console.log('look at this '+data.status);
+            //console.log(data.status=== 'pending');
             setEnableEdit(false)
           }
           const form = {
@@ -96,6 +97,8 @@ const NewCart = () => {
             total_price: data.total_price,
             price_payed: data.price_payed
           }
+          console.log('this is the form u looking for');
+          console.log(form);
           if (form.message) {
             setHasMessage(true)
           }
@@ -215,6 +218,8 @@ const NewCart = () => {
         total_price: formData.total_price,
         status: 'pending',
       }
+      console.log('this is the update payload');
+      console.log(payload);
       await axiosClient.put('/api/orders/' + id, payload).then(response => {
         console.log(response);
         toast.success('Your order has been Updated successfully!')

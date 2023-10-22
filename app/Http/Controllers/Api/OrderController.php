@@ -36,7 +36,7 @@ class OrderController extends Controller
             'message' => 'nullable|string',
             'firstname' => 'required|string',
             'lastname' => 'required|string',
-            'wilaya' => 'required|string',
+            'wilaya' => 'required|integer',
             'full_address' => 'required|string',
             'phone_number' => 'required|numeric',
             'products' => 'required|array',

@@ -30,7 +30,7 @@ axiosClient.interceptors.response.use((response)=>{
         //console.log(response);
         if (response.status === 401){
             localStorage.removeItem('ACCESS_TOKEN')
-            //window.location.reload();
+            window.location.reload();
         }
     } catch(e) {
         //console.error("hello")

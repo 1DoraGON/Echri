@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('wilaya');
+            $table->unsignedInteger('wilaya');
             $table->string('full_address');
             $table->timestamps();
         });

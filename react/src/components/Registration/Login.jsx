@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { removeToken, setToken, setUser } from "../../app/UserSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SocialAuth from "./SocialAuth";
+import LoadingScreen from "../utils/LoadingScreen";
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false)
 
   const emailRef = useRef()
   const passwordRef = useRef()
@@ -25,6 +27,7 @@ const Login = () => {
 
   }, [])
   const onHandleSubmit = async (e) => {
+    setIsLoading(true)
     e.preventDefault()
     //const csrf = await axiosClient.get('/sanctum/csrf-cookie')
     try {
@@ -39,9 +42,10 @@ const Login = () => {
           .then(({ data }) => {
             dispatch(setUser(data.user))
             dispatch(setToken(data.token))
-            console.log('this is from :',from);
+            console.log('this is from :', from);
             navigate(from, { replace: true })
-            
+            setIsLoading(false)
+
           })
           .catch(err => {
             const response = err.response
@@ -49,6 +53,7 @@ const Login = () => {
             if (response && response.status === 422) {
               setErrors(response.data.errors)
               console.log(errors);
+              setIsLoading(false)
             }
           })
       });
@@ -62,6 +67,9 @@ const Login = () => {
   }
   return (
     <>
+      {isLoading && (
+        <LoadingScreen />
+      )}
       <div className="container bg-gray-100 ">
         <div className="py-10 min-h-screen mx-auto max-w-[80vw] lg:max-w-[95vw] flex md:flex-col items-center justify-around sm:gap-y-5">
           <div className="flex flex-col items-center justify-around h-[39vh] w-[30vw] lg:h-[38vh] lg:w-[25vw] md:h-[30vh] md:w-[50vw] lg:max-w-[25vw]">
@@ -98,13 +106,13 @@ const Login = () => {
                 className="block border border-slate-400 w-full p-3 rounded mb-4"
                 name="password"
                 placeholder="Password" />
-                <div className="flex flex-col max-w-sm gap-2">
-              <button
-                type="submit"
-                className="button-theme py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700  text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md rounded-lg"
-              >Login</button>
-              <span className="mx-auto text-center w-[80%] no-underline border-b border-slate-400 text-black my-2">Or</span>
-              <SocialAuth setErrors = {setErrors}/>
+              <div className="flex flex-col max-w-sm gap-2">
+                <button
+                  type="submit"
+                  className="button-theme py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700  text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md rounded-lg"
+                >Login</button>
+                <span className="mx-auto text-center w-[80%] no-underline border-b border-slate-400 text-black my-2">Or</span>
+                <SocialAuth setErrors={setErrors} />
               </div>
 
             </div>

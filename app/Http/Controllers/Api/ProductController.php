@@ -78,8 +78,6 @@ class ProductController extends Controller
             'category_id' => 'integer|exists:categories,id',
             'description' => 'nullable|string',
             'price' => 'numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'color_start' => 'nullable|string',
-            'color_end' => 'nullable|string',
             'stock' => 'nullable|integer',
             'tags' => 'nullable|string',
             'main_image' => [ new ImageOrUrl],

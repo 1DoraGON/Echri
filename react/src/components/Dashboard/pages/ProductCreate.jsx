@@ -9,11 +9,14 @@ import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { NotFound } from '../../HomePage';
 import { ImagePreview, ImagePreviewSecondary } from '../components';
+import LoadingScreen from '../../utils/LoadingScreen';
 const ProductCreate = () => {
   const STORAGE_URL = import.meta.env.VITE_REACT_APP_STORAGE_URL;
   const navigate = useNavigate()
   const { productId } = useParams(); // Get the productId parameter from the URL
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
+
   const [errors, setErrors] = useState(null)
   //
   //
@@ -45,8 +48,6 @@ const ProductCreate = () => {
     stock: '',
     main_image: '',
     images: [],
-    color_start: '#fff',
-    color_end: '#fff',
     category_id: null
   }
   const [formData, setFormData] = useState(emptyForm);
@@ -68,20 +69,20 @@ const ProductCreate = () => {
         delete data.data.tags
         setFormData(data.data)
         console.log(data.data);
-        setLoading(false);
+        setIsLoading(false);
         //console.log(data);
         //console.log(formData);
 
       }).catch(err => {
+        console.log('hello ');
         if (err.response?.status === 404) {
-          console.log(err.response?.status === 404);
           navigate('/404')
         }
       })
 
 
     } else {
-      setLoading(false);
+      setIsLoading(false);
       setFormData(emptyForm)
     }
     axiosClient.get('/api/categories').then(({ data }) => {
@@ -234,13 +235,13 @@ const ProductCreate = () => {
           setOptions((prevData) => [...prevData, response.data.resource])
           //console.log(response);
           setFormData((prevData) => ({ ...prevData, category_id: response.data.resource.id }))
-        }).catch(( error ) => {
+        }).catch((error) => {
           console.log(error.response);
           if (error.response?.status === 422) {
             const errors = error.response.data.errors
             console.log(errors);
             Object.entries(errors).forEach(([key, value]) => {
-              toast.error('Category '+ value[0])
+              toast.error('Category ' + value[0])
             });
           }
         })
@@ -250,7 +251,7 @@ const ProductCreate = () => {
       setCategoryImage('')
       setNewOption('');
       dispatch(setModalIsOpen(false));
-    } else if (newOption.trim() === ''){
+    } else if (newOption.trim() === '') {
       toast.error('Category name field is required!')
     }
   };
@@ -343,8 +344,6 @@ const ProductCreate = () => {
     formDataToSend.append('description', formData.description);
     formDataToSend.append('price', formData.price);
     formDataToSend.append('stock', formData.stock);
-    formDataToSend.append('color_start', formData.color_start);
-    formDataToSend.append('color_end', formData.color_end);
     formDataToSend.append('main_image', formData.main_image);
     formData.images.forEach((image) => {
       if (typeof image === 'string') {
@@ -397,14 +396,15 @@ const ProductCreate = () => {
 
 
 
-  if (loading) {
-    return null; // Render nothing while loading
-  }
+
 
 
 
   return (
     <>
+      {isLoading && (
+        <LoadingScreen />
+      )}
       <section className="mb-10 max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-secondary-dark-bg mt-20">
         <h1 className="text-xl font-bold text-black capitalize dark:text-gray-200">{!productId ? 'Add A Product' : 'Modify Product ' + formData.name}</h1>
         <form onSubmit={handleSubmit} encType="multipart/form-data">

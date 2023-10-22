@@ -1,5 +1,3 @@
-import { ShoppingBagIcon, StarIcon } from '@heroicons/react/24/solid'
-import React from 'react'
 import { useDispatch } from 'react-redux'
 import { setAddItemToCart } from '../../app/CartSlice'
 import { truncate } from 'lodash';
@@ -7,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Item = ({
     id,
-    color_start,
-    color_end,
     name,
     description,
     tags,
@@ -21,8 +17,6 @@ const Item = ({
     const onAddToCart = () => {
         const item = {
             id,
-            color_start,
-            color_end,
             name,
             tags,
             main_image,

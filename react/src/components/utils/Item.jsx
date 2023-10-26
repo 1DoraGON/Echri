@@ -32,12 +32,12 @@ const Item = ({
     //const STORAGE_URL = 'http://127.0.0.1:8000/storage/'
     return (
 
-        <div onClick={()=>{navigate('/products/'+id)}} className="cursor-pointer max-w-sm bg-blue-100 shadow-lg rounded-lg overflow-hidden my-10 transition-all duration-700 ease-in-out w-full hover:scale-105">
-            <div className="px-4 py-2">
+        <div className=" max-w-sm bg-blue-100 shadow-lg rounded-lg overflow-hidden my-10 transition-all duration-700 ease-in-out w-full hover:scale-105">
+            <div className="cursor-pointer px-4 py-2" onClick={()=>{navigate('/products/'+id)}}>
                 <h1 className="text-gray-900 font-bold text-xl lg:text-lg lg:leading-5 leading-5 lg:h-16 h-14 uppercase">{truncate(name, { length: 50 })}</h1>
                 <p className="text-gray-600 leading-3 h-12 text-sm mt-1">{truncate(description, { length: 70 })}</p>
             </div>
-            <img className="h-56 w-full object-cover mt-2" src={STORAGE_URL+main_image} alt={name} />
+            <img  onClick={()=>{navigate('/products/'+id)}} className=" cursor-pointer h-56 w-full object-cover mt-2" src={STORAGE_URL+main_image} alt={name} />
                 <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
                     <h1 className="text-gray-200 font-bold text-xl">DZD {price}</h1>
                     <button  onClick={onAddToCart} className="px-3 py-1 bg-blue-100 hover:bg-white text-sm text-gray-900 font-semibold rounded">Add to card</button>

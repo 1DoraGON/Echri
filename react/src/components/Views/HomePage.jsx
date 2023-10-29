@@ -10,7 +10,6 @@ function HomePage() {
   const filterPage = useSelector(selectFilterPage)
   return (
     <>
-      <Cart />
       <main className='flex flex-col gap-16 relative'>
         {!filterPage && <Hero heroapi={heroapi} /> }
         <Sales sales={toprateslaes}/>

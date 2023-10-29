@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import { Footer, Navbar } from '../HomePage/index'
+import { Cart, Footer, Navbar } from '../HomePage/index'
 import { footerAPI } from '../../data/data.js'
 import useAuth from '../../hooks/useAuth';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,7 +34,7 @@ const ClientLayout = () => {
       ) : (
         <>
         <Navbar />
-  
+        <Cart />
         <Outlet />
         <Footer footerapi={footerAPI} />
         

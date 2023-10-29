@@ -116,7 +116,7 @@ const NewCart = () => {
           console.log(form);
         }).catch(error => {
           console.log(error);
-          if (error.response.status === 404) {
+          if (error.response.status === 404 || error.response.status === 403) {
             navigate('/notfound')
           }
           setIsLoading(false)

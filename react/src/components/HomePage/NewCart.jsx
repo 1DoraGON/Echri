@@ -124,7 +124,7 @@ const NewCart = () => {
       }
     }
     fetchOrderIfExists()
-  }, [])
+  }, [id])
 
 
 
@@ -264,7 +264,9 @@ const NewCart = () => {
   return (
     <>
       {isLoading ? (
-        <LoadingScreen />
+        <div className="min-h-[80vh]">
+          <LoadingScreen />
+        </div>
       ) : (
 
         <div className="h-full min-h-screen bg-gray-100 pt-20">

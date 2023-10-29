@@ -76,6 +76,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
+        $this->authorize('view', $order);
         return new OrderResource($order);
     }
 

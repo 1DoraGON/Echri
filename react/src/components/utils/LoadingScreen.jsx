@@ -3,7 +3,7 @@ import React from 'react'
 const LoadingScreen = () => {
   return (
     <>
-      <div className="min-h-[80vh]">
+      <div>
 
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
 

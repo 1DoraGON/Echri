@@ -66,8 +66,6 @@ const Product = () => {
     setButtonDisabled(true)
     const item = {
       id: product.id,
-      color_start: product.color_start,
-      color_end: product.color_end,
       name: product.name,
       tags: product.tags,
       main_image: product.main_image,
@@ -85,15 +83,12 @@ const Product = () => {
   }
   return (
     <>
-      {true ? (
-
-        <EmptyProduct />
+      {isLoading ? (
+        <>
+          <LoadingScreen />
+          <EmptyProduct />
+        </>
       ) : (
-
-        <div>
-          {isLoading && (
-            <LoadingScreen />
-          )}
           <section className="text-gray-700 body-font overflow-hidden bg-white">
             <div className="container px-5 py-24 mx-auto">
               <div className="w-4/5 lg:w-full mx-auto flex flex-wrap items-center">
@@ -189,7 +184,7 @@ const Product = () => {
               </div>
             </div>
           </section>
-        </div>
+
       )}
 
     </>

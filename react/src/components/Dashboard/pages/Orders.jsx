@@ -36,7 +36,7 @@ const Orders = () => {
   useEffect(() => {
     dispatch(setFilterPage(true));
     const fetchOrders = async () => {
-      await axiosClient.get('/api/user/orders').then(response => {
+      await axiosClient.get('/api/orders').then(response => {
         const data = response.data.data;
         const transformedData = data.map(order => ({
           id: parseInt(order.id),

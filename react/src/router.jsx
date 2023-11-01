@@ -8,6 +8,7 @@ import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Ka
 import './App.css';
 import HomePage from './components/Views/HomePage';
 import ClientLayout from './components/Layouts/ClientLayout';
+import RequireAdmin from './components/Permissions/RequireAdmin';
 const router = createBrowserRouter([
 
     {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
 
             {
                 path: '/',
-                element: <Navigate to="/dashboard" />
+                element: <Navigate to="/products" />
             },
             {
                 path: '/',
@@ -60,8 +61,12 @@ const router = createBrowserRouter([
 
             {
                 path: '/dashboard',
-                element: <Dashboard />,
+                element: <RequireAdmin />,
                 children: [
+                    {
+                        path: '/dashboard/',
+                        element: <Dashboard />
+                    },
                     {
                         path: '/dashboard/ecommerce',
                         element: <Ecommerce />

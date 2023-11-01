@@ -68,11 +68,11 @@ const Order = () => {
 
   const handleCancelOrder = async () => {
     toggleModal()
-    const payload = { status: 'canceled',message: messageRef.current.value }
+    const payload = { status: 'canceled', message: messageRef.current.value }
     await axiosClient.put('/api/admin/orders/' + id, payload).then(response => {
       console.log(response);
       toast.success('The order has been canceled!')
-      setFormData(prev=> ({...prev ,status : 'canceled'}))
+      setFormData(prev => ({ ...prev, status: 'canceled' }))
       //navigate('/orders')
 
     })
@@ -80,11 +80,11 @@ const Order = () => {
 
   const handleConfirmOrder = async () => {
     toggleModal()
-    const payload = { status: 'confirmed',message: messageRef.current.value }
+    const payload = { status: 'confirmed', message: messageRef.current.value }
     await axiosClient.put('/api/admin/orders/' + id, payload).then(response => {
       console.log(response);
       toast.success('The order has been confirmed, Now the client is able to pay his order!')
-      setFormData(prev=> ({...prev ,status : 'confirmed'}))
+      setFormData(prev => ({ ...prev, status: 'confirmed' }))
     }).catch(error => {
       console.log(error);
     })
@@ -94,11 +94,11 @@ const Order = () => {
       {isLoading && (
         <LoadingScreen />
       )}
-      <div className="h-full min-h-screen bg-gray-100 dark:bg-main-dark-bg pt-20 mb-10">
+      <div className="h-full min-h-screen bg-gray-100 dark:bg-main-dark-bg pt-20 pb-10">
         {infoAlert && (
-        <InfoAlert title={'How it works?'} message={infoMsg} onClick={() => { }} onDismiss={(e) => { e.preventDefault(); dispatch(setInfoAlert(false)) }} button={false} />
-      )}
- 
+          <InfoAlert title={'How it works?'} message={infoMsg} onClick={() => { }} onDismiss={(e) => { e.preventDefault(); dispatch(setInfoAlert(false)) }} button={false} />
+        )}
+
         <h1 className="mb-10 text-center text-2xl font-bold dark:text-gray-200">Order Items</h1>
 
         <div className="mx-auto max-w-[92rem] justify-center px-6 flex space-x-6 xl:px-0 md:flex-col md:justify-between md:items-center">
@@ -163,9 +163,10 @@ const Order = () => {
 
 
             </div>
-
-            <button onClick={toggleModal} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isButtonDisabled}>Change Order Status</button>
+            {formData.status !== 'paid' && (
+              <button onClick={toggleModal} className={`mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isButtonDisabled}>Change Order Status</button>
+            )}
 
           </div>
         </div>

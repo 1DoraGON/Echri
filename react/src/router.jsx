@@ -9,6 +9,7 @@ import './App.css';
 import HomePage from './components/Views/HomePage';
 import ClientLayout from './components/Layouts/ClientLayout';
 import RequireAdmin from './components/Permissions/RequireAdmin';
+import TotalSalesTest from './components/Dashboard/pages/TotalSalesTest';
 const router = createBrowserRouter([
 
     {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: '/',
                 element: <Navigate to="/products" />
+            },
+            {
+                path: '/sales',
+                element: <TotalSalesTest />
             },
             {
                 path: '/',
@@ -65,97 +70,100 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '/dashboard/',
-                        element: <Dashboard />
-                    },
-                    {
-                        path: '/dashboard/ecommerce',
-                        element: <Ecommerce />
-                    },
+                        element: <Dashboard />,
+                        children: [
+  
+                            {
+                                path: '/dashboard/ecommerce',
+                                element: <Ecommerce />
+                            },
 
-                    {
-                        path: '/dashboard/employees',
-                        element: <Employees />
-                    },
-                    {
-                        path: '/dashboard/customers',
-                        element: <Customers />
-                    },
-                    {
-                        path: '/dashboard/kanban',
-                        element: <Kanban />
-                    },
-                    {
-                        path: '/dashboard/editor',
-                        element: <Editor />
-                    },
-                    {
-                        path: '/dashboard/calendar',
-                        element: <Calendar />
-                    },
-                    {
-                        path: '/dashboard/color-picker',
-                        element: <ColorPicker />
-                    },
+                            {
+                                path: '/dashboard/employees',
+                                element: <Employees />
+                            },
+                            {
+                                path: '/dashboard/customers',
+                                element: <Customers />
+                            },
+                            {
+                                path: '/dashboard/kanban',
+                                element: <Kanban />
+                            },
+                            {
+                                path: '/dashboard/editor',
+                                element: <Editor />
+                            },
+                            {
+                                path: '/dashboard/calendar',
+                                element: <Calendar />
+                            },
+                            {
+                                path: '/dashboard/color-picker',
+                                element: <ColorPicker />
+                            },
 
 
-                    {
-                        path: '/dashboard/line',
-                        element: <Line />
-                    },
-                    {
-                        path: '/dashboard/area',
-                        element: <Area />
-                    },
-                    {
-                        path: '/dashboard/bar',
-                        element: <Bar />
-                    },
-                    {
-                        path: '/dashboard/pie',
-                        element: <Pie />
-                    },
-                    {
-                        path: '/dashboard/financial',
-                        element: <Financial />
-                    },
-                    {
-                        path: '/dashboard/color-mapping',
-                        element: <ColorMapping />
-                    },
-                    {
-                        path: '/dashboard/pyramid',
-                        element: <Pyramid />
-                    },
-                    {
-                        path: '/dashboard/stacked',
-                        element: <Stacked />
-                    },
+                            {
+                                path: '/dashboard/line',
+                                element: <Line />
+                            },
+                            {
+                                path: '/dashboard/area',
+                                element: <Area />
+                            },
+                            {
+                                path: '/dashboard/bar',
+                                element: <Bar />
+                            },
+                            {
+                                path: '/dashboard/pie',
+                                element: <Pie />
+                            },
+                            {
+                                path: '/dashboard/financial',
+                                element: <Financial />
+                            },
+                            {
+                                path: '/dashboard/color-mapping',
+                                element: <ColorMapping />
+                            },
+                            {
+                                path: '/dashboard/pyramid',
+                                element: <Pyramid />
+                            },
+                            {
+                                path: '/dashboard/stacked',
+                                element: <Stacked />
+                            },
 
-                    /* Product management */
-                    {
-                        path: '/dashboard/products',
-                        element: <Products />
-                    },
-                    {
-                        path: '/dashboard/products/create',
-                        element: <ProductCreate />
-                    },
-                    {
-                        path: '/dashboard/products/:productId/update', // Dynamic route with :productId parameter
-                        element: <ProductCreate />
-                    },
-                    /* Order management */
-                    {
-                        path: '/dashboard/orders',
-                        element: <Orders />
-                    },
-                    {
-                        path: '/dashboard/orders/:id',
-                        element: <Order />
-                    },
-                    {
-                        path: '/dashboard/products/:productId/update', // Dynamic route with :productId parameter
-                        element: <ProductCreate />
+                            /* Product management */
+                            {
+                                path: '/dashboard/products',
+                                element: <Products />
+                            },
+                            {
+                                path: '/dashboard/products/create',
+                                element: <ProductCreate />
+                            },
+                            {
+                                path: '/dashboard/products/:productId/update', // Dynamic route with :productId parameter
+                                element: <ProductCreate />
+                            },
+                            /* Order management */
+                            {
+                                path: '/dashboard/orders',
+                                element: <Orders />
+                            },
+                            {
+                                path: '/dashboard/orders/:id',
+                                element: <Order />
+                            },
+                            {
+                                path: '/dashboard/products/:productId/update', // Dynamic route with :productId parameter
+                                element: <ProductCreate />
+                            },
+                        ]
                     },
                 ]
             }
@@ -177,6 +185,7 @@ const router = createBrowserRouter([
                 path: '/signup',
                 element: <SignUp />
             },
+
         ]
     },
 

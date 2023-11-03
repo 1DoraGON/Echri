@@ -96,28 +96,30 @@ class OrderController extends Controller
             'full_address' => 'required|string',
             'phone_number' => 'required|string'
         ]);
+        if ($order->status === 'pending' || $order->status === 'confirmed' || $order->status === 'canceled') {
+            // Check if the order has an associated address
+            if ($order->address) {
+                // Update the existing address
+                $order->address->update([
+                    'wilaya' => $data['wilaya'],
+                    'full_address' => $data['full_address'],
+                ]);
+            } else {
+                // Create a new address and associate it with the order
+                $address = Address::create([
+                    'wilaya' => $data['wilaya'],
+                    'full_address' => $data['full_address'],
+                ]);
 
-        // Check if the order has an associated address
-        if ($order->address) {
-            // Update the existing address
-            $order->address->update([
-                'wilaya' => $data['wilaya'],
-                'full_address' => $data['full_address'],
-            ]);
-        } else {
-            // Create a new address and associate it with the order
-            $address = Address::create([
-                'wilaya' => $data['wilaya'],
-                'full_address' => $data['full_address'],
-            ]);
+                $order->address()->associate($address);
+            }
 
-            $order->address()->associate($address);
+            // Update the order data
+            $order->update($data);
+
+            return new OrderResource($order);
         }
-
-        // Update the order data
-        $order->update($data);
-
-        return new OrderResource($order);
+        return response(status:403);
     }
     public function updateStatus(Request $request, Order $order)
     {
@@ -131,9 +133,12 @@ class OrderController extends Controller
 
 
         // Update the order data
-        $order->update($data);
+        if ($order->status === 'pending' || $order->status === 'confirmed' || $order->status === 'canceled') {
+            $order->update($data);
+            return $order;
+        }
+        return response(status:403);
 
-        return $order;
     }
 
 

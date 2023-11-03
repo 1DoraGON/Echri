@@ -16,10 +16,9 @@ const RequireAuth = ({ allowedRoles }) => {
 
 export default RequireAuth; */
 
-import React, { useDebugValue } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { selectToken, setUser } from '../../app/UserSlice'
+import { setUser } from '../../app/UserSlice'
 import useAuth from '../../hooks/useAuth'
 import axiosClient from '../../api/axios'
 

@@ -14,8 +14,8 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->text('tags')->nullable();
             $table->string('main_image')->nullable();
-            $table->decimal('price', 8, 2);
-            $table->integer('stock')->nullable();
+            $table->decimal('price', 9, 2);
+            $table->decimal('buy_price', 9, 2);
              // Add the quantity column
              $table->unsignedBigInteger('category_id')->nullable(); // Foreign key column
              $table->timestamps();

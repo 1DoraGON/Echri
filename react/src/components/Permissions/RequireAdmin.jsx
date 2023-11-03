@@ -23,11 +23,11 @@ import RequireAuth from './RequireAuth';
 const RequireAdmin = () => {
   const auth = useAuth()
   const location = useLocation();
-  console.log(auth.user.is_admin);
+  console.log(auth?.user?.is_admin === 1? 'its admin' : 'not admin');
   return (
     <RequireAuth>
 
-      {auth?.user?.is_admin? <Outlet /> : <Navigate to="/" state={{from: location}} replace />}
+      {auth?.user?.is_admin === 1? <Outlet /> : <Navigate to="/" state={{from: location}} replace />}
     </RequireAuth>
   )
 }

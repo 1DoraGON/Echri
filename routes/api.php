@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\Api\OrderController;
@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/admin/total-sales', [AdminController::class, 'calculateTotalSalesForDateRange']);
     Route::post('/proxy-to-chargily', [ProxyController::class, 'proxyToChargily']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -38,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('/orders', OrderController::class);
     Route::apiResource('/categories', CategoryController::class);
-    Route::apiResource('/products', ProductController::class);
+
 
 });
 
@@ -53,4 +54,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/socialauth', [AuthController::class, 'socialAuth']);// Public Routes (accessible to everyone, including guests)
     
+});
+Route::middleware('admin')->group(function () {
+    Route::apiResource('/products', ProductController::class);
 });

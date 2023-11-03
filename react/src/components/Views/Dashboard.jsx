@@ -9,13 +9,11 @@ import { selectActiveMenu, selectModalIsOpen, selectThemeSettings, setThemeSetti
 
 const Dashboard = () => {
   const activeMenu = useSelector(selectActiveMenu);
-  const themeSettings = useSelector(selectThemeSettings)
   const dispatch = useDispatch()
   const modalIsOpen = useSelector(selectModalIsOpen)
   
   return (
     <>
-    
       <div className="flex relative dark:bg-main-dark-bg">
         <div className="fixed right-4 bottom-4 z-[1000]">
           <TooltipComponent
